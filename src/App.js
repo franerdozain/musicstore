@@ -1,4 +1,5 @@
 import './App.css';
+import '../src/components/navbar/navbarStyle.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
 import Cart from './pages/cart/Cart';
@@ -12,15 +13,15 @@ function App() {
   return (
     <Router>
       <MmNavbar />
-        <Routes>
-          <Route exact path="/" element={Home} />
-          <Route path="/cart" element={Cart} />
-          <Route path="/wishlist" element={Wishlist} />
-          <Route path="/profile" element={Profile} />
-          <Route path="/product/:id" element={ProductDetails} />
-          <Route path="/categories/:category/subcategory" element={ProductList} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route exact path="/" element={Home} />
+        <Route path="/cart" element={Cart} />
+        <Route path="/wishlist" element={Wishlist} />
+        <Route path="/profile" element={Profile} />
+        <Route path="/product/:id" element={ProductDetails} />
+        <Route path="/categories/:category/subcategory" element={ProductList} />
+      </Routes>
+    </Router>
   );
 }
 
