@@ -2,15 +2,63 @@
     color: red;
 }
 
+@keyframes heartBeat {
+    0% {
+        color: red;
+    }
+    20% {
+        color: pink;
+    }
+    100% {
+        color: red;
+    }
+}
+
+.FaHeart:hover {
+    animation: heartBeat 1.5s;
+}
+
 .GiShoppingCart {
     color: whitesmoke;
 
 }
 
+@keyframes cartBeat {
+    0% {
+        color: whitesmoke;
+    }
+    20% {
+        color: rgb(42, 148, 172);
+    }
+    100% {
+        color: whitesmoke;
+    }
+}
+
+.GiShoppingCart:hover {
+    animation: cartBeat 1.5s;
+}
+
 .mmLogo {
-    width: 2.5em;
+    width: 2.9em;
 }
 
 .FaUser {
     color: whitesmoke;
+}
+
+@keyframes userBeat {
+    0% {
+        color: whitesmoke;
+    }
+    40% {
+        color: rgba(133, 225, 122, 0.864);
+    }
+    100% {
+        color: whitesmoke;
+    }
+}
+
+.FaUser:hover {
+    animation: userBeat 1.5s;
 }

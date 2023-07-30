@@ -1,0 +1,32 @@
+.FaFacebookF {
+    color: #4267B2;
+    padding: 0.3em;
+    margin-right: 0.5em;
+    transition: 0.2s;
+}
+
+.FaFacebookF:hover {
+    transform: scale(1.2);
+}
+
+.FaYoutube {
+    color: #FF0000;
+    padding: 0.4em;
+    margin-right: 0.5em;
+    transition: 0.2s;
+}
+
+.FaYoutube:hover {
+    color: #FF0000;
+    transform: scale(1.2);
+}
+
+.FaInstagram {
+    padding: 0.4em;
+    margin-right: 0.5em;
+    transition: 0.2s;
+}
+
+.FaInstagram:hover {
+    transform: scale(1.2);
+}
