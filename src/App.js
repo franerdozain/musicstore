@@ -1,8 +1,9 @@
 import './App.css';
 import '../src/components/navbar/navbarStyle.css'
 import '../src/components/footer/footerStyle.css'
+import '../src/pages/home/homeStyle.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/home/Home';
+import Home from './pages/home/Home.js';
 import Cart from './pages/cart/Cart';
 import Wishlist from './pages/wishlist/Wishlist';
 import MmNavbar from './components/navbar/Navbar';
@@ -16,12 +17,12 @@ function App() {
     <Router>
       <MmNavbar />
       <Routes>
-        <Route exact path="/" element={Home} />
-        <Route path="/cart" element={Cart} />
-        <Route path="/wishlist" element={Wishlist} />
-        <Route path="/profile" element={Profile} />
-        <Route path="/product/:id" element={ProductDetails} />
-        <Route path="/categories/:category/subcategory" element={ProductList} />
+        <Route exact path="/" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/categories/:category/subcategory" element={<ProductList />} />
       </Routes>
       <Footer />
     </Router>

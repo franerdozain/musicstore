@@ -9,7 +9,7 @@ import { GiShoppingCart } from "react-icons/gi";
 
 const MmNavbar = () => {
     return (
-        <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
+        <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary sticky-top" data-bs-theme="dark">
             <Container>
                 <Navbar.Brand className='me-0'>
                     Melody Makers
