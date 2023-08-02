@@ -2,6 +2,7 @@ import './App.css';
 import '../src/components/navbar/navbarStyle.css'
 import '../src/components/footer/footerStyle.css'
 import '../src/pages/home/homeStyle.css'
+import '../src/components/generalComponents/generalComponents.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home.js';
 import Cart from './pages/cart/Cart';
@@ -22,7 +23,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/categories/:category/subcategory" element={<ProductList />} />
+        <Route path="/categories/:category/:subcategory" element={<ProductList />} />
       </Routes>
       <Footer />
     </Router>
