@@ -2,6 +2,7 @@ import './App.css';
 import '../src/components/navbar/navbarStyle.css'
 import '../src/components/footer/footerStyle.css'
 import '../src/pages/home/homeStyle.css'
+import '../src/pages/productList/productList.css'
 import '../src/components/generalComponents/generalComponents.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home.js';
