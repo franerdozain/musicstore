@@ -1,5 +1,6 @@
 import { useState } from "react";
 import HomeModal from "./HomeModal";
+import { Container } from "react-bootstrap";
 
 const Home = () => {
   const [modalShow, setModalShow] = useState(false);
@@ -260,9 +261,9 @@ const Home = () => {
     const categoriesWithNullParent = testingData.categories.filter((category) => category.parentID === null);
 
     
-    return(
-    <div className="container">
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4">
+  return (
+    <Container className="min-vh-100">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4">
         {categoriesWithNullParent.map((category, index) => (
           <div key={index} className="col">
             <div className="card" onClick={() => handleClick(category)}>
@@ -270,17 +271,14 @@ const Home = () => {
                 src={`/images/categories/${category.categoryName}.png`}
                 className="card-img-top img-fluid object-fit-contain"
                 alt={category}
-              /> 
-                <h5 className="card-title text-center">{category.categoryName}</h5>
+              />
+              <h5 className="card-title text-center">{category.categoryName}</h5>
             </div>
           </div>
         ))}
       </div>
-      {
-
-      }
       <HomeModal show={modalShow} category={categorySelected} subcategories={subcategories} onHide={() => setModalShow(false)} />
-    </div>
-)
+    </Container>
+  )
 }
 export default Home;
