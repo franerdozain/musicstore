@@ -24,12 +24,12 @@ function CategoriesMenu({ categories }) {
 
   return (
     <div className='container'>
-      <Button variant="primary" className="d-md-none" onClick={handleToggleMenu}>
+      <Button variant="light" className="d-md-none mt-2 position-relative"  onClick={handleToggleMenu}>
         Categories
       </Button>
       {/* big screen menu */}
 
-      <ButtonGroup vertical className="d-none d-md-inline-flex">
+      <ButtonGroup vertical className="d-none d-md-inline-flex mt-2">
         {categories.categories.map((category) => (
           category.parentID === null && (
             <DropdownButton              
