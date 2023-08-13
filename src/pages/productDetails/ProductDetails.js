@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button, Carousel, Container, Image, ListGroup, ListGroupItem, Table } from "react-bootstrap";
+import { Button, Carousel, Container, Image, Table } from "react-bootstrap";
 import DropdownQuantity from "./DropdownQuantity";
+import ProductDetailsModal from "./ProductDetailsModal";
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
     const [inputValue, setInputValue] = useState("");
-    const [itemCart, setItemCart] = useState(null)
+    const [showModal, setShowModal] = useState(false)
 
     const handleQuantitySelect = (selectedQuantity) => {
         setQuantity(selectedQuantity);
@@ -16,12 +17,12 @@ const ProductDetails = () => {
     };
 
     const handleCheckClick = () => {
-        setQuantity(inputValue ? inputValue : 1);
+        setQuantity(inputValue ? parseInt(inputValue) : 1);
         setInputValue("");
     };
 
-    const handleAddClick = () => {
-        setItemCart()
+    const handleAddClick = (p, q) => {
+        setShowModal(true)
     }
 
     // after req to the db based on the productID
@@ -69,7 +70,7 @@ const ProductDetails = () => {
                 ))
                 }
             </Carousel>
-            <h2>{product.product[0].productName}</h2>
+            <h2 className="text-center">{product.product[0].productName}</h2>
             <h2>$ {product.product[0].price}</h2>
 
             {product.product[0].features && (
@@ -82,7 +83,7 @@ const ProductDetails = () => {
                     </ul>
                 </div>
             )}
-            <div className="d-flex w-25 justify-content-evenly">
+            <div className="d-flex flex-wrap w-50 justify-content-evenly">
                 <DropdownQuantity
                     quantity={quantity}
                     handleQuantitySelect={handleQuantitySelect}
@@ -91,7 +92,7 @@ const ProductDetails = () => {
                     inputValue={inputValue}
                     stock={product.product[0].stock}
                 />
-                <Button onClick={handleAddClick}>Add To Cart</Button>
+                <Button onClick={(p, q) => handleAddClick(product.product[0], quantity)}>Add To Cart</Button>
             </div>
 
             {product.product[0].slogan && (
@@ -122,6 +123,14 @@ const ProductDetails = () => {
                         )
                     )}
             </div>
+
+            <ProductDetailsModal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                image={product.product[0].mainImageURL}
+                product={product.product[0].productName}
+                price={product.product[0].price} 
+            />
 
         </Container>
     )
