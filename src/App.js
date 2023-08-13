@@ -23,7 +23,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/product/:name/:id" element={<ProductDetails />} />
         <Route path="/categories/:category/:subcategory" element={<ProductList />} />
       </Routes>
       <Footer />
