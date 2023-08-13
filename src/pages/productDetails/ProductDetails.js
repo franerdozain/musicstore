@@ -89,6 +89,7 @@ const ProductDetails = () => {
                     handleInputValueChange={handleInputValueChange}
                     handleCheckClick={handleCheckClick}
                     inputValue={inputValue}
+                    stock={product.product[0].stock}
                 />
                 <Button onClick={handleAddClick}>Add To Cart</Button>
             </div>
