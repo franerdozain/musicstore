@@ -20,6 +20,7 @@ function App() {
       <MmNavbar />
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route path='/home' element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<Profile />} />
