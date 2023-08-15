@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Col, Table, Image, Form, InputGroup } from "react-bootstrap";
-import FormShippingData from "./FormShippingData";
+import FormShippingData from "../../components/generalComponents/FormShippingData";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
 import CheckoutModal from "./CheckoutModal";
 
@@ -48,7 +48,7 @@ const Cart = () => {
                 "description": `Taylor has added a fresh look and sound to the compact GT (Grand Theater) in the form of a this AD11e Grand Theater spruce edition featuring solid American walnut back and sides. Inside, C-Class bracing dials up more power in the bass range, producing a surprisingly rich low end for a smaller guitar. The player-friendly body of the AD11e Grand Theater includes chamfered edges, while the comfortable 24-1/8" scale length creates a relaxed handfeel that makes fretting chords and bending notes easy. Other notable features include comfortable chamfered body edges, a contrasting maple/black rosette, Italian acrylic dot fretboard inlays, a thin matte-finish body with a black top, a black pickguard and Taylor Mini nickel tuners. The AD11e Grand Theater also features onboard ES2 electronics and ships with Taylor's popular AeroCase for sturdy protection at an exceptionally lightweight.`,
                 "stock": 250,
                 "brand": "Taylor",
-                "specificications": {
+                "specifications": {
                     "Body": ["Body type: Non-Cutaway", "Top wood: Spruce", "Back & sides: Walnut", "Bracing pattern: C-Class"],
                     "Neck": ["Neck shape: GT Carve", "Nut width: 1-23/32” (43.6 mm)", "Fingerboard: Smoked eucalyptus", "Neck wood: Mahogany", 'Scale length: 24.125"', "Number of frets: 20", "Neck finish: Matte", "Bridge: Smoked eucalyptus", "Saddle & nut: Mircata/TUSQ"],
                     "Electronics": ["Pickup/preamp: Behind-the-saddle transducer with Adjustable Sensors"],
@@ -68,7 +68,7 @@ const Cart = () => {
                 "description": `Taylor has added a fresh look and sound to the compact GT (Grand Theater) in the form of a this AD11e Grand Theater spruce edition featuring solid American walnut back and sides. Inside, C-Class bracing dials up more power in the bass range, producing a surprisingly rich low end for a smaller guitar. The player-friendly body of the AD11e Grand Theater includes chamfered edges, while the comfortable 24-1/8" scale length creates a relaxed handfeel that makes fretting chords and bending notes easy. Other notable features include comfortable chamfered body edges, a contrasting maple/black rosette, Italian acrylic dot fretboard inlays, a thin matte-finish body with a black top, a black pickguard and Taylor Mini nickel tuners. The AD11e Grand Theater also features onboard ES2 electronics and ships with Taylor's popular AeroCase for sturdy protection at an exceptionally lightweight.`,
                 "stock": 250,
                 "brand": "Taylor",
-                "specificications": {
+                "specifications": {
                     "Body": ["Body type: Non-Cutaway", "Top wood: Spruce", "Back & sides: Walnut", "Bracing pattern: C-Class"],
                     "Neck": ["Neck shape: GT Carve", "Nut width: 1-23/32” (43.6 mm)", "Fingerboard: Smoked eucalyptus", "Neck wood: Mahogany", 'Scale length: 24.125"', "Number of frets: 20", "Neck finish: Matte", "Bridge: Smoked eucalyptus", "Saddle & nut: Mircata/TUSQ"],
                     "Electronics": ["Pickup/preamp: Behind-the-saddle transducer with Adjustable Sensors"],
@@ -88,7 +88,7 @@ const Cart = () => {
                 "description": `Taylor has added a fresh look and sound to the compact GT (Grand Theater) in the form of a this AD11e Grand Theater spruce edition featuring solid American walnut back and sides. Inside, C-Class bracing dials up more power in the bass range, producing a surprisingly rich low end for a smaller guitar. The player-friendly body of the AD11e Grand Theater includes chamfered edges, while the comfortable 24-1/8" scale length creates a relaxed handfeel that makes fretting chords and bending notes easy. Other notable features include comfortable chamfered body edges, a contrasting maple/black rosette, Italian acrylic dot fretboard inlays, a thin matte-finish body with a black top, a black pickguard and Taylor Mini nickel tuners. The AD11e Grand Theater also features onboard ES2 electronics and ships with Taylor's popular AeroCase for sturdy protection at an exceptionally lightweight.`,
                 "stock": 250,
                 "brand": "Taylor",
-                "specificications": {
+                "specifications": {
                     "Body": ["Body type: Non-Cutaway", "Top wood: Spruce", "Back & sides: Walnut", "Bracing pattern: C-Class"],
                     "Neck": ["Neck shape: GT Carve", "Nut width: 1-23/32” (43.6 mm)", "Fingerboard: Smoked eucalyptus", "Neck wood: Mahogany", 'Scale length: 24.125"', "Number of frets: 20", "Neck finish: Matte", "Bridge: Smoked eucalyptus", "Saddle & nut: Mircata/TUSQ"],
                     "Electronics": ["Pickup/preamp: Behind-the-saddle transducer with Adjustable Sensors"],
@@ -108,7 +108,7 @@ const Cart = () => {
                 "description": `Taylor has added a fresh look and sound to the compact GT (Grand Theater) in the form of a this AD11e Grand Theater spruce edition featuring solid American walnut back and sides. Inside, C-Class bracing dials up more power in the bass range, producing a surprisingly rich low end for a smaller guitar. The player-friendly body of the AD11e Grand Theater includes chamfered edges, while the comfortable 24-1/8" scale length creates a relaxed handfeel that makes fretting chords and bending notes easy. Other notable features include comfortable chamfered body edges, a contrasting maple/black rosette, Italian acrylic dot fretboard inlays, a thin matte-finish body with a black top, a black pickguard and Taylor Mini nickel tuners. The AD11e Grand Theater also features onboard ES2 electronics and ships with Taylor's popular AeroCase for sturdy protection at an exceptionally lightweight.`,
                 "stock": 250,
                 "brand": "Taylor",
-                "specificications": {
+                "specifications": {
                     "Body": ["Body type: Non-Cutaway", "Top wood: Spruce", "Back & sides: Walnut", "Bracing pattern: C-Class"],
                     "Neck": ["Neck shape: GT Carve", "Nut width: 1-23/32” (43.6 mm)", "Fingerboard: Smoked eucalyptus", "Neck wood: Mahogany", 'Scale length: 24.125"', "Number of frets: 20", "Neck finish: Matte", "Bridge: Smoked eucalyptus", "Saddle & nut: Mircata/TUSQ"],
                     "Electronics": ["Pickup/preamp: Behind-the-saddle transducer with Adjustable Sensors"],
@@ -121,6 +121,26 @@ const Cart = () => {
             }
         ]
     }
+     // for designing purposes
+  const initialUser = {
+    "user": [
+      {
+        "Address": "742 Evergreen Terrace",
+        "Country": "Israel",
+        "City": "Haifa",
+        "State": "Haifa",
+        "Zip": 33000,
+        "Email": "sample@gmail.com",
+        "Password": "happyTunes48"
+      }
+    ]
+  };
+
+  const filteredUserDetailsForCart = initialUser.user.map( user => {
+    const {Email, Password, ...shippingData} = user;
+    return {...shippingData}
+  });  
+    
 
     const [cartItems, setCartItems] = useState(cart.product);
 
@@ -149,7 +169,7 @@ const Cart = () => {
         <div className="d-flex flex-column flex-lg-row">
             <div className="flex-grow-1">
                 <Col xs={12} sm={12} md={12} lg={8} xl={8} xxl={8} className="min-vh-100 table-responsive mx-auto mt-2">
-                <h2 className="text-center">Your Cart:</h2>
+                <h2 className="text-center bg-secondary rounded text-white p-1 mt-3">Your Cart:</h2>
                     <Table striped borderless variant="light">
                         <tbody>
                             {cartItems.length > 0 ? (
@@ -200,7 +220,7 @@ const Cart = () => {
 
             <Col xs={12} sm={12} md={12} lg={4} xl={4} xxl={5}>
                 <div className="mx-1 mx-md-4">
-                    <FormShippingData />
+                    <FormShippingData details={filteredUserDetailsForCart} />
                     <div className="mx-1 mx-md-4 mt-4 border rounded text-center">
                         <h2>Order Summary</h2>
                         <h3>Total: ${cartItems.length > 0 && cartItems.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2)}</h3>
