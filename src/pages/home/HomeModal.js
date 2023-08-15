@@ -7,7 +7,7 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
 
     const handleClick = (categoryID) => { 
         const subcatSelected = subcategories.filter(category => category.categoryID === categoryID)             
-        navigate(`categories/${category}/${subcatSelected[0] ? subcatSelected[0].categoryName : "All"}`)
+        navigate(`/categories/${category}/${subcatSelected[0] ? subcatSelected[0].categoryName : "All"}`)
     }
     return (
         <Modal
