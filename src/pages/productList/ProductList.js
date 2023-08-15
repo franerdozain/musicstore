@@ -569,30 +569,29 @@ const ProductList = () => {
   // end pagination
 
   return (
-      <div className="d-flex min-vh-100">
-        <Col xs={1} sm={2} md={3} lg={3} xl={2} xxl={2} >
-          <CategoriesMenu categories={categories} />
-        </Col>
-        <Col xs={7} sm={8} md={7} lg={8} xl={9} xxl={9} className="text-center">
-          <ProductCard products={visibleProducts} images={images} />
-          <div className="pagination">
+    <div className="d-flex min-vh-100">
+      <Col xs={1} sm={2} md={3} lg={3} xl={2} xxl={2} >
+        <CategoriesMenu categories={categories} />
+      </Col>
+      <Col xs={7} sm={8} md={7} lg={8} xl={9} xxl={9} className="text-center">
+        <ProductCard products={visibleProducts} images={images} />
+        <div className="pagination">
           {Array.from({ length: totalPages }, (_, index) => (
             <button
               key={index}
-              className={`page-link ${
-                index + 1 === currentPage ? "active" : ""
-              }`}
+              className={`page-link ${index + 1 === currentPage ? "active" : ""
+                }`}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}
             </button>
           ))}
         </div>
-        </Col>
-        <Col  xl={1} xxl={1}>
-          <DropdownSortBy />
-          </Col>
-      </div>
+      </Col>
+      <Col xl={1} xxl={1}>
+        <DropdownSortBy />
+      </Col>
+    </div>
   )
 }
 export default ProductList;
