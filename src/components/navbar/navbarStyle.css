@@ -1,5 +1,7 @@
+/* wishlist icon */
 .FaHeart {
     color: red;
+    height: 1.6em;
 }
 
 @keyframes heartBeat {
@@ -18,6 +20,7 @@
     animation: heartBeat 1.5s;
 }
 
+/* cart icon */
 .GiShoppingCart {
     color: whitesmoke;
 
@@ -39,10 +42,7 @@
     animation: cartBeat 1.5s;
 }
 
-.mmLogo {
-    width: 2.9em;
-}
-
+/* user icon */
 .FaUser {
     color: whitesmoke;
 }
@@ -52,7 +52,7 @@
         color: whitesmoke;
     }
     40% {
-        color: rgba(133, 225, 122, 0.864);
+        color: rgb(42, 148, 172);
     }
     100% {
         color: whitesmoke;
@@ -61,4 +61,24 @@
 
 .FaUser:hover {
     animation: userBeat 1.5s;
+}
+
+.userDropdownToggle {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.custom-dropdown-menu a {
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.userDropdownToggle::after {
+    content: none;
+}
+
+/* brand logo */
+.mmLogo {
+    width: 2.9em;
 }
