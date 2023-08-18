@@ -3,7 +3,7 @@ import CategoriesMenu from "./CategoriesMenu";
 import { Col, Dropdown, DropdownButton } from "react-bootstrap";
 import ProductCard from "./ProductCard";
 import DropdownSortBy from "./DropdownSortBy";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PageSize = 12;
 
@@ -510,7 +510,8 @@ const ProductList = () => {
     ]
   }
 
-  //design purposes 
+  // design purposes 
+  
   const images = 
   {
     "images": [
