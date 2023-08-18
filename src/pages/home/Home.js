@@ -1,13 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HomeModal from "./HomeModal";
 import { Container } from "react-bootstrap";
+import { getCategories } from "../../services/api";
 
 const Home = () => {
   const [modalShow, setModalShow] = useState(false);
   const [categorySelected, setCategorySelected] = useState(null);
   const [subcategories, setSubcategories] = useState(null);
+
+  const [categories, setCategories] = useState();
+    
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCategories(); 
+        setCategories(data);             
+      } catch (error) {
+        console.log("Error: ", error);
+      }      
+    }
+    fetchData()
+    console.log("First connection between frontend and server :D ", categories);
+  })
+  
+
+
+
+
     // categories & subCategories array for design 
-    // is the best way to go put the categories and subcat names like "Flutes & Piccolos" or it's better add a new item in the sql table to take the category entered name and transorm it to flutesAndPiccolos ?
      const testingData = {
       "categories": [
         {
