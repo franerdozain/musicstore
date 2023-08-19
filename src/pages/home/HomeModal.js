@@ -1,14 +1,19 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
+import CategoryCard from './CategoryCard';
 
-const HomeModal = ({ onHide, show, subcategories, category }) => { 
+const HomeModal = ({ onHide, show, subcategories, category }) => {
     const navigate = useNavigate();
 
-    const handleClick = (categoryID) => { 
-        const subcatSelected = subcategories.filter(category => category.categoryID === categoryID)             
-        navigate(`/categories/${category}/${subcatSelected[0] ? subcatSelected[0].categoryName : "All"}`)
-    }
+    const handleClick = (subcategory) => {
+        if (subcategory) {
+            navigate(`/categories/${category}/${subcategory.categoryName}`);
+        } else {
+            navigate(`/categories/${category}/All`);
+        }
+    };
+
     return (
         <Modal
             show={show}
@@ -29,19 +34,11 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4">
                         {subcategories && subcategories.map((subcategory, index) => (
                             <div key={index} className="col">
-                                <div className="card" onClick={() => handleClick(subcategory.categoryID)}>
-                                    <img
-                                        src={`/images/categories/${subcategory.categoryName}.png`}
-                                        className="card-img-top img-fluid object-fit-contain"
-                                        alt={subcategory.categoryName}
-                                    />
-                                    <h5 className="card-title text-center">{subcategory.categoryName}</h5>
-                                </div>
+                                <CategoryCard category={subcategory.categoryName} onClick={() => handleClick(subcategory)} />
                             </div>
-                        ))
-                        }
-                        <div className="card" onClick={() => handleClick("All")}>
-                        <h5 className="card-title text-center">Show All</h5>
+                        ))}
+                        <div className="col">
+                            <CategoryCard category={"Show All"} />
                         </div>
                     </div>
                 </div>
@@ -52,4 +49,5 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
         </Modal>
     );
 }
+
 export default HomeModal;
