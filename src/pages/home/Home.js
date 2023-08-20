@@ -36,7 +36,7 @@ const Home = () => {
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4">
         {categoriesWithNullParent.map((category, index) => (
           <div key={index} className="col">
-            <CategoryCard category={category.categoryName} onClick={() => handleClick(category)} />
+            <CategoryCard category={category} onClick={() => handleClick(category)} />
           </div>
         ))}
       </div>

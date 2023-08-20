@@ -8,36 +8,38 @@ import { FaHeart, FaUser } from 'react-icons/fa6';
 import { GiShoppingCart } from "react-icons/gi";
 import { FaDoorOpen, FaDoorClosed, FaIdCardAlt } from 'react-icons/fa';
 import { Dropdown } from 'react-bootstrap';
-import DropdownOption from './DropdownOption';
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { useState } from 'react';
-import NavbarModal from './NavbarModal'
+import LoginButton from './LoginButton';
+import AuthModal from './AuthModal';
 
 const MmNavbar = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(null);
-    
-    // for test User Icon
-    const loggedIn = true;
+    const [accessGranted, setAccessGranted] = useState(false);
 
     const handleProfileClick = () => {
-       navigate("profile")
+        navigate("profile")
     };
 
     const handleLogoutClick = () => {
-        // end session and navigate Home
-       navigate("")
+        setAccessGranted(false);
+        navigate("");
     }
 
     const handleLoginClick = () => {
-        setModalType("login")
+        setModalType("login");
         setShowModal(true);
     }
 
     const handleRegistrationClick = () => {
-        setModalType("registration")
+        setModalType("registration");
         setShowModal(true);
+    }
+
+    const handleLoggedIn = () => {
+        setAccessGranted(true);
     }
 
     return (
@@ -64,16 +66,16 @@ const MmNavbar = () => {
                                 <FaUser className='FaUser' size={25} />
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="custom-dropdown-menu bg-dark">
-                                {loggedIn ? (
+                                {accessGranted ? (
                                     <>
-                                        <DropdownOption Icon={FaIdCardAlt} text={"Profile"} onClick={handleProfileClick} />
-                                        <DropdownOption Icon={FaDoorClosed} text={"Logout"} onClick={handleLogoutClick} />
+                                        <LoginButton Icon={FaIdCardAlt} text={"Profile"} onClick={handleProfileClick} />
+                                        <LoginButton Icon={FaDoorClosed} text={"Logout"} onClick={handleLogoutClick} />
                                     </>
                                 ) : (
                                     <>
-                                        <DropdownOption Icon={FaDoorOpen} text={"Login"} onClick={handleLoginClick} />
-                                        <DropdownOption Icon={MdOutlineAppRegistration} text={"Registration"} onClick={handleRegistrationClick} />
-                                        <NavbarModal show={showModal} onHide={() => setShowModal(false)} modalType={modalType} />
+                                        <LoginButton Icon={FaDoorOpen} text={"Login"} onClick={handleLoginClick} />
+                                        <LoginButton Icon={MdOutlineAppRegistration} text={"Registration"} onClick={handleRegistrationClick} />
+                                        <AuthModal show={showModal} onHide={() => setShowModal(false)} modalType={modalType} handleLoggedIn={() => handleLoggedIn()} />
                                     </>
                                 )
                                 }

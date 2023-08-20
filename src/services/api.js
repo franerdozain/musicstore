@@ -1,16 +1,38 @@
 const API_BASE_URL = 'http://localhost:4000';
 
-const getData = async (url) => {
+const fetchData = async (url, method, data = null) => {
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
+        let options = {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        if (method === "POST" || method === "PATCH") {
+            options.body = JSON.stringify(data)
+        }
+        const response = await fetch(url, options);
+        const responseData = await response.json();
+
+        return responseData;
     } catch (error) {
         console.log("Error: ", error)
+        throw error;
     }
 }
 
+export const registerUser = async (userData) => {
+    const responseData = await fetchData(`${API_BASE_URL}/auth/register`, "POST", userData);
+    return responseData;
+}
+
+export const loginUser = async (loginData) => {
+    const responseData = await fetchData(`${API_BASE_URL}/auth/login`, "POST", loginData)
+    return responseData;
+}
+
 export const getCategories = async () => {
-    const data = await getData(`${API_BASE_URL}/categories`)
+    const data = await fetchData(`${API_BASE_URL}/categories`, "GET")
     return data;
 }
+

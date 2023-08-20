@@ -7,11 +7,9 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
     const navigate = useNavigate();
 
     const handleClick = (subcategory) => {
-        if (subcategory) {
-            navigate(`/categories/${category}/${subcategory.categoryName}`);
-        } else {
+        subcategory ?
+            navigate(`/categories/${category}/${subcategory.categoryName}`) :
             navigate(`/categories/${category}/All`);
-        }
     };
 
     return (
@@ -34,11 +32,11 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4">
                         {subcategories && subcategories.map((subcategory, index) => (
                             <div key={index} className="col">
-                                <CategoryCard category={subcategory.categoryName} onClick={() => handleClick(subcategory)} />
+                                <CategoryCard category={subcategory} onClick={() => handleClick(subcategory)} />
                             </div>
                         ))}
-                        <div className="col">
-                            <CategoryCard category={"Show All"} />
+                        <div className="col">                            
+                            <CategoryCard category={{categoryName: "Show All"}} />
                         </div>
                     </div>
                 </div>
