@@ -12,7 +12,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
         "city": "",
         "zip": "",
         "shippingAddress": "",
-        "passwordHash": "",
+        "password": "",
         "role": "user"
     });
     const [password, setPassword] = useState("");
@@ -30,7 +30,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
             "city": "",
             "zip": "",
             "shippingAddress": "",
-            "passwordHash": "",
+            "password": "",
             "role": "user"
         });
         setPassword("");
@@ -54,8 +54,8 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         
-        name === "passwordHash" && setPassword(value);
-        name === "reEnterPasswordHash" && setReEnterPassword(value);        
+        name === "password" && setPassword(value);
+        name === "reEnterPassword" && setReEnterPassword(value);        
         name === "email" && setExistingEmailErrorMsg("");
       
         setUserData((prevData) => ({
@@ -83,9 +83,8 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {           
-            const responseData = await loginUser(userData)
-           
-            if (responseData.msg === "Access granted") {
+            const responseData = await loginUser(userData)           
+            if (responseData.idUser) {                
                 handleLoggedIn()
                 onHide()
             }
@@ -99,7 +98,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
             return (
                 <Form className="d-flex flex-column justify-content-center align-items-center" onSubmit={handleLogin}>
                     <InputField typeInput={"email"} textInput={"E-mail"} name={"email"} value={userData.email} onChange={handleInputChange}  />
-                    <InputField typeInput={"password"} textInput={"Password"} name={"passwordHash"} value={userData.passwordHash} onChange={handleInputChange} />
+                    <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={userData.password} onChange={handleInputChange} />
                 </Form>
             )
         } else if (modalType === "registration") {
@@ -112,8 +111,8 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
                     <InputField typeInput={"text"} textInput={"City"} name={"city"} value={userData.city} onChange={handleInputChange} />
                     <InputField typeInput={"text"} textInput={"State"} name={"state"} value={userData.state} onChange={handleInputChange} />
                     <InputField typeInput={"text"} textInput={"Zip"} name={"zip"} value={userData.zip} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Password"} name={"passwordHash"} value={userData.passwordHash} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Re-Enter Password"} name={"reEnterPasswordHash"} value={userData.reEnterPasswordHash} onChange={handleInputChange} errorText={passwordErrorMsg} />
+                    <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={userData.password} onChange={handleInputChange} />
+                    <InputField typeInput={"password"} textInput={"Re-Enter Password"} name={"reEnterPassword"} value={userData.reEnterPassword} onChange={handleInputChange} errorText={passwordErrorMsg} />
                 </Form>
             )
         }
