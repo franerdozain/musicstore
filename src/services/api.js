@@ -4,8 +4,9 @@ const fetchData = async (url, method, data = null) => {
     try {
         let options = {
             method,
+            credentials: "include",
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'                
             }
         }
         if (method === "POST" || method === "PATCH") {
