@@ -13,6 +13,7 @@ import ProductDetails from './pages/productDetails/ProductDetails';
 import ProductList from './pages/productList/ProductList';
 import Profile from './pages/profile/Profile';
 import Footer from './components/footer/Footer';
+import ResetPassword from './pages/resetPassword/ResetPassword';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:name/:id" element={<ProductDetails />} />
         <Route path="/categories/:category/:subcategory" element={<ProductList />} />
+        <Route path='/reset/new-password' element={<ResetPassword />} />
       </Routes>
       <Footer />
     </Router>

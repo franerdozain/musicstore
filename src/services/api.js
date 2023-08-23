@@ -37,3 +37,12 @@ export const getCategories = async () => {
     return data;
 }
 
+export const resetPassword = async (email) => {        
+    const responseData = await fetchData(`${API_BASE_URL}/reset`, "POST", {email})
+    return responseData;
+}
+
+export const updatePassword = async (token, password) => {
+    const responseData = await fetchData(`${API_BASE_URL}/reset/new-password`, "PATCH", {token, password})
+    return responseData;
+}

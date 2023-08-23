@@ -2,6 +2,7 @@ import { Button, Form, Modal } from "react-bootstrap"
 import InputField from "./InputField"
 import { useEffect, useState } from "react"
 import { loginUser, registerUser } from "../../services/api"
+import ResetPasswordModal from "./ResetPasswordModal"
 
 const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const [userData, setUserData] = useState({
@@ -20,6 +21,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [existingEmailErrorMsg, setExistingEmailErrorMsg] = useState("");
     const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
+    const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
 
     const resetForm = () => {
         setUserData({
@@ -83,6 +85,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {           
+            //start indicator
             const responseData = await loginUser(userData)           
             if (responseData.idUser) {                
                 handleLoggedIn()
@@ -90,6 +93,8 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
             }
         } catch (error) {
             console.log(`Error: ${error}`);
+        } finally {
+            //stop indicator
         }
     }
 
@@ -118,6 +123,10 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
         }
     }
 
+    const handleForgotPassword = () => {
+        setForgotPasswordModal(true);
+    }
+
     return (
         <Modal
             show={show}
@@ -142,6 +151,8 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
 
             <Modal.Body >
                 {renderModalType()}
+                {modalType === "login" && <Button onClick={handleForgotPassword} variant="link">Forgot password?</Button>}
+                {forgotPasswordModal && <ResetPasswordModal show={forgotPasswordModal} onHide={() => {setForgotPasswordModal(false)}}  />}
             </Modal.Body>
 
             <Modal.Footer className="d-flex justify-content-center">
