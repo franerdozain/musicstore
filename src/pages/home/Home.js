@@ -12,8 +12,8 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getCategories();
-        setCategories(data);
+        const responseData = await getCategories();
+        setCategories(responseData);
       } catch (error) {
         console.log("Error: ", error);
       }

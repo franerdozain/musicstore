@@ -33,8 +33,8 @@ export const loginUser = async (loginData) => {
 }
 
 export const getCategories = async () => {
-    const data = await fetchData(`${API_BASE_URL}/categories`, "GET")
-    return data;
+    const responseData = await fetchData(`${API_BASE_URL}/categories`, "GET")
+    return responseData;
 }
 
 export const resetPassword = async (email) => {        
@@ -44,5 +44,10 @@ export const resetPassword = async (email) => {
 
 export const updatePassword = async (token, password) => {
     const responseData = await fetchData(`${API_BASE_URL}/reset/new-password`, "PATCH", {token, password})
+    return responseData;
+}
+
+export const logoutUser = async () => {
+    const responseData = await fetchData(`${API_BASE_URL}/auth/logout`, "GET")
     return responseData;
 }

@@ -12,6 +12,7 @@ import { MdOutlineAppRegistration } from "react-icons/md";
 import { useState } from 'react';
 import LoginButton from './LoginButton';
 import AuthModal from './AuthModal';
+import { logoutUser } from '../../services/api';
 
 const MmNavbar = () => {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const MmNavbar = () => {
 
     const handleLogoutClick = () => {
         setAccessGranted(false);
+        logoutUser();
         navigate("");
     }
 
