@@ -93,7 +93,7 @@ const Wishlist = () => {
                 <Col xs={2} sm={2} md={1} lg={1} xl={1} xxl={1}>
                   <Image
                     src={product.mainImageURL}
-                    alt={`${product.productName} image`}
+                    alt={`${product.productName}`}
                     className="float-start img-fluid img-thumbnail"
                   />
                   </Col>

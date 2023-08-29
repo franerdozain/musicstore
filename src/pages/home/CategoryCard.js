@@ -1,16 +1,21 @@
-const CategoryCard = ({ category, onClick }) => {
+const CategoryCard = ({ category, onClick, images }) => {
 
+const matchingImages = images.filter(image => image.idCategory === category.idCategory); 
+const isSubcategory = category.idCategoryParent !== null;  
 
     return (
         <div className="text-center m-2 p-2 card d-flex flex-column h-100" >
-            <img
-                src={category.imageURL}
-                className="card-img-top img-fluid object-fit-contain cursor-pointer"
-                alt={`${category.categoryName} image`}
-                onClick={onClick}
-            />
+            { category.categoryName !== "Show All" && (
+                <img            
+                    src={`http://localhost:4000/images/${isSubcategory ? 'subcategories' : 'categories'}/${matchingImages[0]?.imageURL}`}               
+                    className="card-img-top img-fluid object-fit-contain"
+                    alt={`${category.categoryName}`}
+                    onClick={onClick}
+                />
+            )
+            }
             <h5
-                className="card-title text-center"
+                className={`card-title text-center ${category.categoryName === "Show All" ? "my-auto" : ""} `}
                 onClick={onClick} >
                 {category.categoryName}
             </h5>

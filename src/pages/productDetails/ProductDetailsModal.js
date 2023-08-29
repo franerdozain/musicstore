@@ -19,7 +19,7 @@ const ProductDetailsModal = ({ onHide, show, image, product, price }) => {
         >
             <Modal.Header closeButton >
                 <img
-                    src='/images/mmLogoBL.png'
+                    src='/mmLogoBL.png'
                     alt="Music Makers Logo"
                     className="logo-modal float-start me-2 img-fluid"
                 />

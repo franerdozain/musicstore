@@ -51,3 +51,8 @@ export const logoutUser = async () => {
     const responseData = await fetchData(`${API_BASE_URL}/auth/logout`, "GET")
     return responseData;
 }
+
+export const getCategoriesImages = async () => {
+    const responseData = await fetchData(`${API_BASE_URL}/images/categories`, "GET")   
+    return responseData;
+}

@@ -51,7 +51,7 @@ const MmNavbar = () => {
                     Melody Makers
                     <Link to={"/"}>
                         <img
-                            src='/images/mmLogoWhSm.png'
+                            src='/mmLogoWhSm.png'
                             className="mmLogo d-inline-block align-top"
                             alt="Melody Makers Logo"
                         />

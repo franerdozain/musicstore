@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
 import CategoryCard from './CategoryCard';
 
-const HomeModal = ({ onHide, show, subcategories, category }) => {
+const HomeModal = ({ onHide, show, subcategories, category, images }) => {
     const navigate = useNavigate();
 
     const handleClick = (subcategory) => {
@@ -22,7 +22,7 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
         >
             <Modal.Header closeButton>
                 <img
-                    src='/images/mmLogoBL.png'
+                    src='/mmLogoBL.png'
                     alt="Music Makers Logo"
                     className="logo-modal float-start me-2 img-fluid"
                 />
@@ -32,11 +32,11 @@ const HomeModal = ({ onHide, show, subcategories, category }) => {
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4">
                         {subcategories && subcategories.map((subcategory, index) => (
                             <div key={index} className="col">
-                                <CategoryCard category={subcategory} onClick={() => handleClick(subcategory)} />
+                                <CategoryCard category={subcategory} onClick={() => handleClick(subcategory)} images={images} />
                             </div>
                         ))}
                         <div className="col">                            
-                            <CategoryCard category={{categoryName: "Show All"}} />
+                            <CategoryCard category={{categoryName: "Show All"}} images={images} />
                         </div>
                     </div>
                 </div>
