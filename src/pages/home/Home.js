@@ -3,38 +3,28 @@ import HomeModal from "./HomeModal";
 import { Container } from "react-bootstrap";
 import { getCategories, getCategoriesImages } from "../../services/api";
 import CategoryCard from "./CategoryCard";
+import useApi from "../../hooks/useApi";
 
 const Home = () => {
   const [modalShow, setModalShow] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
   const [images, setImages] = useState([]);
+  const { data: imagesData, loading: loadingCategoriesImages, LoadingAnimation: loadingCategoriesImagesAnimation } = useApi(getCategoriesImages);
+  const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
 
   useEffect(() => {
-    const fetchImages = async () => {
-        try {
-            const response = await getCategoriesImages();                
-            setImages(response);
-        } catch (error) {
-            console.error('Error fetching images:', error);
-        }
-    };
-
-    fetchImages();
-}, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const responseData = await getCategories();
-        setCategories(responseData);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
+    if (imagesData) {
+      setImages(imagesData);
     }
-    fetchData()
-  }, [])
+  }, [imagesData]);
+
+
+  useEffect(() => {
+    if (categoriesData) {
+      setCategories(categoriesData);
+    }
+  }, [categoriesData]);
 
   const handleClick = (category) => {
     setModalShow(true);
@@ -48,13 +38,19 @@ const Home = () => {
 
   return (
     <Container className="min-vh-100" id="home-text">
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4">
-        {categoriesWithNullParent.map((category, index) => (
-          <div key={index} className="col">
-            <CategoryCard category={category} onClick={() => handleClick(category)} images={images} />
-          </div>
-        ))}
-      </div>
+      {loadingCategories || loadingCategoriesImages ? (
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4 justify-content-center">
+          {loadingCategoriesAnimation || loadingCategoriesImagesAnimation}
+        </div>
+      ) : (
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4">
+          {categoriesWithNullParent.map((category, index) => (
+            <div key={index} className="col">
+              <CategoryCard category={category} onClick={() => handleClick(category)} images={images} />
+            </div>
+          ))}
+        </div>
+      )}
       <HomeModal
         show={modalShow}
         category={selectedCategory?.categoryName || ""}
