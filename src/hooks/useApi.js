@@ -23,11 +23,10 @@ function useApi(apiFetch, ...args) {
     return {
         data,
         loading,
-        LoadingAnimation: loading ?
+        LoadingAnimation: 
             <Spinner animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
-            </Spinner> :
-            null
+            </Spinner> 
     };
 }
 

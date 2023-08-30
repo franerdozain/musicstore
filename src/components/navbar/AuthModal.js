@@ -1,10 +1,10 @@
-import { Button, Form, Modal } from "react-bootstrap"
+import { Button, Form, Modal, Spinner } from "react-bootstrap"
 import InputField from "./InputField"
 import { useEffect, useState } from "react"
 import { loginUser, registerUser } from "../../services/api"
 import ResetPasswordModal from "./ResetPasswordModal"
 
-const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
+const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
     const [userData, setUserData] = useState({
         "username": "",
         "email": "",
@@ -22,6 +22,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
     const [existingEmailErrorMsg, setExistingEmailErrorMsg] = useState("");
     const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
     const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const resetForm = () => {
         setUserData({
@@ -47,54 +48,65 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
             setPasswordsMatch(true)
             setPasswordErrorMsg("")
         } else {
-            setPasswordsMatch(false); 
-            setPasswordErrorMsg("Passwords don't match")          
+            setPasswordsMatch(false);
+            setPasswordErrorMsg("Passwords don't match")
         }
 
     }, [password, reEnterPassword])
-    
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        
+
         name === "password" && setPassword(value);
-        name === "reEnterPassword" && setReEnterPassword(value);        
+        name === "reEnterPassword" && setReEnterPassword(value);
         name === "email" && setExistingEmailErrorMsg("");
-      
+
         setUserData((prevData) => ({
             ...prevData,
             [name]: value,
-        }));  
-    };  
+        }));
+    };
 
     const handleRegistration = async (event) => {
         event.preventDefault();
-        if(passwordsMatch){
+        if (passwordsMatch) {
             try {
+                setLoading(true);
+
+                //setTimeout for testing loading animation
+                await new Promise(r => setTimeout(r, 2000))
+
                 const responseData = await registerUser(userData);
-                if(responseData.error && responseData.error === "Email already exists"){
+                if (responseData.error && responseData.error === "Email already exists") {
                     setExistingEmailErrorMsg("Email already exists")
-                }                
+                }
             } catch (error) {
                 console.error("Error:", error);
+            } finally {
+                setLoading(false);
             }
-        } else {            
+        } else {
             setPasswordsMatch(false)
         }
     };
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        try {           
-            //start indicator
-            const responseData = await loginUser(userData)           
-            if (responseData.idUser) {                
+        try {
+            setLoading(true);
+
+            //setTimeout for testing loading animation
+            await new Promise(r => setTimeout(r, 2000)) 
+                                 
+            const responseData = await loginUser(userData)
+            if (responseData.idUser) {
                 handleLoggedIn()
                 onHide()
             }
         } catch (error) {
             console.log(`Error: ${error}`);
         } finally {
-            //stop indicator
+            setLoading(false)
         }
     }
 
@@ -102,7 +114,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
         if (modalType === "login") {
             return (
                 <Form className="d-flex flex-column justify-content-center align-items-center" onSubmit={handleLogin}>
-                    <InputField typeInput={"email"} textInput={"E-mail"} name={"email"} value={userData.email} onChange={handleInputChange}  />
+                    <InputField typeInput={"email"} textInput={"E-mail"} name={"email"} value={userData.email} onChange={handleInputChange} />
                     <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={userData.password} onChange={handleInputChange} />
                 </Form>
             )
@@ -152,7 +164,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
             <Modal.Body >
                 {renderModalType()}
                 {modalType === "login" && <Button onClick={handleForgotPassword} variant="link">Forgot password?</Button>}
-                {forgotPasswordModal && <ResetPasswordModal show={forgotPasswordModal} onHide={() => {setForgotPasswordModal(false)}}  />}
+                {forgotPasswordModal && <ResetPasswordModal show={forgotPasswordModal} onHide={() => { setForgotPasswordModal(false) }} />}
             </Modal.Body>
 
             <Modal.Footer className="d-flex justify-content-center">
@@ -162,6 +174,14 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn}) => {
                     className="w-50"
                     onClick={modalType === "login" ? handleLogin : handleRegistration}
                 >
+                    {loading && (
+                        <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-label="Submitting... Please wait."
+                        />
+                    )}
                     {modalType === "login" ? "Login" : "Create Account"}
                 </Button>
             </Modal.Footer>

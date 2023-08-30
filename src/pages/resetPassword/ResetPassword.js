@@ -1,4 +1,4 @@
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { updatePassword } from "../../services/api";
@@ -12,6 +12,10 @@ const ResetPassword = () => {
     const [reEnterPassword, setReEnterPassword] = useState("");
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [tokenEpired, setTokenExpired] = useState("");
+    const [updatedMsg, setUpdatedMsg] = useState("");
+    const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
         if ((password === reEnterPassword) || (!password && !reEnterPassword)) {
@@ -37,12 +41,22 @@ const ResetPassword = () => {
     };
 
     const handleSubmit = async () => {
-        if (passwordsMatch) {
+        if (passwordsMatch && password !== "") {
+            setLoading(true)
             try {
-                const response = await updatePassword(token, newPassword);
-                console.log("response", response);
+                const response = await updatePassword(token, newPassword);                      
+                if (response.error) {
+                    setDisabled(true);
+                    setTokenExpired(response.error);                    
+                }
+                if (response.message) {
+                    setDisabled(true);
+                    setUpdatedMsg(response.message);
+                }
             } catch (error) {
                 console.log(`Error: ${error}`);
+            } finally {
+                setLoading(false)
             }
         }
     }
@@ -50,11 +64,27 @@ const ResetPassword = () => {
     return (
         <Container className="min-vh-100 d-flex justify-content-center my-5">
             <Row className="d-flex justify-content-center">
-                <Col  className="text-center">
-                    <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={password} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Re enter Password"} name={"reEnterPassword"} value={reEnterPassword} onChange={handleInputChange} />  
-                    {passwordErrorMsg && <small className="text-danger">{passwordErrorMsg}</small>}                 
-                    <Button onClick={handleSubmit} className="w-75">Submit</Button>
+                <Col className="text-center">
+                    <InputField disabled={disabled} typeInput={"password"} textInput={"Password"} name={"password"} value={password} onChange={handleInputChange} />
+                    <InputField disabled={disabled} typeInput={"password"} textInput={"Re enter Password"} name={"reEnterPassword"} value={reEnterPassword} onChange={handleInputChange} />
+                    {passwordErrorMsg && <small className="text-danger">{passwordErrorMsg}</small>}
+                    {tokenEpired && <small className="text-danger">{tokenEpired}</small>}
+                    {updatedMsg && <small className="text-success">{updatedMsg}</small>}
+                    <Button
+                        onClick={handleSubmit}
+                        className="w-75"
+                        disabled={disabled}
+                    >
+                        {loading && (
+                            <Spinner                               
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-label="Submitting... Please wait."
+                            />
+                        )}
+                        Submit
+                    </Button>
                 </Col>
             </Row>
         </Container>
