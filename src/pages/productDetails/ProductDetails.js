@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Carousel, Container, Image, Table } from "react-bootstrap";
+
 import DropdownQuantity from "./DropdownQuantity";
-import ProductDetailsModal from "./ProductDetailsModal";
+import CheckoutModal from "./CheckoutModal";
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
@@ -124,7 +125,7 @@ const ProductDetails = () => {
                     )}
             </div>
 
-            <ProductDetailsModal
+            <CheckoutModal
                 show={showModal}
                 onHide={() => setShowModal(false)}
                 image={product.product[0].mainImageURL}

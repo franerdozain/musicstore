@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Col, Table, Image, Form, InputGroup } from "react-bootstrap";
-import FormShippingData from "../../components/generalComponents/FormShippingData";
 import { BsPlusCircle, BsDashCircle } from "react-icons/bs";
+
+import FormShippingData from "../../components/generalComponents/FormShippingData";
 import CheckoutModal from "./CheckoutModal";
 
 const Cart = () => {

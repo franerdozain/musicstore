@@ -1,6 +1,6 @@
 import { Form, InputGroup } from "react-bootstrap";
-import { SlMagnifier } from 'react-icons/sl'
-import { useNavigate } from 'react-router-dom'
+import { SlMagnifier } from 'react-icons/sl';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
     const navigate = useNavigate();
@@ -9,7 +9,7 @@ const SearchBar = () => {
     }
     return (
         <>
-            <Form className="d-flex  col-xxl-8 flex-grow-1 my-2">
+            <Form className="d-flex col-xxl-8 flex-grow-1">
                 <InputGroup>
                     <Form.Control
                         type="search"

@@ -2,7 +2,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
 
-const ProductDetailsModal = ({ onHide, show, image, product, price }) => {
+const CheckoutModal = ({ onHide, show, image, product, price }) => {
     const navigate = useNavigate();
 
     const handleCheckout = () => {
@@ -43,4 +43,4 @@ const ProductDetailsModal = ({ onHide, show, image, product, price }) => {
         </Modal>
     );
 }
-export default ProductDetailsModal;
+export default CheckoutModal;

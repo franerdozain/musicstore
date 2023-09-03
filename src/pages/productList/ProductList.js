@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
+import { Col } from "react-bootstrap";
+import { useState } from "react";
+
 import CategoriesMenu from "./CategoriesMenu";
-import { Col, Dropdown, DropdownButton } from "react-bootstrap";
 import ProductCard from "./ProductCard";
 import DropdownSortBy from "./DropdownSortBy";
-import { useEffect, useState } from "react";
 
 const PageSize = 12;
-
 
 const ProductList = () => {
     const {category, subcategory} = useParams();

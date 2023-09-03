@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import HomeModal from "./HomeModal";
 import { Container } from "react-bootstrap";
+
+import HomeModal from "./HomeModal";
 import { getCategories, getCategoriesImages } from "../../services/api";
 import CategoryCard from "./CategoryCard";
 import useApi from "../../hooks/useApi";

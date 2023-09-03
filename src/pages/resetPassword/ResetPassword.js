@@ -1,6 +1,7 @@
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 import { updatePassword } from "../../services/api";
 import InputField from "../../components/navbar/InputField";
 

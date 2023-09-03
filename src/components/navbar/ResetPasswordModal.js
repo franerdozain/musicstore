@@ -1,5 +1,6 @@
-import { Button, Form, Modal, Spinner } from "react-bootstrap"
-import { useState } from "react"
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useState } from "react";
+
 import InputField from "./InputField";
 import { resetPassword } from "../../services/api";
 

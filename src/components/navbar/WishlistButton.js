@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa6';
 
 const WishlistButton = () => {

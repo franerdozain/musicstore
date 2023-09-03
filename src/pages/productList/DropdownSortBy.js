@@ -1,5 +1,4 @@
-import { Dropdown, DropdownButton } from "react-bootstrap"
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 const DropdownSortBy = () => {
     return (

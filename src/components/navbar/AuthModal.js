@@ -1,8 +1,9 @@
-import { Button, Form, Modal, Spinner } from "react-bootstrap"
-import InputField from "./InputField"
-import { useEffect, useState } from "react"
-import { loginUser, registerUser } from "../../services/api"
-import ResetPasswordModal from "./ResetPasswordModal"
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+
+import InputField from "./InputField";
+import { loginUser, registerUser } from "../../services/api";
+import ResetPasswordModal from "./ResetPasswordModal";
 
 const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
     const [userData, setUserData] = useState({

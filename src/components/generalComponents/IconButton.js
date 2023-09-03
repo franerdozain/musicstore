@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
-const Button = ({ icon: Icon, destination, className }) => {
+const IconButton = ({ icon: Icon, destination, className }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -10,4 +10,4 @@ const Button = ({ icon: Icon, destination, className }) => {
         <Icon role="button" onClick={handleClick} className={className} size={30} />
     )
 }
-export default Button;
+export default IconButton;

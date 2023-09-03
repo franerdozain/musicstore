@@ -1,16 +1,17 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import SearchBar from './SearchBar';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../generalComponents/Button';
 import { FaHeart, FaUser } from 'react-icons/fa6';
 import { GiShoppingCart } from "react-icons/gi";
 import { FaDoorOpen, FaDoorClosed, FaIdCardAlt } from 'react-icons/fa';
 import { Dropdown } from 'react-bootstrap';
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { useState } from 'react';
+
+import SearchBar from './SearchBar';
 import LoginButton from './LoginButton';
+import IconButton from '../generalComponents/IconButton';
 import AuthModal from './AuthModal';
 import { logoutUser } from '../../services/api';
 
@@ -64,8 +65,8 @@ const MmNavbar = () => {
                     <SearchBar />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="d-flex flex-row justify-content-end align-items-center" >
-                            <Button icon={FaHeart} destination="/wishlist" className="FaHeart ms-2" />
-                            <Button icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-3" />
+                            <IconButton icon={FaHeart} destination="/wishlist" className="FaHeart ms-2" />
+                            <IconButton icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-3" />
                             <Dropdown className='ms-3 mb-1'>
                                 <Dropdown.Toggle variant="dark" id="dropdownMenuButton" className="userDropdownToggle">
                                     <FaUser className='FaUser' size={25} />

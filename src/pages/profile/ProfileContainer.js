@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+
 import Profile from "./Profile";
 import AdminProfile from "./AdminProfile";
 
