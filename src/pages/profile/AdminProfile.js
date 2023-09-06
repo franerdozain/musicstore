@@ -3,7 +3,7 @@ import { Col, Container, Table } from "react-bootstrap";
 
 import useApi from "../../hooks/useApi";
 import { getCategories } from "../../services/api";
-import AddOrModifyProductForm from "./AddOrModifyProductForm";
+import ProductForm from "./ProductForm";
 import CategorySelector from "./CategorySelector";
 import ImagesForUploadSpan from "./ImagesForUploadSpan";
 
@@ -72,31 +72,31 @@ const AdminProfile = () => {
         setSelectedSubcategory(subcategory.categoryName)
     }
 
-    const handleInputChange = (detail, e) => {
-        if (detail === "Images") {
-            const selectedFiles = Array.from(e.target.files);
-            const existingFiles = productDetail.Images.value || [];
-            const allSelectedFiles = [...existingFiles, ...selectedFiles];
-            const fileNames = allSelectedFiles.map(file => file.name);
+    // const handleInputChange = (detail, e) => {
+    //     if (detail === "Images") {
+    //         const selectedFiles = Array.from(e.target.files);
+    //         const existingFiles = productDetail.Images.value || [];
+    //         const allSelectedFiles = [...existingFiles, ...selectedFiles];
+    //         const fileNames = allSelectedFiles.map(file => file.name);
 
-            setProductDetail((prevProductDetail) => ({
-                ...prevProductDetail,
-                [detail]: {
-                    value: allSelectedFiles,
-                    fileNames: fileNames,
-                    type: "file",
-                },
-            }));
-        } else {
-            setProductDetail((prevProductDetail) => ({
-                ...prevProductDetail,
-                [detail]: {
-                    ...prevProductDetail[detail],
-                    value: e.target.value,
-                },
-            }));
-        }
-    };
+    //         setProductDetail((prevProductDetail) => ({
+    //             ...prevProductDetail,
+    //             [detail]: {
+    //                 value: allSelectedFiles,
+    //                 fileNames: fileNames,
+    //                 type: "file",
+    //             },
+    //         }));
+    //     } else {
+    //         setProductDetail((prevProductDetail) => ({
+    //             ...prevProductDetail,
+    //             [detail]: {
+    //                 ...prevProductDetail[detail],
+    //                 value: e.target.value,
+    //             },
+    //         }));
+    //     }
+    // };
 
     const handleCreateProduct = () => {
 
@@ -117,31 +117,31 @@ const AdminProfile = () => {
         setProductForModify(product)
     }
 
-    const handleModifyInputChange = (detail, e) => {
-        if (detail === "Images") {
-            const selectedFiles = Array.from(e.target.files);
-            const existingFiles = productDetailForModify.Images.value || [];
-            const allSelectedFiles = [...existingFiles, ...selectedFiles];
-            const fileNames = allSelectedFiles.map(file => file.name);
+    // const handleModifyInputChange = (detail, e) => {
+    //     if (detail === "Images") {
+    //         const selectedFiles = Array.from(e.target.files);
+    //         const existingFiles = productDetailForModify.Images.value || [];
+    //         const allSelectedFiles = [...existingFiles, ...selectedFiles];
+    //         const fileNames = allSelectedFiles.map(file => file.name);
 
-            setProductDetailForModify((prevProductDetail) => ({
-                ...prevProductDetail,
-                [detail]: {
-                    value: allSelectedFiles,
-                    fileNames: fileNames,
-                    type: "file",
-                },
-            }));
-        } else {
-            setProductDetailForModify((prevProductDetail) => ({
-                ...prevProductDetail,
-                [detail]: {
-                    ...prevProductDetail[detail],
-                    value: e.target.value,
-                },
-            }));
-        }
-    }
+    //         setProductDetailForModify((prevProductDetail) => ({
+    //             ...prevProductDetail,
+    //             [detail]: {
+    //                 value: allSelectedFiles,
+    //                 fileNames: fileNames,
+    //                 type: "file",
+    //             },
+    //         }));
+    //     } else {
+    //         setProductDetailForModify((prevProductDetail) => ({
+    //             ...prevProductDetail,
+    //             [detail]: {
+    //                 ...prevProductDetail[detail],
+    //                 value: e.target.value,
+    //             },
+    //         }));
+    //     }
+    // }
 
     const handleModifyProduct = () => {
 
@@ -169,11 +169,9 @@ const AdminProfile = () => {
                             <Table striped borderless variant="light mb-0">
                                 <thead>
                                     <tr>
-                                        <th rowSpan="3" className="bg-primary text-white">Date</th>
-                                        <th rowSpan="3" className="bg-primary text-white">Message ID</th>
-                                        <th rowSpan="3" className="bg-primary text-white">Title</th>
-                                        <th rowSpan="3" className="bg-primary text-white">Message</th>
-                                        <th rowSpan="3" className="bg-primary text-white">User</th>
+                                        {["Date", "Message ID", "Title", "Message", "User"].map(th => (
+                                        <th key={th} rowSpan="3" className="bg-primary text-white">{th}</th>    
+                                        ))}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,10 +198,10 @@ const AdminProfile = () => {
                     />
                     <div className="d-flex flex-wrap w-100">
                         {selectedSubcategory !== "Subcategory" && (
-                            <AddOrModifyProductForm
-                                productDetail={productDetail}
-                                handleInputChange={handleInputChange}
-                                handleCreateProduct={() => handleCreateProduct()}
+                            <ProductForm
+                                // productDetail={productDetail}
+                                // handleInputChange={handleInputChange}
+                                // handleCreateProduct={() => handleCreateProduct()}
                                 buttonName={"Create Product"}
                             />
                         )
@@ -238,10 +236,10 @@ const AdminProfile = () => {
                     </select>
                     )}
                     <div className="d-flex flex-wrap w-100">
-                        {productForModify && <AddOrModifyProductForm
-                            productDetail={productDetailForModify}
-                            handleInputChange={handleModifyInputChange}
-                            handleCreateProduct={() => handleModifyProduct()}
+                        {productForModify && <ProductForm
+                            // productDetail={productDetailForModify}
+                            // handleInputChange={handleModifyInputChange}
+                            // handleCreateProduct={() => handleModifyProduct()}
                             buttonName={"Modify Product"}
                         />}
                         {productDetailForModify.Images.fileNames && productDetailForModify.Images.fileNames.length > 0 && (
