@@ -5,7 +5,6 @@ import useApi from "../../hooks/useApi";
 import { getCategories } from "../../services/api";
 import ProductForm from "./ProductForm";
 import CategorySelector from "./CategorySelector";
-import ImagesForUploadSpan from "./ImagesForUploadSpan";
 
 const AdminProfile = () => {
     const [selectedCategory, setSelectedCategory] = useState("Category");
@@ -13,34 +12,9 @@ const AdminProfile = () => {
     const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
-    const [productDetail, setProductDetail] = useState({
-        "Product Name": { value: "", type: "text" },
-        "$": { value: "", type: "number" },
-        "Stock": { value: "", type: "number" },
-        "Brand": { value: "", type: "text" },
-        "Supplier": { value: "", type: "text" },
-        "Slogan": { value: "", type: "text" },
-        "Description": { value: "", type: "textarea" },
-        "Specification": [{ value: "", type: "textarea" }],
-        "Feature": [{ value: "", type: "textarea" }],
-        "Images": { value: [], type: "file" }
-    });
-
     const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [subcategoriesForModify, setSubcategoriesForModify] = useState([]);
     const [selectedSubcategoryForModify, setSelectedSubcategoryForModify] = useState("Subcategory");
-    const [productDetailForModify, setProductDetailForModify] = useState({
-        "Product Name": { value: "", type: "text" },
-        "$": { value: "", type: "number" },
-        "Stock": { value: "", type: "number" },
-        "Brand": { value: "", type: "text" },
-        "Supplier": { value: "", type: "text" },
-        "Slogan": { value: "", type: "text" },
-        "Description": { value: "", type: "textarea" },
-        "Specification": [{ value: "", type: "textarea" }],
-        "Feature": [{ value: "", type: "textarea" }],
-        "Images": { value: [], type: "file" }
-    });
 
     // replace the fake data with useApi custom hook to fetch products from db
     const [products, setProducts] = useState(["product 1", "product 2", "product 3", "product 4", "product 5", "product 6", "product 7"])
@@ -72,36 +46,10 @@ const AdminProfile = () => {
         setSelectedSubcategory(subcategory.categoryName)
     }
 
-    // const handleInputChange = (detail, e) => {
-    //     if (detail === "Images") {
-    //         const selectedFiles = Array.from(e.target.files);
-    //         const existingFiles = productDetail.Images.value || [];
-    //         const allSelectedFiles = [...existingFiles, ...selectedFiles];
-    //         const fileNames = allSelectedFiles.map(file => file.name);
-
-    //         setProductDetail((prevProductDetail) => ({
-    //             ...prevProductDetail,
-    //             [detail]: {
-    //                 value: allSelectedFiles,
-    //                 fileNames: fileNames,
-    //                 type: "file",
-    //             },
-    //         }));
-    //     } else {
-    //         setProductDetail((prevProductDetail) => ({
-    //             ...prevProductDetail,
-    //             [detail]: {
-    //                 ...prevProductDetail[detail],
-    //                 value: e.target.value,
-    //             },
-    //         }));
-    //     }
-    // };
-
     const handleCreateProduct = () => {
 
     }
-    
+
     // Modify Product
     const handleCategoryClickForModify = (category) => {
         setSelectedCategoryForModify(category.categoryName);
@@ -117,50 +65,23 @@ const AdminProfile = () => {
         setProductForModify(product)
     }
 
-    // const handleModifyInputChange = (detail, e) => {
-    //     if (detail === "Images") {
-    //         const selectedFiles = Array.from(e.target.files);
-    //         const existingFiles = productDetailForModify.Images.value || [];
-    //         const allSelectedFiles = [...existingFiles, ...selectedFiles];
-    //         const fileNames = allSelectedFiles.map(file => file.name);
-
-    //         setProductDetailForModify((prevProductDetail) => ({
-    //             ...prevProductDetail,
-    //             [detail]: {
-    //                 value: allSelectedFiles,
-    //                 fileNames: fileNames,
-    //                 type: "file",
-    //             },
-    //         }));
-    //     } else {
-    //         setProductDetailForModify((prevProductDetail) => ({
-    //             ...prevProductDetail,
-    //             [detail]: {
-    //                 ...prevProductDetail[detail],
-    //                 value: e.target.value,
-    //             },
-    //         }));
-    //     }
-    // }
-
     const handleModifyProduct = () => {
 
     }
 
     // Create Category/Subcategory
     const handleCategoryCreationClick = () => {
-        
+
     }
-    
+
     const handleSubcategoryCreateClick = () => {
-        
+
     }
 
 
     return (
         <div className="min-vh-100">
             <Container className="d-flex flex-wrap" fluid>
-
                 {/* Messages */}
                 <Col xs={12} md={6}>
                     <div className="mt-4 border rounded me-4">
@@ -170,19 +91,19 @@ const AdminProfile = () => {
                                 <thead>
                                     <tr>
                                         {["Date", "Message ID", "Title", "Message", "User"].map(th => (
-                                        <th key={th} rowSpan="3" className="bg-primary text-white">{th}</th>    
+                                            <th key={th} rowSpan="3" className="bg-primary text-white">{th}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* msg data */}
+                                    {/* msgs data */}
                                 </tbody>
                             </Table>
                         </div>
                     </div>
                 </Col>
 
-                {/* Create Product */}                
+                {/* Create Product */}
                 <Col xs={12} md={6} className="flex-grow-1">
                     <CategorySelector
                         title={"Create Product"}
@@ -198,23 +119,14 @@ const AdminProfile = () => {
                     />
                     <div className="d-flex flex-wrap w-100">
                         {selectedSubcategory !== "Subcategory" && (
-                            <ProductForm
-                                // productDetail={productDetail}
-                                // handleInputChange={handleInputChange}
-                                // handleCreateProduct={() => handleCreateProduct()}
-                                buttonName={"Create Product"}
-                            />
+                            <ProductForm buttonName={"Create Product"} />
                         )
                         }
-                        {productDetail.Images.fileNames && productDetail.Images.fileNames.length > 0 && (
-                            <ImagesForUploadSpan productDetail={productDetail} />
-                        )}
                     </div>
-
                 </Col>
 
                 {/* Modify Product */}
-                <Col xs={12} md={6}>                       
+                <Col xs={12} md={6}>
                     <CategorySelector
                         title={"Modify Product"}
                         withSearchBar={true}
@@ -226,7 +138,7 @@ const AdminProfile = () => {
                         selectedSubcategory={selectedSubcategoryForModify}
                         subcategories={subcategoriesForModify}
                         handleSubcategoryClick={handleSubcategoryClickForModify}
-                    />                   
+                    />
                     {!productForModify && (<select className="form-select" multiple aria-label="multiple select product" size={5}>
                         {products.length > 0 && (
                             products.map((product, idx) => (
@@ -236,15 +148,7 @@ const AdminProfile = () => {
                     </select>
                     )}
                     <div className="d-flex flex-wrap w-100">
-                        {productForModify && <ProductForm
-                            // productDetail={productDetailForModify}
-                            // handleInputChange={handleModifyInputChange}
-                            // handleCreateProduct={() => handleModifyProduct()}
-                            buttonName={"Modify Product"}
-                        />}
-                        {productDetailForModify.Images.fileNames && productDetailForModify.Images.fileNames.length > 0 && (
-                            <ImagesForUploadSpan productDetail={productDetailForModify} />
-                        )}
+                        {productForModify && <ProductForm buttonName={"Modify Product"} />}
                     </div>
                 </Col>
 

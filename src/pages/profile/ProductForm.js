@@ -1,11 +1,11 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
-import { FaPlus } from "react-icons/fa6";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { uploadImages } from "../../services/api";
-import { useState } from "react";
 
+import { uploadImages } from "../../services/api";
+
+// validation schema for product creation/modification
 const schema = yup.object().shape({
     productName: yup.string().required("Please enter product's name"),
     price: yup
@@ -44,7 +44,7 @@ const schema = yup.object().shape({
         "File size is too large",
         (value) => {
             if (!value) return false;
-            return value.length > 0 && value[0].size <= 10485760; 
+            return value.length > 0 && value[0].size <= 10485760;
         }
     ),
 })
@@ -52,27 +52,16 @@ const schema = yup.object().shape({
 
 const ProductForm = ({ buttonName }) => {
 
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     })
 
-    const submitForm = async (data) => {   
-        // console.log("submitForm", data);    
-        // const newData = new FormData();
-        // newData.append("hola", "chau")
-        // for(let e in data){
-        //     console.log("trastorno", data[e]);
-        //     newData.append(e, data[e])
-        // }
-        // console.log("tofu", newData);
-        console.log("picolo", data);
+    const submitForm = async (data) => {
         try {
-            const response = await uploadImages(data);
-            console.log("where am i", response);
+            const response = await uploadImages(data);        
         } catch (error) {
             console.log("Error: ", error);
         }
-
     }
 
     const placeholders = {
@@ -91,33 +80,32 @@ const ProductForm = ({ buttonName }) => {
 
     return (
         <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)} enctype="multipart/form-data">
-            {Object.keys(schema.fields).map((fieldName) => (
+            {Object.keys(schema.fields).map((fieldName) => (  
+                fieldName !== "images" && (
                 <Form.Group key={fieldName} controlId={fieldName} className="w-100">
-                    <InputGroup className="mb-3">                 
-                        <>
+                    <InputGroup className="mb-3">                       
                             <InputGroup.Text className="justify-content-center">
                                 {placeholders[fieldName].outer || placeholders[fieldName]}
                             </InputGroup.Text>
-                                <Controller
-                                    name={fieldName}
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Form.Control
-                                            {...field}
-                                            placeholder={placeholders[fieldName].inner}
-                                            type={{
-                                                price: 'number',
-                                                discount: 'number',
-                                                stock: 'number',
-                                            }[fieldName] || 'text'}
-                                        />
-                                    )}
-                                />
-                        </>
-
+                            <Controller
+                                name={fieldName}
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Control
+                                        {...field}
+                                        placeholder={placeholders[fieldName].inner}
+                                        type={{
+                                            price: 'number',
+                                            discount: 'number',
+                                            stock: 'number',
+                                        }[fieldName] || 'text'}
+                                    />
+                                )}
+                            />
                         <small className="text-danger">{errors[fieldName]?.message}</small>
                     </InputGroup>
-                </Form.Group>
+                </Form.Group>                    
+                )
             ))}
             <Form.Group controlId="images" className="w-100">
                 <InputGroup className="mb-3">
@@ -125,24 +113,20 @@ const ProductForm = ({ buttonName }) => {
                         name="images"
                         control={control}
                         render={({ field }) => (
-                            <>
-                                <input                                
-                                    {...field}
-                                    name="images"
-                                    type="file"
-                                    accept="image/*"
-                                    multiple                                      
-                                    value={field.value?.fieldName}
-                                    onChange={e => {                                        
-                                        field.onChange(e.target.files)
-                                    }}                                                            
-                                />
-                                <Button variant="primary rounded">
-                                    <FaPlus />
-                                </Button>
-                            </>
+                            <input
+                                {...field}
+                                name="images"
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                value={field.value?.fieldName}
+                                onChange={e => {
+                                    field.onChange(e.target.files)
+                                }}
+                            />
                         )}
                     />
+                    <small className="text-danger">{errors.images?.message}</small>
                 </InputGroup>
             </Form.Group>
 
@@ -150,67 +134,6 @@ const ProductForm = ({ buttonName }) => {
                 {buttonName}
             </Button>
         </Form>
-
     )
 }
 export default ProductForm;
-
-
-{/* <><input
-                        name="images"
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={(e) => {
-                            const selectedFiles = e.target.files;
-                            console.log("selected img:", selectedFiles);
-                        }} /> */}
-
-
-
-
-
-
-                        //     <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
-                        //     {Object.keys(schema.fields).map((fieldName) => (
-                        //         <Form.Group key={fieldName} controlId={fieldName} className="w-100">
-                        //             <InputGroup className="mb-3">                                               
-                                    
-                                       
-                        //                         <InputGroup.Text className="justify-content-center">
-                        //                             {placeholders[fieldName].outer || placeholders[fieldName]}
-                        //                         </InputGroup.Text>
-                        //                         <input
-                        //                             {...register(fieldName)} // Registra otros campos usando register
-                        //                             placeholder={placeholders[fieldName].inner}
-                        //                             type={{
-                        //                                 price: 'number',
-                        //                                 discount: 'number',
-                        //                                 stock: 'number',
-                        //                             }[fieldName] || 'text'}
-                        //                         />
-                                         
-                                     
-                
-                        //                 <small className="text-danger">{errors[fieldName]?.message}</small>
-                        //             </InputGroup>
-                        //         </Form.Group>
-                        //     ))}
-                        //      <input
-                        //                         {...register("images")}
-                        //                             name="images"
-                        //                             type="file"
-                        //                             accept="image/*"
-                        //                             multiple
-                        //                             onChange={handleFiles}
-                                                   
-                        //                         />
-                        //                         <Button variant="primary rounded">
-                        //                             <FaPlus />
-                        //                         </Button>
-                                          
-                
-                        //     <Button type="submit">
-                        //         {buttonName}
-                        //     </Button>
-                        // </Form>
