@@ -1,151 +1,62 @@
-import { Button, Form, Modal, Spinner } from "react-bootstrap";
-import { useEffect, useState } from "react";
-
-import InputField from "./InputField";
-import { loginUser, registerUser } from "../../services/api";
+import { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
+import AuthForm from "./AuthForm";
 import ResetPasswordModal from "./ResetPasswordModal";
+import { loginUser, registerUser } from "../../services/api";
 
 const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
-    const [userData, setUserData] = useState({
-        "username": "",
-        "email": "",
-        "country": "",
-        "state": "",
-        "city": "",
-        "zip": "",
-        "shippingAddress": "",
-        "password": "",
-        "role": "user"
-    });
-    const [password, setPassword] = useState("");
-    const [reEnterPassword, setReEnterPassword] = useState("");
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [existingEmailErrorMsg, setExistingEmailErrorMsg] = useState("");
-    const [passwordErrorMsg, setPasswordErrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
     const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const resetForm = () => {
-        setUserData({
-            "username": "",
-            "email": "",
-            "country": "",
-            "state": "",
-            "city": "",
-            "zip": "",
-            "shippingAddress": "",
-            "password": "",
-            "role": "user"
-        });
-        setPassword("");
-        setReEnterPassword("");
-        setPasswordsMatch(true);
-        setExistingEmailErrorMsg("");
-        setPasswordErrorMsg("");
-    }
+    const submitAuthForm = async (data) => {
+        data.role = "user";
+        setIsSubmitting(true);
 
-    useEffect(() => {
-        if ((password === reEnterPassword) || (!password && !reEnterPassword)) {
-            setPasswordsMatch(true)
-            setPasswordErrorMsg("")
-        } else {
-            setPasswordsMatch(false);
-            setPasswordErrorMsg("Passwords don't match")
-        }
-
-    }, [password, reEnterPassword])
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-
-        name === "password" && setPassword(value);
-        name === "reEnterPassword" && setReEnterPassword(value);
-        name === "email" && setExistingEmailErrorMsg("");
-
-        setUserData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleRegistration = async (event) => {
-        event.preventDefault();
-        if (passwordsMatch) {
-            try {
-                setLoading(true);
-
-                //setTimeout for testing loading animation
-                await new Promise(r => setTimeout(r, 2000))
-
-                const responseData = await registerUser(userData);
-                if (responseData.error && responseData.error === "Email already exists") {
-                    setExistingEmailErrorMsg("Email already exists")
-                }
-            } catch (error) {
-                console.error("Error:", error);
-            } finally {
-                setLoading(false);
-            }
-        } else {
-            setPasswordsMatch(false)
-        }
-    };
-
-    const handleLogin = async (event) => {
-        event.preventDefault();
         try {
-            setLoading(true);
-
-            //setTimeout for testing loading animation
-            await new Promise(r => setTimeout(r, 2000)) 
-                                 
-            const responseData = await loginUser(userData)
-            if (responseData.idUser) {
-                handleLoggedIn()
-                onHide()
+            if (modalType === "registration") {
+                const responseData = await registerUser(data);
+                if (responseData.errorExistingEmail) {
+                    setErrorMsg(responseData.errorExistingEmail);
+                }
+                if (responseData.message) {
+                    setSuccessMsg(responseData.message)
+                    onHide()
+                    setSuccessMsg("")
+                }
+            } else if (modalType === "login") {
+                const responseData = await loginUser(data);
+                if (responseData.errorInexistentEmail) {
+                    setErrorMsg(responseData.errorInexistentEmail)
+                }
+                if (responseData.errorWrongPassword) {
+                    setErrorMsg(responseData.errorWrongPassword)
+                }
+                if (responseData.idUser) {
+                    handleLoggedIn();
+                    onHide();
+                }
             }
         } catch (error) {
-            console.log(`Error: ${error}`);
+            console.error("Error:", error);
         } finally {
-            setLoading(false)
+            setIsSubmitting(false);
         }
-    }
-
-    const renderModalType = () => {
-        if (modalType === "login") {
-            return (
-                <Form className="d-flex flex-column justify-content-center align-items-center" onSubmit={handleLogin}>
-                    <InputField typeInput={"email"} textInput={"E-mail"} name={"email"} value={userData.email} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={userData.password} onChange={handleInputChange} />
-                </Form>
-            )
-        } else if (modalType === "registration") {
-            return (
-                <Form className="d-flex flex-column justify-content-center align-items-center" onSubmit={handleRegistration}>
-                    <InputField typeInput={"email"} textInput={"Email"} name={"email"} value={userData.email} onChange={handleInputChange} errorText={existingEmailErrorMsg} />
-                    <InputField typeInput={"text"} textInput={"Username"} name={"username"} value={userData.username} onChange={handleInputChange} />
-                    <InputField typeInput={"text"} textInput={"Shipping Address"} name={"shippingAddress"} value={userData.shippingAddress} onChange={handleInputChange} />
-                    <InputField typeInput={"text"} textInput={"Country"} name={"country"} value={userData.country} onChange={handleInputChange} />
-                    <InputField typeInput={"text"} textInput={"City"} name={"city"} value={userData.city} onChange={handleInputChange} />
-                    <InputField typeInput={"text"} textInput={"State"} name={"state"} value={userData.state} onChange={handleInputChange} />
-                    <InputField typeInput={"text"} textInput={"Zip"} name={"zip"} value={userData.zip} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Password"} name={"password"} value={userData.password} onChange={handleInputChange} />
-                    <InputField typeInput={"password"} textInput={"Re-Enter Password"} name={"reEnterPassword"} value={userData.reEnterPassword} onChange={handleInputChange} errorText={passwordErrorMsg} />
-                </Form>
-            )
-        }
-    }
+    };
 
     const handleForgotPassword = () => {
         setForgotPasswordModal(true);
-    }
+    };
+
+    const clearErrorMsg = () => setErrorMsg("");
 
     return (
         <Modal
             show={show}
             onHide={() => {
                 onHide();
-                resetForm();
+                setErrorMsg("");
             }}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -162,35 +73,26 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                 </h4>
             </Modal.Header>
 
-            <Modal.Body >
-                {renderModalType()}
-                {modalType === "login" && <Button onClick={handleForgotPassword} variant="link">Forgot password?</Button>}
-                {forgotPasswordModal && <ResetPasswordModal show={forgotPasswordModal} onHide={() => { setForgotPasswordModal(false) }} />}
+            <Modal.Body>
+                <AuthForm
+                    formType={modalType}
+                    submitAuthForm={submitAuthForm}
+                    isSubmitting={isSubmitting}
+                    errorMsg={errorMsg}
+                    successMsg={successMsg}
+                    clearErrorMsg={clearErrorMsg}
+                />
+                {modalType === "login" && (
+                    <Button onClick={handleForgotPassword} variant="link">
+                        Forgot password?
+                    </Button>
+                )}
+                {forgotPasswordModal && (
+                    <ResetPasswordModal show={forgotPasswordModal} onHide={() => setForgotPasswordModal(false)} />
+                )}
             </Modal.Body>
-
-            <Modal.Footer className="d-flex justify-content-center">
-                <Button
-                    variant="primary"
-                    type="submit"
-                    className="w-50"
-                    onClick={modalType === "login" ? handleLogin : handleRegistration}
-                >
-                    {loading && (
-                        <Spinner
-                            animation="border"
-                            size="sm"
-                            role="status"
-                            aria-label="Submitting... Please wait."
-                        />
-                    )}
-                    {modalType === "login" ? "Login" : "Create Account"}
-                </Button>
-            </Modal.Footer>
         </Modal>
-    )
-}
+    );
+};
 
 export default AuthModal;
-
-
-

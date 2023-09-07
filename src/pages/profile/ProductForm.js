@@ -4,107 +4,73 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { uploadImages } from "../../services/api";
-
-// validation schema for product creation/modification
-const schema = yup.object().shape({
-    productName: yup.string().required("Please enter product's name"),
-    price: yup
-        .number()
-        .typeError("Values must be numbers and cannot be empty")
-        .positive("Price can't be negative")
-        .required("Please Enter Product's Initial Price")
-        .min(0.5, "Price must be greater than 0.5")
-        .max(1000000, "Price cannot be greater than $ 1,000,000"),
-    discount: yup
-        .number()
-        .typeError("Values must be numbers")
-        .transform((value, originalValue) => {
-            if (originalValue === null || originalValue === undefined || originalValue === '') {
-                return undefined;
-            }
-            return parseFloat(value);
-        })
-        .positive()
-        .min(0.01, "Discount can't be less than 1% (For 1 % enter 0.01)")
-        .max(1, "Discount can't be greater than 100% (For 100 % enter 1)"),
-    stock: yup
-        .number()
-        .typeError("Please enter product's initial stock")
-        .positive()
-        .integer()
-        .required("Please Enter Product's Initial Stock"),
-    brand: yup.string(),
-    supplier: yup.string(),
-    slogan: yup.string(),
-    description: yup.string(),
-    specifications: yup.string(),
-    features: yup.string(),
-    images: yup.mixed().required("Please select at least one image").test(
-        "fileSize",
-        "File size is too large",
-        (value) => {
-            if (!value) return false;
-            return value.length > 0 && value[0].size <= 10485760;
-        }
-    ),
-})
-
+import { CreateOrModifySchema } from "../../utils/validationSchemas";
 
 const ProductForm = ({ buttonName }) => {
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(schema)
+    const { control, handleSubmit, clearErrors, formState: { errors } } = useForm({
+        resolver: yupResolver(CreateOrModifySchema)
     })
 
     const submitForm = async (data) => {
-        try {
-            const response = await uploadImages(data);        
+        try {     
+            const response = await uploadImages(data);
         } catch (error) {
             console.log("Error: ", error);
         }
     }
 
-    const placeholders = {
-        productName: "Product Name:",
-        price: { outer: "Price $:", inner: "XX.xx" },
-        discount: { outer: "Discount", inner: "E.g.: for 5 % discount enter 0.05" },
-        stock: "Initial Stock:",
-        brand: "Brand:",
-        supplier: "Supplier:",
-        slogan: "Slogan:",
-        description: "Description:",
-        specifications: "Specifications:",
-        features: "Features:",
-        images: ""
-    };
+    const productFormFields = [
+        { name: "productName", label: "Product Name:" },
+        { name: "price", label: { outer: "Price $:", inner: "XX.xx" } },
+        { name: "discount", label: { outer: "Discount", inner: "E.g.: for 5 % discount enter 0.05" } },
+        { name: "stock", label: "Initial Stock:" },
+        { name: "brand", label: "Brand:" },
+        { name: "supplier", label: "Supplier:" },
+        { name: "slogan", label: "Slogan:" },
+        { name: "description", label: "Description:" },
+        { name: "specifications", label: "Specifications:" },
+        { name: "features", label: "Features:" },
+        { name: "images", label: "" }
+    ];
 
     return (
-        <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)} enctype="multipart/form-data">
-            {Object.keys(schema.fields).map((fieldName) => (  
-                fieldName !== "images" && (
-                <Form.Group key={fieldName} controlId={fieldName} className="w-100">
-                    <InputGroup className="mb-3">                       
+        <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)}>
+            {productFormFields.map((field) => (
+                field.name !== "images" && (
+                    <Form.Group key={field.name} controlId={field.name} className="w-100">
+                        <InputGroup className="mb-3">
                             <InputGroup.Text className="justify-content-center">
-                                {placeholders[fieldName].outer || placeholders[fieldName]}
+                                {field.label.outer || field.label}
                             </InputGroup.Text>
                             <Controller
-                                name={fieldName}
+                                name={field.name}
                                 control={control}
                                 render={({ field }) => (
                                     <Form.Control
-                                        {...field}
-                                        placeholder={placeholders[fieldName].inner}
+                                        // {...field}                                  
                                         type={{
                                             price: 'number',
                                             discount: 'number',
                                             stock: 'number',
-                                        }[fieldName] || 'text'}
+                                        }[field.name] || 'text'}
+                                        step={{
+                                            price: '1',
+                                            discount: '0.01',
+                                            stock: '1'
+                                        }[field.name]}
+                                        value={field.value}
+                                        onChange={(e) => {
+                                            field.onChange(e.target.value);
+                                            clearErrors(field.name);
+                                        }}
+                                        isInvalid={!!errors[field.name]}
                                     />
                                 )}
                             />
-                        <small className="text-danger">{errors[fieldName]?.message}</small>
-                    </InputGroup>
-                </Form.Group>                    
+                            <Form.Control.Feedback type="invalid">{errors[field.name]?.message}</Form.Control.Feedback>
+                        </InputGroup>
+                    </Form.Group>
                 )
             ))}
             <Form.Group controlId="images" className="w-100">
@@ -119,7 +85,7 @@ const ProductForm = ({ buttonName }) => {
                                 type="file"
                                 accept="image/*"
                                 multiple
-                                value={field.value?.fieldName}
+                                value={field.value?.field}
                                 onChange={e => {
                                     field.onChange(e.target.files)
                                 }}

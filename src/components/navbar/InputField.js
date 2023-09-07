@@ -1,6 +1,4 @@
-import React from "react";
 import { Form, InputGroup } from "react-bootstrap";
-
 
 const InputField = ({ typeInput, textInput, name, value, onChange, errorText, disabled, marginBottom })  => {
     return (
