@@ -66,3 +66,11 @@ export const CreateOrModifySchema = yup.object().shape({
         }
     ),
 })
+
+// new password
+export const newPasswordSchema = yup.object().shape({
+    password: yup.string().required("Password is required"),
+    reEnterPassword: yup.string()
+        .required("Please re-enter your password")
+        .oneOf([yup.ref('password'), null], 'Passwords do not match')
+});

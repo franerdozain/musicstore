@@ -1,7 +1,6 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import { uploadImages } from "../../services/api";
 import { CreateOrModifySchema } from "../../utils/validationSchemas";

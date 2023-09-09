@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+
 import AuthForm from "./AuthForm";
-import ResetPasswordModal from "./ResetPasswordModal";
+import NewPasswordModal from "./NewPasswordModal";
 import { loginUser, registerUser } from "../../services/api";
 
 const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
@@ -15,6 +16,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
         setIsSubmitting(true);
 
         try {
+            setErrorMsg("");
             if (modalType === "registration") {
                 const responseData = await registerUser(data);
                 if (responseData.errorExistingEmail) {
@@ -39,7 +41,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                 }
             }
         } catch (error) {
-            console.error("Error:", error);
+            setErrorMsg("Internal server error, please try again in a moment")
         } finally {
             setIsSubmitting(false);
         }
@@ -72,7 +74,6 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                     {modalType === "login" ? "Login" : "Registration"}
                 </h4>
             </Modal.Header>
-
             <Modal.Body>
                 <AuthForm
                     formType={modalType}
@@ -88,7 +89,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                     </Button>
                 )}
                 {forgotPasswordModal && (
-                    <ResetPasswordModal show={forgotPasswordModal} onHide={() => setForgotPasswordModal(false)} />
+                    <NewPasswordModal show={forgotPasswordModal} onHide={() => setForgotPasswordModal(false)} />
                 )}
             </Modal.Body>
         </Modal>

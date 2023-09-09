@@ -13,7 +13,7 @@ import MmNavbar from './components/navbar/Navbar';
 import ProductDetails from './pages/productDetails/ProductDetails';
 import ProductList from './pages/productList/ProductList';
 import Footer from './components/footer/Footer';
-import ResetPassword from './pages/resetPassword/ResetPassword';
+import NewPassword from './pages/newPassword/NewPassword';
 import ProfileContainer from './pages/profile/ProfileContainer';
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
         <Route path="/profile" element={<ProfileContainer />} />
         <Route path="/product/:name/:id" element={<ProductDetails />} />
         <Route path="/categories/:category/:subcategory" element={<ProductList />} />
-        <Route path='/reset/new-password' element={<ResetPassword />} />
+        <Route path='/reset/new-password' element={<NewPassword />} />
       </Routes>
       <Footer />
     </Router>

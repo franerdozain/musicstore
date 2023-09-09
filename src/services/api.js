@@ -24,7 +24,9 @@ const fetchData = async (url, method, data = null, files = false) => {
             options.headers = {
                 'Content-Type': 'application/json'
             };
-            options.body = JSON.stringify(data);
+            if (method === "POST" || method === "PATCH") {
+                options.body = JSON.stringify(data)
+            }
         }
 
         const response = await fetch(url, options);
@@ -52,7 +54,7 @@ export const getCategories = async () => {
     return responseData;
 }
 
-export const resetPassword = async (email) => {        
+export const newPassword = async (email) => {        
     const responseData = await fetchData(`${API_BASE_URL}/reset`, "POST", {email})
     return responseData;
 }
