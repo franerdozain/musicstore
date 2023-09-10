@@ -13,7 +13,8 @@ const ProductForm = ({ buttonName }) => {
 
     const submitForm = async (data) => {
         try {     
-            const response = await uploadImages(data);
+            //change it to await createOrModifyProduct
+            // const response = await uploadImages(data);
         } catch (error) {
             console.log("Error: ", error);
         }

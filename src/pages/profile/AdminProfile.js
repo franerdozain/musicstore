@@ -8,7 +8,7 @@ import CategorySelector from "./CategorySelector";
 
 const AdminProfile = () => {
     const [selectedCategory, setSelectedCategory] = useState("Category");
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState({ images: [], categories: [] });
     const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
@@ -31,14 +31,14 @@ const AdminProfile = () => {
         }
     }, [categoriesData]);
 
-    const categoriesWithNullParent = categories.filter(
+    const categoriesWithNullParent = categories.categories.filter(
         (category) => category.idCategoryParent === null
     );
 
     // Create Product
     const handleCategoryClick = category => {
         setSelectedCategory(category.categoryName);
-        const filteredCategories = categories.filter(subcategory => subcategory.idCategoryParent === category.idCategory)
+        const filteredCategories = categories.categories.filter(subcategory => subcategory.idCategoryParent === category.idCategory)
         setSubcategories(filteredCategories);
     }
 
@@ -53,7 +53,7 @@ const AdminProfile = () => {
     // Modify Product
     const handleCategoryClickForModify = (category) => {
         setSelectedCategoryForModify(category.categoryName);
-        const filteredCategories = categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
+        const filteredCategories = categories.categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
         setSubcategoriesForModify(filteredCategories);
     };
 
@@ -74,7 +74,7 @@ const AdminProfile = () => {
 
     }
 
-    const handleSubcategoryCreateClick = () => {
+    const handleSubcategoryCreationClick = () => {
 
     }
 
@@ -163,7 +163,7 @@ const AdminProfile = () => {
                         categoriesWithNullParent={categoriesWithNullParent}
                         selectedSubcategory={selectedSubcategoryForCreate}
                         subcategories={subcategoriesForCreate}
-                        handleSubcategoryClick={handleSubcategoryCreateClick}
+                        handleSubcategoryClick={handleSubcategoryCreationClick}
                     />
                 </Col>
             </Container>

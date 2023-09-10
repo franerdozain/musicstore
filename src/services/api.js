@@ -50,7 +50,7 @@ export const loginUser = async (loginData) => {
 }
 
 export const getCategories = async () => {
-    const responseData = await fetchData(`${API_BASE_URL}/categories`, "GET")
+    const responseData = await fetchData(`${API_BASE_URL}/categories/all`, "GET")
     return responseData;
 }
 
@@ -69,13 +69,9 @@ export const logoutUser = async () => {
     return responseData;
 }
 
-export const getCategoriesImages = async () => {
-    const responseData = await fetchData(`${API_BASE_URL}/images/categories`, "GET")   
-    return responseData;
-}
 
-export const uploadImages = async (formData) => {  
-    console.log("uploadImages", formData)
-    const responseData = await fetchData(`${API_BASE_URL}/images/categories/new`, "POST", formData, true)
+
+export const createCategories = async (formData) => {  
+    const responseData = await fetchData(`${API_BASE_URL}/categories/new`, "POST", formData, true)
     return responseData;
 }

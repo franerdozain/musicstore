@@ -2,24 +2,15 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import HomeModal from "./HomeModal";
-import { getCategories, getCategoriesImages } from "../../services/api";
+import { getCategories } from "../../services/api";
 import CategoryCard from "./CategoryCard";
 import useApi from "../../hooks/useApi";
 
 const Home = () => {
   const [modalShow, setModalShow] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState({ images: [], categories: [] });
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [images, setImages] = useState([]);
-  const { data: imagesData, loading: loadingCategoriesImages, LoadingAnimation: loadingCategoriesImagesAnimation } = useApi(getCategoriesImages);
   const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
-
-  useEffect(() => {
-    if (imagesData) {
-      setImages(imagesData);
-    }
-  }, [imagesData]);
-
 
   useEffect(() => {
     if (categoriesData) {
@@ -33,21 +24,21 @@ const Home = () => {
 
   }
 
-  const categoriesWithNullParent = categories.filter(
+  const categoriesWithNullParent = categories.categories.filter(
     (category) => category.idCategoryParent === null
   );
 
   return (
     <Container className="min-vh-100" id="home-text">
-      {loadingCategories || loadingCategoriesImages ? (
+      {loadingCategories  ? (
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4 justify-content-center">
-          {loadingCategoriesAnimation || loadingCategoriesImagesAnimation}
+          {loadingCategoriesAnimation }
         </div>
       ) : (
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4">
           {categoriesWithNullParent.map((category, index) => (
             <div key={index} className="col">
-              <CategoryCard category={category} onClick={() => handleClick(category)} images={images} />
+              <CategoryCard category={category} onClick={() => handleClick(category)} images={categories.images} />
             </div>
           ))}
         </div>
@@ -55,14 +46,14 @@ const Home = () => {
       <HomeModal
         show={modalShow}
         category={selectedCategory?.categoryName || ""}
-        subcategories={categories.filter(
+        subcategories={categories.categories.filter(
           (category) => selectedCategory && category.idCategoryParent === selectedCategory.idCategory
         )}
         onHide={() => {
           setModalShow(false);
           setSelectedCategory(null);
         }}
-        images={images}
+        images={categories.images}
       />
     </Container>
   )
