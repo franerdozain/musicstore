@@ -25,7 +25,7 @@ export const loginValidationSchema = yup.object().shape({
 })
 
 // create and modify product
-export const CreateOrModifySchema = yup.object().shape({
+export const createOrModifySchema = yup.object().shape({
     productName: yup.string().required("Please enter product's name"),
     price: yup
         .number()
@@ -74,3 +74,9 @@ export const newPasswordSchema = yup.object().shape({
         .required("Please re-enter your password")
         .oneOf([yup.ref('password'), null], 'Passwords do not match')
 });
+
+// create category/subcategory
+export const createCatOrSubcatSchema = yup.object().shape({
+    category: yup.string(),
+    subcategory: yup.string()
+})

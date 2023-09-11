@@ -3,12 +3,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { uploadImages } from "../../services/api";
-import { CreateOrModifySchema } from "../../utils/validationSchemas";
+import { createOrModifySchema } from "../../utils/validationSchemas";
 
 const ProductForm = ({ buttonName }) => {
 
     const { control, handleSubmit, clearErrors, formState: { errors } } = useForm({
-        resolver: yupResolver(CreateOrModifySchema)
+        resolver: yupResolver(createOrModifySchema)
     })
 
     const submitForm = async (data) => {
