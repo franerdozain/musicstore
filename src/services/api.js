@@ -69,9 +69,8 @@ export const logoutUser = async () => {
     return responseData;
 }
 
-
-
-export const createCategories = async (formData) => {  
+export const createCategoryOrSubcategory = async (formData) => {  
+    console.log("api", formData);
     const responseData = await fetchData(`${API_BASE_URL}/categories/new`, "POST", formData, true)
     return responseData;
 }

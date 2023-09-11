@@ -78,5 +78,20 @@ export const newPasswordSchema = yup.object().shape({
 // create category/subcategory
 export const createCatOrSubcatSchema = yup.object().shape({
     category: yup.string(),
-    subcategory: yup.string()
-})
+    subcategory: yup.string(),
+    images: yup.mixed().required("Please select one image for the category/subcategory").test(
+        "fileSize",
+        "File size is too large",
+        (value) => {
+            if (!value) return false;
+            return value.length > 0 && value[0].size <= 10485760;
+        }
+    ),
+}).test({
+    name: 'at-least-one-present',
+    exclusive: true,
+    message: 'Category or Subcategory is required',
+    test: function(value) {
+        return value.category || value.subcategory;
+    }
+});

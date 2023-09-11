@@ -1,18 +1,59 @@
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Form, InputGroup, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { FaQuestionCircle } from "react-icons/fa";
+import { BiConfused, BiHappyAlt } from 'react-icons/bi';
 
 import { createCatOrSubcatSchema } from "../../utils/validationSchemas";
+import { createCategoryOrSubcategory, getCategories } from "../../services/api";
 
 const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCategoryForCreate, handleCategorySelectionClick }) => {
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [updatedCategoriesWithNullParent, setUpdatedCategoriesWithNullParent] = useState(categoriesWithNullParent)
 
-    const { control, handleSubmit, clearErrors, formState: { errors } } = useForm({
+    useEffect(() => {
+        setUpdatedCategoriesWithNullParent(categoriesWithNullParent)
+    }, [categoriesWithNullParent])
+
+    const { control, handleSubmit, setValue, clearErrors, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(createCatOrSubcatSchema)
     });
-
     const submitForm = async (data) => {
         try {
+            setErrorMessage("");
+            setSuccessMessage("");
+            await new Promise(r => setTimeout(r, 2000));
+            const { category, subcategory, images } = data;
+            let requestData = {};
 
+            if (selectedCategoryForCreate) {
+                requestData = {
+                    categoryName: subcategory,
+                    idCategoryParent: selectedCategoryForCreate.idCategory,
+                    images: images
+                };
+            } else {
+                requestData = {
+                    categoryName: category,
+                    images: images
+                };
+            }
+            const response = await createCategoryOrSubcategory(requestData);
+            if (response.message) {
+                setSuccessMessage(response.message);
+                setValue("category", "");
+                setValue("subcategory", "");
+                getCategories().then((data) => {
+                    if (data && data.categories) {
+                        setUpdatedCategoriesWithNullParent(data.categories.filter((category) => category.idCategoryParent === null));
+                    }
+                });
+            }
+            if (response.errorExistingCategory) {
+                setErrorMessage(response.errorExistingCategory)
+            }
         } catch (error) {
             console.log("Error: ", error);
         }
@@ -27,42 +68,77 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
         <div className="mt-4 border rounded me-4 d-flex flex-column">
             <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">{title}</h2>
             <div className="d-flex flex-wrap">
-                <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)}>
+                <Form className="d-flex flex-column align-items-center w-100 mx-auto" onSubmit={handleSubmit(submitForm)}>
                     {createCatOrSubcatFields.map((field) => (
                         <Form.Group key={field.name} controlId={field.name} className="w-100">
                             <InputGroup className="mb-3">
                                 <InputGroup.Text className="justify-content-center">
-                                    {field.label.outer || field.label}
+                                    {field.label}
                                 </InputGroup.Text>
+
                                 <Controller
                                     name={field.name}
                                     control={control}
                                     render={({ field }) => (
                                         <Form.Control
                                             type='text'
-                                            value={field.name === "category" && selectedCategoryForCreate ? selectedCategoryForCreate : field.value}
+                                            value={field.name === "category" && selectedCategoryForCreate ? selectedCategoryForCreate.categoryName : field.value}
                                             onChange={(e) => {
                                                 field.onChange(e.target.value);
-                                                clearErrors(field.name);
+                                                clearErrors("");
+                                                setSuccessMessage("");
+                                                setErrorMessage("");
                                             }}
                                             isInvalid={!!errors[field.name]}
                                             disabled={(field.name === "category" && selectedCategoryForCreate) || (field.name === "subcategory" && !selectedCategoryForCreate) ? true : false}
                                         />
                                     )}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors[field.name]?.message}</Form.Control.Feedback>
+                                <OverlayTrigger
+                                    key="top"
+                                    placement="top"
+                                    trigger={"click"}
+                                    overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                            {(field.name === "category" && selectedCategoryForCreate) ?
+                                                "To create a category select 'Create A Category' from the select menu" :
+                                                (field.name === "category" && !selectedCategoryForCreate) ?
+                                                    "Enter the category name that you want to create" : ""}
+                                            {(field.name === "subcategory" && selectedCategoryForCreate) ?
+                                                "Enter the subcategory name that you want to create" :
+                                                (field.name === "subcategory" && !selectedCategoryForCreate) ?
+                                                    "To create a subcategory first choose a category from the select menu or create a new one" : ""}
+                                        </Tooltip>}
+                                    rootClose
+                                >
+                                    <div>
+                                        <FaQuestionCircle className="mx-1" style={{ cursor: "pointer" }} />
+                                    </div>
+                                </OverlayTrigger>
                             </InputGroup>
                         </Form.Group>
                     ))}
 
-                    <label>For Subcategory Select First A Category</label>
                     <Controller
                         name="category"
                         control={control}
                         render={({ field }) => (
-                            <select {...field} onChange={(e) => handleCategorySelectionClick(e.target.value)}>
+                            <select
+                                {...field}
+                                onChange={(e) => {
+                                    handleCategorySelectionClick(e.target.value, updatedCategoriesWithNullParent)
+                                    if (e.target.value === "" || e.target.value === "Create A Category") {
+                                        setValue("subcategory", "");
+                                    }
+                                    if (e.target.value === "" || categoriesWithNullParent.some(option => option.categoryName === e.target.value)) {
+                                        setValue("category", "")
+                                    }
+                                    setSuccessMessage("");
+                                    setErrorMessage("");
+                                }}>
                                 <option value="">Select Category</option>
-                                {categoriesWithNullParent.map((option) => (
+                                <option value="">Create A Category</option>
+                                {updatedCategoriesWithNullParent && updatedCategoriesWithNullParent.map((option) => (
                                     <option key={option.categoryName} value={option.categoryName}>
                                         {option.categoryName}
                                     </option>
@@ -72,7 +148,7 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
                     />
 
                     <Form.Group controlId="images" className="w-100">
-                        <InputGroup className="mb-3">
+                        <InputGroup className="my-3">
                             <Controller
                                 name="images"
                                 control={control}
@@ -91,11 +167,23 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
                                     />
                                 )}
                             />
-                            <small className="text-danger">{errors.images?.message}</small>
                         </InputGroup>
                     </Form.Group>
-
-                    <Button type="submit">
+                    {<small className="text-danger">{errors.images?.message}</small>}
+                    {<small className="text-danger">{errors[""]?.message}</small>}
+                    {!isSubmitting && successMessage && (
+                        <small className="text-success">{successMessage}<BiHappyAlt className="text-black" size={25} /></small>
+                    )}
+                    {!isSubmitting && errorMessage && (
+                        <small className="text-danger">{errorMessage}<BiConfused className="text-black" size={25} /></small>
+                    )}
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting && <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-label="Submitting... Please wait."
+                        />}
                         {`Create ${selectedCategoryForCreate ? "Subcategory" : "Category"}`}
                     </Button>
                 </Form>

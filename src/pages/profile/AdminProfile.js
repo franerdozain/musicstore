@@ -16,15 +16,13 @@ const AdminProfile = () => {
     const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [subcategoriesForModify, setSubcategoriesForModify] = useState([]);
     const [selectedSubcategoryForModify, setSelectedSubcategoryForModify] = useState("Subcategory");
+    
 
     // replace the fake data with useApi custom hook to fetch products from db
     const [products, setProducts] = useState(["product 1", "product 2", "product 3", "product 4", "product 5", "product 6", "product 7"])
     const [productForModify, setProductForModify] = useState(null);
 
-    const [selectedCategoryForCreate, setSelectedCategoryForCreate] = useState(null);
-    const [selectedSubcategoryForCreate, setSelectedSubcategoryForCreate] = useState("Subcategory");
-    const [subcategoriesForCreate, setSubcategoriesForCreate] = useState([]);
-
+    const [selectedCategoryForCreate, setSelectedCategoryForCreate] = useState();
 
     useEffect(() => {
         if (categoriesData) {
@@ -71,16 +69,10 @@ const AdminProfile = () => {
     }
 
     // Create Category/Subcategory
-    const handleCategorySelectionClick = (category) => {
-        setSelectedCategoryForCreate(category)
-        console.log("1", selectedCategoryForCreate);
-       
+    const handleCategorySelectionClick = (category, updatedCategoriesWithNullParent) => {
+        const selectedCategory = updatedCategoriesWithNullParent.find(cat => cat.categoryName === category);
+        setSelectedCategoryForCreate(selectedCategory);
     }
-
-    const handleSubcategoryCreationClick = () => {
-
-    }
-
 
     return (
         <div className="min-vh-100">
@@ -162,7 +154,7 @@ const AdminProfile = () => {
                         selectedCategoryForCreate={selectedCategoryForCreate}
                         categoriesWithNullParent={categoriesWithNullParent}
                         selectedSubcategory={selectedSubcategory}
-                        handleCategorySelectionClick={handleCategorySelectionClick}
+                        handleCategorySelectionClick={handleCategorySelectionClick}                       
                     />
                 </Col>
             </Container>
