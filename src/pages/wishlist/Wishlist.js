@@ -104,7 +104,7 @@ const Wishlist = () => {
                           </div>
                       </Col>
                       <div>
-                  <FaCircleMinus onClick={() => handleClick(product.productID)} style={{cursor:"pointer"}}/>
+                  <FaCircleMinus onClick={() => handleClick(product.productID)} type="button" />
                 </div>
               </div>
             </div>

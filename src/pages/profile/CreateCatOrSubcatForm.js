@@ -112,7 +112,7 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
                                     rootClose
                                 >
                                     <div>
-                                        <FaQuestionCircle className="mx-1" style={{ cursor: "pointer" }} />
+                                        <FaQuestionCircle type="button" className="mx-1" />
                                     </div>
                                 </OverlayTrigger>
                             </InputGroup>
