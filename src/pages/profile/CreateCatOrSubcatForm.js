@@ -55,7 +55,7 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
                 setErrorMessage(response.errorExistingCategory)
             }
         } catch (error) {
-            console.log("Error: ", error);
+            throw error;
         }
     }
 
@@ -65,7 +65,7 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
     ]
 
     return (
-        <div className="mt-4 border rounded me-4 d-flex flex-column">
+        <div className="mt-4 border rounded me-4 d-flex flex-column w-100">
             <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">{title}</h2>
             <div className="d-flex flex-wrap">
                 <Form className="d-flex flex-column align-items-center w-100 mx-auto" onSubmit={handleSubmit(submitForm)}>

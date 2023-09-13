@@ -1,14 +1,16 @@
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { FaMinus, FaPlus } from "react-icons/fa";
 
 import { createProduct } from "../../services/api";
 import { createOrModifySchema } from "../../utils/validationSchemas";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { useState } from "react";
+import { BiConfused, BiHappyAlt } from "react-icons/bi";
 
-const ProductForm = ({ buttonName }) => {
-
+const ProductForm = ({ buttonName, selectedSubcategoryId }) => {
+    const [successMsg, setSuccessMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
     const [productFormFields, setProductFormFields] = useState([
         { name: "productName", label: "Product Name:" },
         { name: "price", label: { outer: "Price $:", inner: "XX.xx" } },
@@ -40,16 +42,24 @@ const ProductForm = ({ buttonName }) => {
         }
     }
 
-    const { control, handleSubmit, clearErrors, formState: { errors } } = useForm({
+    const { control, handleSubmit, setValue, clearErrors, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(createOrModifySchema)
     })
 
     const submitForm = async (data) => {
         try {
-            const response = await createProduct(data);
-            console.log("response in front end:", response)
+            setErrorMsg("");
+            setSuccessMsg("");
+            const requestData = { ...data, idCategory: selectedSubcategoryId };
+            const response = await createProduct(requestData);
+            if (response.message) {
+                setSuccessMsg(response.message);
+                productFormFields.map(field => setValue(field.name, ""))
+            }
+            if (response.errorExistingProduct) setErrorMsg(response.errorExistingProduct)
+            if (response.errorStoringData) setErrorMsg(response.errorStoringData)
         } catch (error) {
-            console.log("Error: ", error);
+            throw error;
         }
     }
 
@@ -67,7 +77,6 @@ const ProductForm = ({ buttonName }) => {
                                 control={control}
                                 render={({ field }) => (
                                     <Form.Control
-                                        // {...field}                                  
                                         type={{
                                             price: 'number',
                                             discount: 'number',
@@ -82,6 +91,8 @@ const ProductForm = ({ buttonName }) => {
                                         onChange={(e) => {
                                             field.onChange(e.target.value);
                                             clearErrors(field.name);
+                                            setErrorMsg("");
+                                            setSuccessMsg("");
                                         }}
                                         isInvalid={!!errors[field.name]}
                                     />
@@ -126,8 +137,20 @@ const ProductForm = ({ buttonName }) => {
                     <small className="text-danger">{errors.images?.message}</small>
                 </InputGroup>
             </Form.Group>
+            {!isSubmitting && successMsg && (
+                <small className="text-success">{successMsg}<BiHappyAlt className="text-black" size={25} /></small>
+            )}
+            {!isSubmitting && errorMsg && (
+                <small className="text-danger">{errorMsg}<BiConfused className="text-black" size={25} /></small>
+            )}
 
-            <Button type="submit">
+            <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting && <Spinner
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-label="Submitting... Please wait."
+                />}
                 {buttonName}
             </Button>
         </Form>

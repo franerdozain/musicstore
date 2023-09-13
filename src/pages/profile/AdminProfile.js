@@ -13,6 +13,7 @@ const AdminProfile = () => {
     const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
     const [subcategories, setSubcategories] = useState([]);
     const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
+    const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
     const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [subcategoriesForModify, setSubcategoriesForModify] = useState([]);
     const [selectedSubcategoryForModify, setSelectedSubcategoryForModify] = useState("Subcategory");
@@ -43,6 +44,7 @@ const AdminProfile = () => {
 
     const handleSubcategoryClick = subcategory => {
         setSelectedSubcategory(subcategory.categoryName)
+        setSelectedSubcategoryId(subcategory.idCategory)
     }
 
     const handleCreateProduct = () => {
@@ -79,7 +81,7 @@ const AdminProfile = () => {
             <Container className="d-flex flex-wrap" fluid>
                 {/* Messages */}
                 <Col xs={12} md={6}>
-                    <div className="mt-4 border rounded me-4">
+                    <div className="mt-4 border rounded me-4 w-100">
                         <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">User's Messages</h2>
                         <div className="table-responsive">
                             <Table striped borderless variant="light mb-0">
@@ -114,7 +116,7 @@ const AdminProfile = () => {
                     />
                     <div className="d-flex flex-wrap w-100">
                         {selectedSubcategory !== "Subcategory" && (
-                            <ProductForm buttonName={"Create Product"} />
+                            <ProductForm buttonName={"Create Product"} selectedSubcategoryId={selectedSubcategoryId} />
                         )
                         }
                     </div>

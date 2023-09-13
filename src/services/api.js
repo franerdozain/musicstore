@@ -34,7 +34,6 @@ const fetchData = async (url, method, data = null, files = false) => {
 
         return responseData;
     } catch (error) {
-        console.log("Error: ", error)
         throw error;
     }
 }
@@ -75,7 +74,6 @@ export const createCategoryOrSubcategory = async (formData) => {
 }
 
 export const createProduct = async (formData) => {  
-    console.log("api dormData: ", formData);
     const responseData = await fetchData(`${API_BASE_URL}/products/new`, "POST", formData, true)
     return responseData;
 }

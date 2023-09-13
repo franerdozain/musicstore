@@ -13,7 +13,7 @@ function useApi(apiFetch, ...args) {
                 const data = await apiFetch(...args);
                 setData(data);               
             } catch (error) {
-                console.log("Error: ", error);
+                throw error;
             } finally {                
                 setLoading(false);
             }

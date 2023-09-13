@@ -13,7 +13,7 @@ const CategorySelector = ({
     subcategories,
     handleSubcategoryClick }) => {
     return (
-        <div className="mt-4 border rounded me-4 d-flex flex-column">
+        <div className="mt-4 border rounded me-4 d-flex flex-column w-100">
             <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">{title}</h2>
             <div className="d-flex flex-wrap">
                 <div className="bg-primary text-white h-50">
