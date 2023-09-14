@@ -24,11 +24,11 @@ function CategoriesMenu({ categories }) {
 
   return (
     <div className='container'>
-      <Button variant="light" className="d-md-none mt-2 position-relative"  onClick={handleToggleMenu}>
+      <Button variant="light" className="d-md-none mt-2 position-relative" onClick={handleToggleMenu}>
         Categories
       </Button>
-      {/* big screen menu */}
 
+      {/* big screen menu */}
       <ButtonGroup vertical className="d-none d-md-inline-flex mt-2">
         {categories.categories.map((category) => (
           category.parentID === null && (
@@ -70,7 +70,7 @@ function CategoriesMenu({ categories }) {
       {/* small screen menu */}
       <Offcanvas show={showMenu} onHide={() => setShowMenu(false)} placement="start">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Categorías</Offcanvas.Title>
+          <Offcanvas.Title>Categories</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <ul>

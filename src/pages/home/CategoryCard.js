@@ -8,7 +8,7 @@ const isSubcategory = category.idCategoryParent !== null;
             { category.categoryName !== "Show All" && (
                 <img            
                     src={`http://localhost:4000/images/${isSubcategory ? 'subcategories' : 'categories'}/${matchingImages[0]?.imageURL}`}               
-                    className="card-img-top img-fluid object-fit-contain"
+                    className="card-img-top img-fluid object-fit-contain category-home-card"
                     alt={`${category.categoryName}`}
                     onClick={onClick}
                 />
