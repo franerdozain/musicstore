@@ -12,14 +12,14 @@ function CategoriesMenu({ categories }) {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   };
 
-  const handleCategoryClick = (categoryID) => {
+  const handleCategoryClick = (idCategory) => {
     setSelectedCategory((prevSelectedCategory) =>
-      prevSelectedCategory === categoryID ? null : categoryID
+      prevSelectedCategory === idCategory ? null : idCategory
     );
   };
 
   const handleSubcategoryClick = (subcategory) => {
-    setSelectedSubcategory(subcategory.categoryID)
+    setSelectedSubcategory(subcategory.idCategory)
   };
 
   return (
@@ -30,24 +30,25 @@ function CategoriesMenu({ categories }) {
 
       {/* big screen menu */}
       <ButtonGroup vertical className="d-none d-md-inline-flex mt-2">
-        {categories.categories.map((category) => (
-          category.parentID === null && (
+       
+        { categories.map((category) => (
+          category.idCategoryParent === null && (
             <DropdownButton              
               as={ButtonGroup}
               title={category.categoryName}
-              key={category.categoryID}
+              key={category.idCategory}
               drop="end"
               variant="light"
               onClick={() => {
-                handleCategoryClick(category.categoryID);
+                handleCategoryClick(category.idCategory);
               }}             
             >
-              {categories.categories.some(subcategory => subcategory.parentID === category.categoryID) ? (
-                categories.categories.map((subcategory => (
-                  subcategory.parentID === category.categoryID && (
+              {categories.some(subcategory => subcategory.idCategoryParent === category.idCategory) ? (
+                categories.map((subcategory => (
+                  subcategory.idCategoryParent === category.idCategory && (
                     <DropdownItem
                       className='text-center'
-                      key={subcategory.categoryID}
+                      key={subcategory.idCategory}
                       onClick={() => handleSubcategoryClick(subcategory)}
                     >
                       {subcategory.categoryName}
@@ -74,18 +75,18 @@ function CategoriesMenu({ categories }) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <ul>
-            {categories.categories.map((category) => (
-              category.parentID === null && (
-                <li key={category.categoryID}>
-                  <button onClick={() => handleCategoryClick(category.categoryID)}>
+            {categories.map((category) => (
+              category.idCategoryParent === null && (
+                <li key={category.idCategory}>
+                  <button onClick={() => handleCategoryClick(category.idCategory)}>
                     {category.categoryName}
                   </button>
                   {/* subcategories */}
-                  {selectedCategory === category.categoryID && (
+                  {selectedCategory === category.idCategory && (
                     <ul>
-                      {categories.categories.map((subcategory) => (
-                        subcategory.parentID === category.categoryID && (
-                          <li key={subcategory.categoryID}>{subcategory.categoryName}</li>
+                      {categories.map((subcategory) => (
+                        subcategory.idCategoryParent === category.idCategory && (
+                          <li key={subcategory.idCategory}>{subcategory.categoryName}</li>
                         )
                       ))}
                     </ul>

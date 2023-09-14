@@ -53,6 +53,11 @@ export const getCategories = async () => {
     return responseData;
 }
 
+export const getCategoriesData = async () => {    
+    const responseData = await fetchData(`${API_BASE_URL}/categories/categoriesData`, "GET")   
+    return responseData;    
+}
+
 export const newPassword = async (email) => {        
     const responseData = await fetchData(`${API_BASE_URL}/reset`, "POST", {email})
     return responseData;

@@ -1,15 +1,26 @@
 import { useParams } from "react-router-dom";
 import { Col } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import CategoriesMenu from "./CategoriesMenu";
 import ProductCard from "./ProductCard";
 import DropdownSortBy from "./DropdownSortBy";
+import useApi from "../../hooks/useApi";
+import { getCategoriesData } from "../../services/api";
 
 const PageSize = 12;
 
 const ProductList = () => {
     const {category, subcategory} = useParams();
+    const [categories, setCategories] = useState({ categories: [] });
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategoriesData);
+    
+    useEffect(() => {
+      if (categoriesData) {       
+        setCategories(categoriesData.categories);
+      }
+    }, [categoriesData]);
 
     // design purposes
     const products = {
@@ -269,246 +280,6 @@ const ProductList = () => {
     ]
   };
 
-  // design purposes
-  const categories = {
-    "categories": [
-      {
-        "categoryID": 0,
-        "categoryName": "Woodwinds",
-        "parentID": null
-      },
-      {
-        "categoryID": 1,
-        "categoryName": "Saxophones",
-        "parentID": 0
-      },
-      {
-        "categoryID": 2,
-        "categoryName": "Clarinets",
-        "parentID": 0
-      },
-      {
-        "categoryID": 3,
-        "categoryName": "Flutes & Piccolos",
-        "parentID": 0
-      },
-      {
-        "categoryID": 4,
-        "categoryName": "Brass",
-        "parentID": null
-      },
-      {
-        "categoryID": 5,
-        "categoryName": "Trumpets",
-        "parentID": 4
-      },
-      {
-        "categoryID": 6,
-        "categoryName": "Alto & Tenor Horns",
-        "parentID": 4
-      },
-      {
-        "categoryID": 7,
-        "categoryName": "Baritone Horns",
-        "parentID": 4
-      },
-      {
-        "categoryID": 8,
-        "categoryName": "French Horns",
-        "parentID": 4
-      },
-      {
-        "categoryID": 9,
-        "categoryName": "Flugelhorns",
-        "parentID": 4
-      },
-      {
-        "categoryID": 10,
-        "categoryName": "Euphoniums",
-        "parentID": 4
-      },
-      {
-        "categoryID": 11,
-        "categoryName": "Tubas",
-        "parentID": 4
-      },
-      {
-        "categoryID": 12,
-        "categoryName": "Cornets",
-        "parentID": 4
-      },
-      {
-        "categoryID": 13,
-        "categoryName": "Trombones",
-        "parentID": 4
-      },
-      {
-        "categoryID": 14,
-        "categoryName": "Keyboards",
-        "parentID": null
-      },
-      {
-        "categoryID": 15,
-        "categoryName": "Digital Pianos",
-        "parentID": 14
-      },
-      {
-        "categoryID": 16,
-        "categoryName": "Synthesizers",
-        "parentID": 14
-      },
-      {
-        "categoryID": 17,
-        "categoryName": "Drums & Percussion",
-        "parentID": null
-      },
-      {
-        "categoryID": 18,
-        "categoryName": "Acoustic Drums",
-        "parentID": 17
-      },
-      {
-        "categoryID": 19,
-        "categoryName": "Electronic Drums",
-        "parentID": 17
-      },
-      {
-        "categoryID": 20,
-        "categoryName": "World Percussion",
-        "parentID": 17
-      },
-      {
-        "categoryID": 21,
-        "categoryName": "Tambourines",
-        "parentID": 17
-      },
-      {
-        "categoryID": 22,
-        "categoryName": "Cowbells",
-        "parentID": 17
-      },
-      {
-        "categoryID": 23,
-        "categoryName": "Hand Drums",
-        "parentID": 17
-      },
-      {
-        "categoryID": 24,
-        "categoryName": "Jam Bocks",
-        "parentID": 17
-      },
-      {
-        "categoryID": 25,
-        "categoryName": "Hand Percussion",
-        "parentID": 17
-      },
-      {
-        "categoryID": 26,
-        "categoryName": "Guitars",
-        "parentID": null
-      },
-      {
-        "categoryID": 27,
-        "categoryName": "Acoustic Guitars",
-        "parentID": 26
-      },
-      {
-        "categoryID": 28,
-        "categoryName": "Electric Guitars",
-        "parentID": 26
-      },
-      {
-        "categoryID": 29,
-        "categoryName": "Basses",
-        "parentID": null
-      },
-      {
-        "categoryID": 30,
-        "categoryName": "Acoustic Basses",
-        "parentID": 29
-      },
-      {
-        "categoryID": 31,
-        "categoryName": "Electric Basses",
-        "parentID": 29
-      },
-      {
-        "categoryID": 32,
-        "categoryName": "Orchestra Strings",
-        "parentID": null
-      },
-      {
-        "categoryID": 33,
-        "categoryName": "Violins",
-        "parentID": 32
-      },
-      {
-        "categoryID": 34,
-        "categoryName": "Double Basses",
-        "parentID": 32
-      },
-      {
-        "categoryID": 35,
-        "categoryName": "Violas",
-        "parentID": 32
-      },
-      {
-        "categoryID": 36,
-        "categoryName": "Cellos",
-        "parentID": 32
-      },
-      {
-        "categoryID": 37,
-        "categoryName": "Microphones",
-        "parentID": null
-      },
-      {
-        "categoryID": 38,
-        "categoryName": "Accessories",
-        "parentID": null
-      },
-      {
-        "categoryID": 39,
-        "categoryName": "Woodwinds Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 40,
-        "categoryName": "Brass Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 41,
-        "categoryName": "Keyboards Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 42,
-        "categoryName": "Drums & Percussion Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 43,
-        "categoryName": "Guitars Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 44,
-        "categoryName": "Basses Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 45,
-        "categoryName": "Orchestra Strings Accessories",
-        "parentID": 38
-      },
-      {
-        "categoryID": 46,
-        "categoryName": "Microphones Accessories",
-        "parentID": 38
-      }
-    ]
-  }
 
   // design purposes 
   
@@ -572,7 +343,20 @@ const ProductList = () => {
   return (
     <div className="d-flex min-vh-100">
       <Col xs={2} sm={2} md={3} lg={3} xl={2} xxl={2} >
-        <CategoriesMenu categories={categories} />
+        {loadingCategories ? (
+          <div className="d-flex justify-content-center">
+            <div className="mt-5">
+              {loadingCategoriesAnimation}
+            </div>
+          </div>
+        ) : (
+          <>
+            {categories.length > 0 && (
+              <CategoriesMenu categories={categories} />
+            )}
+          </>
+        )
+        }
       </Col>
       <Col xs={8} sm={8} md={7} lg={8} xl={9} xxl={9} className="text-center d-flex flex-column justify-content-between align-items-center">
         <ProductCard products={visibleProducts} images={images} />
@@ -589,7 +373,7 @@ const ProductList = () => {
           ))}
         </div>
       </Col>
-      <Col xl={1} xxl={1} className="position-fixed end-0">
+      <Col xl={1} xxl={1} className="position-absolute end-0">
         <DropdownSortBy />
       </Col>
     </div>
