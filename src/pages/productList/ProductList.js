@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { FcNext, FcPrevious } from "react-icons/fc";
 
 import CategoriesMenu from "./CategoriesMenu";
 import ProductCard from "./ProductCard";
@@ -8,7 +9,7 @@ import DropdownSortBy from "./DropdownSortBy";
 import useApi from "../../hooks/useApi";
 import { getCategoriesData, getSubcategoryProductsList } from "../../services/api";
 
-const PageSize = 12;
+const PageSize = 4;
 
 const ProductList = () => {
   const { category, subcategory, id } = useParams();
@@ -16,39 +17,40 @@ const ProductList = () => {
   const [products, setProducts] = useState([])
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategoriesData);
-  const { data: categoryProducts } = useApi(getSubcategoryProductsList, id)
   const [selectedSortBy, setSelectedSortBy] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1)
 
-  // maybe separate in 2 useEffect to avoid the update of all categories on each req for subcategory
   useEffect(() => {
-    if (categoryProducts) {
-      setProducts(categoryProducts.products)
-    }
     if (categoriesData) {
       setCategories(categoriesData.categories);
     }
-  }, [categoriesData, categoryProducts]);
+  }, [categoriesData]);
 
-  // pagination
-  //  const [currentPage, setCurrentPage] = useState(1);
-
-  // const startIndex = (currentPage - 1) * PageSize;
-
-  // const visibleProducts = products.length > 0 && products.slice(
-  //   startIndex,
-  //   startIndex + PageSize
-  // );
-
-  // const handlePageChange = (page) => {
-  //   setCurrentPage(page);
-  // };
-
-  // const totalPages = Math.ceil(products.length > 0 && products.length / PageSize);
-  // end pagination
+  useEffect(() => {
+    if (category && subcategory && id) {
+      const fetchData = async () => {
+        const response = await getSubcategoryProductsList(id, currentPage, PageSize, selectedSortBy);
+        console.log("2", response);
+        if (response && response.products) {
+          setProducts(response.products);
+          setTotalPages(response.totalPages);
+        }
+      };
+      fetchData();
+    }
+  }, [id, category, subcategory, currentPage, selectedSortBy]);
 
   const handleSortByClick = (sortBy) => {
     setSelectedSortBy(sortBy === "Delete Sorting" ? null : sortBy);
   }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const totalPagesDisplay = totalPages ? totalPages : 1;
+
 
   return (
     <div className="d-flex min-vh-100">
@@ -71,19 +73,32 @@ const ProductList = () => {
       <Col xs={6} sm={8} md={7} lg={8} xl={9} xxl={9} className="text-center d-flex flex-column justify-content-between align-items-center">
         <ProductCard products={products} />
         <div className="pagination">
-          {/* {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            className="page-link  p-1"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <FcPrevious size={20} />
+          </button>
+          {Array.from({ length: totalPagesDisplay }, (_, index) => (
             <button
               key={index}
-              className={`page-link ${index + 1 === currentPage ? "active" : ""
-                }`}
+              className={`page-link ${index + 1 === currentPage ? "active" : ""}`}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}
             </button>
-          ))} */}
+          ))}
+          <button
+            className="page-link p-1"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPagesDisplay}
+          >
+            <FcNext size={20}/>
+          </button>
         </div>
       </Col>
-      <Col xl={1} xxl={1} className="position-absolute end-0">
+      <Col md={2} lg={1} xl={1} xxl={1} className="position-absolute end-0">
         <DropdownSortBy handleSortByClick={handleSortByClick} selectedSortBy={selectedSortBy} />
       </Col>
     </div>
