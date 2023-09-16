@@ -8,9 +8,9 @@ const HomeModal = ({ onHide, show, subcategories, category, images }) => {
     const navigate = useNavigate();
 
     const handleClick = (subcategory) => {
-        subcategory ?
-            navigate(`/categories/${category}/${subcategory.categoryName}`) :
-            navigate(`/categories/${category}/All`);
+        subcategory === "All" ?
+            navigate(`/categories/${category}/all/${subcategories[0].idCategoryParent}`) :
+            navigate(`/categories/${category}/${subcategory.categoryName}/${subcategory.idCategory}`);
     };
 
     return (
@@ -37,7 +37,7 @@ const HomeModal = ({ onHide, show, subcategories, category, images }) => {
                             </div>
                         ))}
                         <div className="col">                            
-                            <CategoryCard category={{categoryName: "Show All"}} images={images} />
+                            <CategoryCard category={{categoryName: "Show All"}} onClick={() => handleClick("All")} images={images} />
                         </div>
                     </div>
                 </div>

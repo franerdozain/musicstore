@@ -4,17 +4,17 @@ import { Spinner } from "react-bootstrap";
 function useApi(apiFetch, ...args) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    
+
     useEffect(() => {
         async function fetchData() {
             try {
                 // setTimeout for testing loading animation 
-                await new Promise((resolve) => setTimeout(resolve, 2000));                
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 const data = await apiFetch(...args);
-                setData(data);               
+                setData(data);
             } catch (error) {
                 throw error;
-            } finally {                
+            } finally {
                 setLoading(false);
             }
         }
@@ -23,10 +23,10 @@ function useApi(apiFetch, ...args) {
     return {
         data,
         loading,
-        LoadingAnimation: 
+        LoadingAnimation:
             <Spinner animation="border" role="status">
                 <span className="visually-hidden">Loading...</span>
-            </Spinner> 
+            </Spinner>
     };
 }
 

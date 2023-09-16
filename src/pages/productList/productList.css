@@ -2,3 +2,10 @@
     --bs-dropdown-link-active-bg:#4e4e4e;
 }
 
+.dropdown-toggle {
+    white-space: normal;
+}
+
+ [data-bs-theme=dark].carousel .carousel-indicators [data-bs-target] {
+    background-color: transparent;
+}

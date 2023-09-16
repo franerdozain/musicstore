@@ -27,7 +27,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<ProfileContainer />} />
         <Route path="/product/:name/:id" element={<ProductDetails />} />
-        <Route path="/categories/:category/:subcategory" element={<ProductList />} />
+        <Route path="/categories/:category/:subcategory/:id" element={<ProductList />} />
         <Route path='/reset/new-password' element={<NewPassword />} />
       </Routes>
       <Footer />

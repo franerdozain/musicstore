@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:4000';
+const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const fetchData = async (url, method, data = null, files = false) => {
     try {
@@ -39,46 +39,51 @@ const fetchData = async (url, method, data = null, files = false) => {
 }
 
 export const registerUser = async (userData) => {
-    const responseData = await fetchData(`${API_BASE_URL}/auth/register`, "POST", userData);
+    const responseData = await fetchData(`${apiBaseUrl}/auth/register`, "POST", userData);
     return responseData;
 }
 
 export const loginUser = async (loginData) => {
-    const responseData = await fetchData(`${API_BASE_URL}/auth/login`, "POST", loginData)
+    const responseData = await fetchData(`${apiBaseUrl}/auth/login`, "POST", loginData)
     return responseData;
 }
 
 export const getCategories = async () => {
-    const responseData = await fetchData(`${API_BASE_URL}/categories/all`, "GET")
+    const responseData = await fetchData(`${apiBaseUrl}/categories/all`, "GET")
     return responseData;
 }
 
 export const getCategoriesData = async () => {    
-    const responseData = await fetchData(`${API_BASE_URL}/categories/categoriesData`, "GET")   
+    const responseData = await fetchData(`${apiBaseUrl}/categories/categoriesData`, "GET")   
     return responseData;    
 }
 
 export const newPassword = async (email) => {        
-    const responseData = await fetchData(`${API_BASE_URL}/reset`, "POST", {email})
+    const responseData = await fetchData(`${apiBaseUrl}/reset`, "POST", {email})
     return responseData;
 }
 
 export const updatePassword = async (token, password) => {
-    const responseData = await fetchData(`${API_BASE_URL}/reset/new-password`, "PATCH", {token, password})
+    const responseData = await fetchData(`${apiBaseUrl}/reset/new-password`, "PATCH", {token, password})
     return responseData;
 }
 
 export const logoutUser = async () => {
-    const responseData = await fetchData(`${API_BASE_URL}/auth/logout`, "GET")
+    const responseData = await fetchData(`${apiBaseUrl}/auth/logout`, "GET")
     return responseData;
 }
 
 export const createCategoryOrSubcategory = async (formData) => {  
-    const responseData = await fetchData(`${API_BASE_URL}/categories/new`, "POST", formData, true)
+    const responseData = await fetchData(`${apiBaseUrl}/categories/new`, "POST", formData, true)
     return responseData;
 }
 
 export const createProduct = async (formData) => {  
-    const responseData = await fetchData(`${API_BASE_URL}/products/new`, "POST", formData, true)
+    const responseData = await fetchData(`${apiBaseUrl}/products/new`, "POST", formData, true)
+    return responseData;
+}
+
+export const getSubcategoryProductsList = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/products/list/${id}`, "GET")
     return responseData;
 }

@@ -1,21 +1,32 @@
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Carousel } from "react-bootstrap";
 import { FaHeart } from 'react-icons/fa6';
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ products, images }) => {
+const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
+
+const ProductCard = ({ products }) => {
   const navigate = useNavigate();
   const handleClick = (productID, productName) => {
     navigate(`/product/${encodeURIComponent(productName)}/${productID}`)
   }
   return (
     <Row className="w-100 mt-5 mt-md-2 ml-1">
-      {products.map((product) => {
-        const productImage = images.images.find((image) => image.productID === product.productID);
-        const imageUrl = productImage ? productImage.url : '';
+      {products?.map((product, idx) => {
         return (
-          <Col key={product.productID} xs={12} sm={6} md={4} lg={3} xl={3} xxl={2} className="mb-2" >
+          <Col key={`${product.productID}-${idx}`} xs={12} sm={6} md={4} lg={3} xl={3} xxl={2} className="mb-2" >
             <Card className="h-100" >
-              <Card.Img src={imageUrl} alt={product.productName} onClick={() => handleClick(product.productID, product.productName)} />
+              <Carousel interval={null} data-bs-theme="dark">
+                {product.imageUrls.map((img, idx) => (
+                  <Carousel.Item key={idx} interval={null}>
+                    <img className="d-block w-100 "
+                      src={`${imagePath}/${encodeURIComponent(img)}`}
+                      onError={(e) => { e.target.src = '/coming soon.png' }}
+                      alt={product.productName}
+                    />
+                  </Carousel.Item>
+                ))
+                }
+              </Carousel>
               <Card.Body>
                 <Card.Text onClick={() => handleClick(product.productID, product.productName)}>{product.productName}</Card.Text>
                 <div className="d-flex justify-content-between align-items-center">
