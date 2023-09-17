@@ -94,3 +94,9 @@ export const getProductsList = async (id, page, pageSize, sortBy, isCategory) =>
     const responseData = await fetchData(`${apiBaseUrl}/products/list/${id}?${queryParams}`, "GET");   
     return responseData;
 }
+
+export const getProduct = async (id) => {   
+    const responseData = await fetchData(`${apiBaseUrl}/products/details/${id}`, "GET");   
+    console.log("krilin", responseData);
+    return responseData;
+}

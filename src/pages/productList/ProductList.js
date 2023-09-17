@@ -30,7 +30,6 @@ const ProductList = () => {
   useEffect(() => {
     if (category && subcategory && id) {
       const fetchData = async () => {
-        console.log("mar", category, subcategory, "selected", );
         const response = await getProductsList(id, currentPage, PageSize, selectedSortBy, subcategory === "all");       
         if (response && response.products) {
           setProducts(response.products);
