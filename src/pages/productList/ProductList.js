@@ -7,9 +7,9 @@ import CategoriesMenu from "./CategoriesMenu";
 import ProductCard from "./ProductCard";
 import DropdownSortBy from "./DropdownSortBy";
 import useApi from "../../hooks/useApi";
-import { getCategoriesData, getSubcategoryProductsList } from "../../services/api";
+import { getCategoriesData, getProductsList } from "../../services/api";
 
-const PageSize = 4;
+const PageSize = 6;
 
 const ProductList = () => {
   const { category, subcategory, id } = useParams();
@@ -30,8 +30,8 @@ const ProductList = () => {
   useEffect(() => {
     if (category && subcategory && id) {
       const fetchData = async () => {
-        const response = await getSubcategoryProductsList(id, currentPage, PageSize, selectedSortBy);
-        console.log("2", response);
+        console.log("mar", category, subcategory, "selected", );
+        const response = await getProductsList(id, currentPage, PageSize, selectedSortBy, subcategory === "all");       
         if (response && response.products) {
           setProducts(response.products);
           setTotalPages(response.totalPages);
@@ -64,7 +64,7 @@ const ProductList = () => {
         ) : (
           <>
             {categories.length > 0 && (
-              <CategoriesMenu categories={categories} />
+              <CategoriesMenu categories={categories} setCurrentPage={setCurrentPage} />
             )}
           </>
         )

@@ -83,12 +83,14 @@ export const createProduct = async (formData) => {
     return responseData;
 }
 
-export const getSubcategoryProductsList = async (id, page, pageSize, sortBy) => {
+export const getProductsList = async (id, page, pageSize, sortBy, isCategory) => {
     const queryParams = new URLSearchParams({
         page,
         pageSize,
-        sortBy
+        sortBy,
+        isCategory
     });
-    const responseData = await fetchData(`${apiBaseUrl}/products/list/${id}?${queryParams}`, "GET");
+
+    const responseData = await fetchData(`${apiBaseUrl}/products/list/${id}?${queryParams}`, "GET");   
     return responseData;
 }

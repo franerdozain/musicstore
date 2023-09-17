@@ -1,7 +1,7 @@
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
 const DropdownSortBy = ({ handleSortByClick, selectedSortBy }) => {
-
+    
     const handleClick = (e) => {
         handleSortByClick(e)
     }
