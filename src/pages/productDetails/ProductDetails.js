@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import DropdownQuantity from "./DropdownQuantity";
 import CheckoutModal from "./CheckoutModal";
 import useApi from "../../hooks/useApi";
-import { getProduct } from "../../services/api";
+import { addToCart, getProduct } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const ProductDetails = () => {
@@ -15,6 +16,7 @@ const ProductDetails = () => {
     const [productDetails, setProductDetails] = useState(null);
     const { name, id } = useParams();
     const { data: productResponse, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getProduct, id);
+    const { userStatus } = useAuth();
 
     useEffect(() => {
         if (productResponse) {
@@ -35,8 +37,16 @@ const ProductDetails = () => {
         setInputValue("");
     };
 
-    const handleAddClick = (p, q) => {
+    const handleAddClick = async (pId, q) => {
         setShowModal(true)
+        const idUser = userStatus.user?.idUser 
+        //if not iduser, ask to login
+        try {
+            const data = {personId: idUser, idProduct: pId, quantity: q}
+            const response = await addToCart(data);            
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -83,7 +93,7 @@ const ProductDetails = () => {
                             inputValue={inputValue}
                             stock={productDetails?.product.stock}
                         />
-                        <Button onClick={(p, q) => handleAddClick(productDetails?.product, quantity)}>Add To Cart</Button>
+                        <Button onClick={(p, q) => handleAddClick(productDetails?.product.idProduct, quantity)}>Add To Cart</Button>
                     </div>
 
                     {productDetails?.product.slogan && (

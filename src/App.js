@@ -15,8 +15,29 @@ import ProductList from './pages/productList/ProductList';
 import Footer from './components/footer/Footer';
 import NewPassword from './pages/newPassword/NewPassword';
 import ProfileContainer from './pages/profile/ProfileContainer';
+import { useEffect } from 'react';
+import { checkUserStatus } from './services/api';
+import { useAuth } from './contexts/AuthContext';
 
 function App() {
+  const { userStatus, setUserStatus } = useAuth();
+
+  useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const response = await checkUserStatus();
+        setUserStatus({
+          isAuthenticated: response.isAuthenticated,
+          user: response.user
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchStatus()
+  }, [])
+  console.log("app user status", userStatus);
+
   return (
     <Router>
       <MmNavbar />

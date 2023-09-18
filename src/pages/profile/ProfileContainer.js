@@ -1,23 +1,17 @@
-import { useSearchParams } from "react-router-dom";
 
 import Profile from "./Profile";
 import AdminProfile from "./AdminProfile";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ProfileContainer = () => {
-    const [queryParams] = useSearchParams();
-    const queryUser = queryParams.get("user");
-    const userType = queryUser === "user" || queryUser === "admin" ? queryUser : "";
+    const {userStatus} = useAuth();
+    
+    console.log("user stauts",userStatus)
     return (
         <>
-            {userType === "user" ? (
-                <Profile />
-            ) :
-                userType === "admin" ? (
-                    <AdminProfile />
-                ) : ""
-                    // <NotFound />
-            }
-        </>
+    
+        {userStatus.user?.role === "admin" ? <AdminProfile /> : <Profile /> }
+        </>            
     );
 }
 

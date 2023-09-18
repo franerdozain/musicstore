@@ -48,6 +48,11 @@ export const loginUser = async (loginData) => {
     return responseData;
 }
 
+export const checkUserStatus = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/auth/status`, "GET");
+    return responseData;
+}
+
 export const getCategories = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/categories/all`, "GET")
     return responseData;
@@ -98,5 +103,11 @@ export const getProductsList = async (id, page, pageSize, sortBy, isCategory) =>
 export const getProduct = async (id) => {   
     const responseData = await fetchData(`${apiBaseUrl}/products/details/${id}`, "GET");   
     console.log("krilin", responseData);
+    return responseData;
+}
+
+export const addToCart = async (data) => {
+    console.log("la data", data)
+    const responseData = await fetchData(`${apiBaseUrl}/cart/add/`, 'POST', data);
     return responseData;
 }

@@ -3,7 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 
 import AuthForm from "./AuthForm";
 import NewPasswordModal from "./NewPasswordModal";
-import { loginUser, registerUser } from "../../services/api";
+import { checkUserStatus, loginUser, registerUser } from "../../services/api";
 
 const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
     const [errorMsg, setErrorMsg] = useState("");
@@ -36,7 +36,7 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                     setErrorMsg(responseData.errorWrongPassword)
                 }
                 if (responseData.idUser) {
-                    handleLoggedIn();
+                    await handleLoggedIn();
                     onHide();
                 }
             }

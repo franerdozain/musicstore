@@ -7,30 +7,32 @@ import { GiShoppingCart } from "react-icons/gi";
 import { FaDoorOpen, FaDoorClosed, FaIdCardAlt } from 'react-icons/fa';
 import { Dropdown } from 'react-bootstrap';
 import { MdOutlineAppRegistration } from "react-icons/md";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 import SearchBar from './SearchBar';
 import LoginButton from './LoginButton';
 import IconButton from '../generalComponents/IconButton';
 import AuthModal from './AuthModal';
-import { logoutUser } from '../../services/api';
+import { checkUserStatus, logoutUser } from '../../services/api';
 
 const MmNavbar = () => {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [accessGranted, setAccessGranted] = useState(false);
-
-    // for testing purposes of user/admin profile page
-    const user = "user";
+    const { userStatus, setUserStatus } = useAuth();
         
     const handleProfileClick = () => {
-        navigate(`profile?user=${user}`)
+        navigate(`profile`)
     };
 
-    const handleLogoutClick = () => {
-        setAccessGranted(false);
-        logoutUser();
+    const handleLogoutClick = async () => {
+        await logoutUser();
+        const response = await checkUserStatus();
+        setUserStatus({
+            isAuthenticated: response.isAuthenticated,
+            user: response.user
+          });
         navigate("");
     }
 
@@ -44,8 +46,12 @@ const MmNavbar = () => {
         setShowModal(true);
     }
 
-    const handleLoggedIn = () => {
-        setAccessGranted(true);
+    const handleLoggedIn = async () => {
+        const response = await checkUserStatus();
+        setUserStatus({
+            isAuthenticated: response.isAuthenticated,
+            user: response.user
+          });
     }
 
     return (
@@ -72,7 +78,7 @@ const MmNavbar = () => {
                                     <FaUser className='FaUser' size={25} />
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="custom-dropdown-menu bg-dark">
-                                    {accessGranted ? (
+                                    { userStatus.isAuthenticated ? (
                                         <>
                                             <LoginButton Icon={FaIdCardAlt} text={"Profile"} onClick={handleProfileClick} />
                                             <LoginButton Icon={FaDoorClosed} text={"Logout"} onClick={handleLogoutClick} />

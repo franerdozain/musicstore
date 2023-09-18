@@ -3,6 +3,7 @@ import { Col, Table, Row, Container } from "react-bootstrap";
 import FormShippingData from "../../components/generalComponents/FormShippingData";
 
 const Profile = () => {
+
   // for designing purposes
   const initialUser = {
     "user": [
