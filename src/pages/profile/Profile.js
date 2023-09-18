@@ -1,9 +1,25 @@
 import { Col, Table, Row, Container } from "react-bootstrap";
 
 import FormShippingData from "../../components/generalComponents/FormShippingData";
+import { useEffect, useState } from "react";
+import { getUserData } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
+import useApi from "../../hooks/useApi";
 
 const Profile = () => {
+  const { userStatus } = useAuth();
+  const [userData, setUserData] = useState(null);
+  const { data: userResponse, loading: loadingUserResponse, LoadingAnimation: loadingUserResponseAnimation } = useApi(getUserData, userStatus.user?.idUser);
 
+  useEffect(() => {
+    if(userResponse) {
+      if (userResponse.noUserMsg) {
+      } else if (userResponse.userFound) {
+        setUserData(userResponse)
+      }      
+    }
+  }, [userResponse])
+  
   // for designing purposes
   const initialUser = {
     "user": [
@@ -133,67 +149,82 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-vh-100">
-      <Container fluid>
-        <Row>
-          <Col xs={12} md={6}>
-            <div className="mx-1 mx-md-4">
-              <FormShippingData details={initialUser.user} />
+    <Container className="min-vh-100 d-flex flex-column justify-content-start align-items-center pt-3">
+      {loadingUserResponse ? (
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 pt-4 mb-4 justify-content-center">
+          {loadingUserResponseAnimation}
+        </div>
+      ) : (
+        <>
+          {!userStatus.isAuthenticated ? (
+            <p>"Please create an account or login"</p>
+          ) : (
+            <div className="min-vh-100">
+              <Container fluid>
+                <Row>
+                  <Col xs={12} md={6}>
+                    <div className="mx-1 mx-md-4">
+                      <FormShippingData details={initialUser.user} />
+                    </div>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <div className="mt-4 border rounded me-4">
+                      <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">Shopping History</h2>
+                      {shoppingHistory && (
+                        <div className="table-responsive">
+                          <Table striped borderless variant="light mb-0">
+                            <thead>
+                              <tr>
+                                <th rowSpan="3" className="bg-primary text-white">Date</th>
+                                <th rowSpan="3" className="bg-primary text-white">Order ID</th>
+                                <th rowSpan="3" className="bg-primary text-white">Product</th>
+                                <th rowSpan="3" className="bg-primary text-white">Quantity</th>
+                                <th rowSpan="3" className="bg-primary text-white">Price</th>
+                                <th rowSpan="3" className="bg-primary text-white">Total Price</th>
+                                <th colSpan="2" className="bg-primary text-white">Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {shoppingHistory.orders.map((order, orderIndex) => {
+                                const totalOrderPrice = order.Products.reduce(
+                                  (total, product) => total + product.price * product.quantity,
+                                  0
+                                );
+                                return order.Products.map((product, productIndex) => (
+                                  <tr key={`${orderIndex}-${productIndex}`}>
+                                    {productIndex === 0 && (
+                                      <>
+                                        <td rowSpan={order.Products.length}>{order.Date}</td>
+                                        <td rowSpan={order.Products.length}>{order["Order ID"]}</td>
+                                      </>
+                                    )}
+                                    <td>{product.productName}</td>
+                                    <td>{product.quantity}</td>
+                                    <td>${product.price.toFixed(2)}</td>
+                                    <td>${(product.price * product.quantity).toFixed(2)}</td>
+                                    {productIndex === 0 && (
+                                      <>
+                                        <td rowSpan={order.Products.length}>${totalOrderPrice.toFixed(2)}</td>
+                                        <td rowSpan={order.Products.length}></td>
+                                      </>
+                                    )}
+                                  </tr>
+                                ));
+                              })}
+                            </tbody>
+                          </Table>
+                        </div>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+              </Container>
             </div>
-          </Col>
-          <Col xs={12} md={6}>
-            <div className="mt-4 border rounded me-4">
-              <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">Shopping History</h2>
-              {shoppingHistory && (
-                <div className="table-responsive">
-                  <Table striped borderless variant="light mb-0">
-                    <thead>
-                      <tr>
-                        <th rowSpan="3" className="bg-primary text-white">Date</th>
-                        <th rowSpan="3" className="bg-primary text-white">Order ID</th>
-                        <th rowSpan="3" className="bg-primary text-white">Product</th>
-                        <th rowSpan="3" className="bg-primary text-white">Quantity</th>
-                        <th rowSpan="3" className="bg-primary text-white">Price</th>
-                        <th rowSpan="3" className="bg-primary text-white">Total Price</th>
-                        <th colSpan="2" className="bg-primary text-white">Total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {shoppingHistory.orders.map((order, orderIndex) => {
-                        const totalOrderPrice = order.Products.reduce(
-                          (total, product) => total + product.price * product.quantity,
-                          0
-                        );
-                        return order.Products.map((product, productIndex) => (
-                          <tr key={`${orderIndex}-${productIndex}`}>
-                            {productIndex === 0 && (
-                              <>
-                                <td rowSpan={order.Products.length}>{order.Date}</td>
-                                <td rowSpan={order.Products.length}>{order["Order ID"]}</td>
-                              </>
-                            )}
-                            <td>{product.productName}</td>
-                            <td>{product.quantity}</td>
-                            <td>${product.price.toFixed(2)}</td>
-                            <td>${(product.price * product.quantity).toFixed(2)}</td>
-                            {productIndex === 0 && (
-                              <>
-                                <td rowSpan={order.Products.length}>${totalOrderPrice.toFixed(2)}</td>
-                                <td rowSpan={order.Products.length}></td>
-                              </>
-                            )}
-                          </tr>
-                        ));
-                      })}
-                    </tbody>
-                  </Table>
-                </div>
-              )}
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          )}
+        </>
+      )
+      }
+    </Container>
   );
 }
 export default Profile;

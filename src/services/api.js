@@ -38,6 +38,7 @@ const fetchData = async (url, method, data = null, files = false) => {
     }
 }
 
+// user 
 export const registerUser = async (userData) => {
     const responseData = await fetchData(`${apiBaseUrl}/auth/register`, "POST", userData);
     return responseData;
@@ -51,16 +52,6 @@ export const loginUser = async (loginData) => {
 export const checkUserStatus = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/auth/status`, "GET");
     return responseData;
-}
-
-export const getCategories = async () => {
-    const responseData = await fetchData(`${apiBaseUrl}/categories/all`, "GET")
-    return responseData;
-}
-
-export const getCategoriesData = async () => {    
-    const responseData = await fetchData(`${apiBaseUrl}/categories/categoriesData`, "GET")   
-    return responseData;    
 }
 
 export const newPassword = async (email) => {        
@@ -78,11 +69,29 @@ export const logoutUser = async () => {
     return responseData;
 }
 
+export const getUserData = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "GET")
+    return responseData;
+}
+
+// categories
+export const getCategories = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/categories/all`, "GET")
+    return responseData;
+}
+
+export const getCategoriesData = async () => {    
+    const responseData = await fetchData(`${apiBaseUrl}/categories/categoriesData`, "GET")   
+    return responseData;    
+}
+
+
 export const createCategoryOrSubcategory = async (formData) => {  
     const responseData = await fetchData(`${apiBaseUrl}/categories/new`, "POST", formData, true)
     return responseData;
 }
 
+// product
 export const createProduct = async (formData) => {  
     const responseData = await fetchData(`${apiBaseUrl}/products/new`, "POST", formData, true)
     return responseData;
@@ -106,6 +115,7 @@ export const getProduct = async (id) => {
     return responseData;
 }
 
+// cart
 export const addToCart = async (data) => {
     console.log("la data", data)
     const responseData = await fetchData(`${apiBaseUrl}/cart/add/`, 'POST', data);
