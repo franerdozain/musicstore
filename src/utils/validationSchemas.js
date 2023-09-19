@@ -95,3 +95,13 @@ export const createCatOrSubcatSchema = yup.object().shape({
         return value.category || value.subcategory;
     }
 });
+
+export const modifyUserDetails = yup.object().shape({
+    username: yup.string().min(2),
+    email: yup.string().email("Invalid email format"),
+    country: yup.string().required(),
+    state: yup.string().required(),
+    city: yup.string().required(),
+    zip: yup.string().required(),
+    shippingAddress: yup.string().required(),
+})

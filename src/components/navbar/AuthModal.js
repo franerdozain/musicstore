@@ -5,7 +5,7 @@ import AuthForm from "./AuthForm";
 import NewPasswordModal from "./NewPasswordModal";
 import { checkUserStatus, loginUser, registerUser } from "../../services/api";
 
-const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
+const AuthModal = ({ show, onHide, modalType, handleLoggedIn, handleCreateAccount, handleAlreadyHaveAnAccount }) => {
     const [errorMsg, setErrorMsg] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
     const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
@@ -84,8 +84,18 @@ const AuthModal = ({ show, onHide, modalType, handleLoggedIn }) => {
                     clearErrorMsg={clearErrorMsg}
                 />
                 {modalType === "login" && (
-                    <Button onClick={handleForgotPassword} variant="link">
-                        Forgot password?
+                    <div >
+                        <Button onClick={handleForgotPassword} variant="link" className="text-decoration-none">
+                            Forgot password?
+                        </Button>
+                        <Button onClick={handleCreateAccount} variant="link" className="text-decoration-none" >
+                            Create Account
+                        </Button>
+                    </div>
+                )}
+                {modalType === "registration" && (
+                    <Button onClick={handleAlreadyHaveAnAccount} variant="link" className="text-decoration-none">
+                        Already Have An Account?
                     </Button>
                 )}
                 {forgotPasswordModal && (

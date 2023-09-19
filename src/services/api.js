@@ -74,6 +74,16 @@ export const getUserData = async (id) => {
     return responseData;
 }
 
+export const updateUserData = async (id, newData) => {
+    const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "PATCH", newData)
+    return responseData;
+}
+
+export const deleteUser = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "DELETE")
+    return responseData;
+}
+
 // categories
 export const getCategories = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/categories/all`, "GET")
@@ -111,13 +121,22 @@ export const getProductsList = async (id, page, pageSize, sortBy, isCategory) =>
 
 export const getProduct = async (id) => {   
     const responseData = await fetchData(`${apiBaseUrl}/products/details/${id}`, "GET");   
-    console.log("krilin", responseData);
     return responseData;
 }
 
 // cart
 export const addToCart = async (data) => {
-    console.log("la data", data)
     const responseData = await fetchData(`${apiBaseUrl}/cart/add/`, 'POST', data);
+    return responseData;
+}
+
+export const getCart = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/cart/all/`, 'GET');
+    console.log("goku",responseData);
+    return responseData;
+}
+
+export const deleteFromCart = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/cart/${id}`, 'DELETE');
     return responseData;
 }

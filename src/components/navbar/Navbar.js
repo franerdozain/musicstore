@@ -54,6 +54,14 @@ const MmNavbar = () => {
           });
     }
 
+    const handleCreateAccount = () => {
+        setModalType("registration");
+    }
+
+    const handleAlreadyHaveAnAccount = () => {
+        setModalType("login");        
+    }
+
     return (
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary sticky-top" data-bs-theme="dark">
                 <Container>
@@ -87,7 +95,7 @@ const MmNavbar = () => {
                                         <>
                                             <LoginButton Icon={FaDoorOpen} text={"Login"} onClick={handleLoginClick} />
                                             <LoginButton Icon={MdOutlineAppRegistration} text={"Registration"} onClick={handleRegistrationClick} />
-                                            <AuthModal show={showModal} onHide={() => setShowModal(false)} modalType={modalType} handleLoggedIn={() => handleLoggedIn()} />
+                                            <AuthModal show={showModal} onHide={() => setShowModal(false)} modalType={modalType} handleLoggedIn={() => handleLoggedIn()} handleCreateAccount={handleCreateAccount} handleAlreadyHaveAnAccount={handleAlreadyHaveAnAccount} />
                                         </>
                                     )
                                     }

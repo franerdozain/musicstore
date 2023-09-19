@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GiCheckMark } from "react-icons/gi";
 import { Modal, Image, Badge } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa6';
+const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 
 const CheckoutModal = ({ onHide, show, image, cartQuantity }) => {
@@ -34,8 +35,9 @@ const CheckoutModal = ({ onHide, show, image, cartQuantity }) => {
                     <div className='text-center mt-3 mb-4'>
                         {cartQuantity > 1 ? (
                             <Badge className='me-4' bg="secondary">
-                                <Image src={image} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-1' />
+                                <Image src={`${imagePath}/${image}`} alt='' fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-1' />
                                 <FaPlus />
+                                {console.log("4444", `${imagePath}/${image}`)}
                             </Badge>
                         ) : (
                             <Image src={image} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-4' />
