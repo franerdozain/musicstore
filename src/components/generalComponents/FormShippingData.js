@@ -4,14 +4,15 @@ import { Form, InputGroup, Button } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { BiEdit } from "react-icons/bi";
 import { FaCircleCheck } from "react-icons/fa6";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { modifyUserDetails, registerValidationSchema } from "../../utils/validationSchemas";
-import { deleteUser, updateUserData } from "../../services/api";
+import { checkUserStatus, deleteUser, logoutUser, updateUserData } from "../../services/api";
 
 
 const FormShippingData = () => {
-  const { userStatus } = useAuth();
+  const navigate = useNavigate();
+  const { userStatus, setUserStatus } = useAuth();
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [initialUserData, setInitialUserData] = useState({
@@ -49,8 +50,20 @@ const FormShippingData = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    const response = await deleteUser(id)
-    console.log("delete", response)
+    try {
+      const response = await deleteUser(id);
+       if(response.userDeleted) {
+        await logoutUser();
+        const response = await checkUserStatus();
+        setUserStatus({
+            isAuthenticated: response.isAuthenticated,
+            user: response.user
+          });
+        navigate("/");                             
+       }
+    } catch (error) {
+      console.log(`Error: ${error}`)
+    }
   };
 
   const { control, handleSubmit, clearErrors, formState: { errors, isSubmitting } } = useForm({
@@ -66,7 +79,6 @@ const FormShippingData = () => {
     }
     try {
       const responseUpdate = await updateUserData(userStatus.user.idUser, modifiedFields)
-      console.log("SSSSSSS", responseUpdate);
     } catch (error) {
       console.log(`Error: ${error}`)
     }

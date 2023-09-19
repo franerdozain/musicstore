@@ -36,7 +36,6 @@ function App() {
     }
     fetchStatus()
   }, [])
-  console.log("app user status", userStatus);
 
   return (
     <Router>
