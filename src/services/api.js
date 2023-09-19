@@ -132,11 +132,16 @@ export const addToCart = async (data) => {
 
 export const getCart = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/cart/all/`, 'GET');
-    console.log("goku",responseData);
     return responseData;
 }
 
 export const deleteFromCart = async (id) => {
     const responseData = await fetchData(`${apiBaseUrl}/cart/${id}`, 'DELETE');
+    return responseData;
+}
+
+export const modifyCartItemQuantity = async (productId, modifyType) => {  
+    const responseData = await fetchData(`${apiBaseUrl}/cart/modify`, 'PATCH', {productId, modifyType});
+    console.log("API", responseData)
     return responseData;
 }

@@ -6,13 +6,14 @@ import { MdDelete } from "react-icons/md";
 import FormShippingData from "../../components/generalComponents/FormShippingData";
 import CheckoutModal from "./CheckoutModal";
 import { useAuth } from "../../contexts/AuthContext";
-import { deleteFromCart, getCart } from "../../services/api";
+import { deleteFromCart, getCart, modifyCartItemQuantity } from "../../services/api";
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const Cart = () => {
     const { userStatus } = useAuth();
     const [modalShow, setModalShow] = useState(false);
     const [cartItems, setCartItems] = useState([]);
+    const [modifiableMsg, setModifiableMsg] = useState("");
 
     const handleClick = () => {
         setModalShow(true)
@@ -39,14 +40,43 @@ const Cart = () => {
         updateQuantity(index, newValue >= 1 ? newValue : 1);
     };
 
-    const handleDecreaseClick = (index) => {
-        const updatedValue = cartItems[index].quantity > 1 ? cartItems[index].quantity - 1 : 1;
-        updateQuantity(index, updatedValue);
+    const handleDecreaseClick = (index, id) => {
+        if (cartItems[index].quantity > 1) {
+            const fetchDecrease = async () => {
+                try {
+                    setModifiableMsg(prevMessages => ({ ...prevMessages, [id]: "" }))
+                    const response = await modifyCartItemQuantity(id, "decrement")
+                    if (response.quantityModified) {
+                        console.log("response in DEcrease", response.quantityModified);
+                        const updatedValue = cartItems[index].quantity > 1 ? cartItems[index].quantity - 1 : 1;
+                        updateQuantity(index, updatedValue);
+                    }
+                } catch (error) {
+                    console.log(`Error: ${error}`);
+                }
+            }
+            fetchDecrease();
+        }
     };
 
-    const handleIncreaseClick = (index) => {
-        const updatedValue = cartItems[index].quantity < cartItems[index].product.stock ? cartItems[index].quantity + 1 : cartItems[index].quantity;
-        updateQuantity(index, updatedValue);
+    const handleIncreaseClick = (index, id) => {
+        if (cartItems[index].quantity < cartItems[index].product.stock) {
+            const fetchDecrease = async () => {
+                try {
+                    const response = await modifyCartItemQuantity(id, "increment")
+                    if (response.quantityModified) {
+                        console.log("response in increase", response.quantityModified);
+                        const updatedValue = cartItems[index].quantity < cartItems[index].product.stock ? cartItems[index].quantity + 1 : cartItems[index].quantity;
+                        updateQuantity(index, updatedValue);
+                    }
+                } catch (error) {
+                    console.log(`Error: ${error}`);
+                }
+            }
+            fetchDecrease();
+        } else {
+            setModifiableMsg(prevMessages => ({ ...prevMessages, [id]: "Maximum Quantity Available Today, More Coming! :-)" }));
+        }
     };
 
     const updateQuantity = (index, value) => {
@@ -103,7 +133,7 @@ const Cart = () => {
                                                                     <div className="d-flex flex-column flex-md-row align-items-center justify-content-center">
                                                                         <BsDashCircle
                                                                             style={{ cursor: "pointer", color: "blue", margin: "0.2em" }}
-                                                                            onClick={() => handleDecreaseClick(index)}
+                                                                            onClick={() => handleDecreaseClick(index, cartItem.idProduct)}
                                                                         />
                                                                         <InputGroup className="w-50">
                                                                             <Form.Control
@@ -113,14 +143,13 @@ const Cart = () => {
                                                                                 value={cartItem.quantity}
                                                                                 isInvalid={cartItem.quantity < 1 || cartItem.quantity > cartItem.product.stock}
                                                                                 min="1"
+                                                                                readOnly='true'
                                                                             />
-                                                                            <Form.Control.Feedback type="invalid">
-                                                                                {`Maximum Available Quantity: ${cartItem.product.stock}`}
-                                                                            </Form.Control.Feedback>
+                                                                            <small className="text-danger">{modifiableMsg[cartItem.idProduct]}</small>
                                                                         </InputGroup>
                                                                         <BsPlusCircle
                                                                             style={{ cursor: "pointer", color: "blue", margin: "0.2em" }}
-                                                                            onClick={() => handleIncreaseClick(index)}
+                                                                            onClick={() => handleIncreaseClick(index, cartItem.idProduct)}
                                                                         />
                                                                         <MdDelete size={20} style={{ cursor: "pointer", marginLeft: "0.3em" }} onClick={() => handleDeleteItem(cartItem.productName, cartItem.idProduct)} />
                                                                     </div>
