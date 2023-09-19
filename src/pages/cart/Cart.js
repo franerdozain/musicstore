@@ -6,7 +6,7 @@ import { MdDelete } from "react-icons/md";
 import FormShippingData from "../../components/generalComponents/FormShippingData";
 import CheckoutModal from "./CheckoutModal";
 import { useAuth } from "../../contexts/AuthContext";
-import { deleteFromCart, getCart, modifyCartItemQuantity } from "../../services/api";
+import { completePurchase, deleteFromCart, getCart, modifyCartItemQuantity } from "../../services/api";
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const Cart = () => {
@@ -14,10 +14,6 @@ const Cart = () => {
     const [modalShow, setModalShow] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [modifiableMsg, setModifiableMsg] = useState("");
-
-    const handleClick = () => {
-        setModalShow(true)
-    }
 
     useEffect(() => {
         if (userStatus.isAuthenticated) {
@@ -100,6 +96,25 @@ const Cart = () => {
         deleteItem();
     }
 
+    const handlePurchase = () => {
+        const products = cartItems.map(cartItem => ({
+            idProduct: cartItem.idProduct,
+            quantity: cartItem.quantity,
+            unitPrice: cartItem.product.price
+        }));
+
+        const makePurchase = async () => {
+            try {
+                console.log(products)
+                await completePurchase(products);
+            } catch (error) {
+                console.log(`Error: ${error}`)
+            }
+        }
+        setModalShow(true)
+        makePurchase();
+    }
+
     return (
         <Container className="min-vh-100 d-flex flex-column justify-content-start align-items-center pt-3">
             <>
@@ -171,12 +186,12 @@ const Cart = () => {
                                         <div className="mx-1 mx-md-4 mt-4 border rounded text-center">
                                             <h2>Order Summary</h2>
                                             <h3>Total: {cartItems && cartItems.length > 0 ? cartItems.reduce((total, cartItem) => total + cartItem.product.price * cartItem.quantity, 0).toFixed(2) : '0.00'}</h3>
-                                            <Button variant="danger" className="my-2" onClick={handleClick}>Checkout</Button>
+                                            <Button variant="danger" className="my-2" onClick={handlePurchase}>Checkout</Button>
                                         </div>
                                     </div>
                                 </Col>
                                 {cartItems && cartItems.length > 0 && (<>
-                                    <CheckoutModal show={modalShow} onHide={() => setModalShow(false)} image={cartItems && cartItems[0].product.image} cartQuantity={cartItems && cartItems.length} />
+                                    <CheckoutModal show={modalShow} onHide={() => { setModalShow(false); setCartItems([]) }} image={cartItems && cartItems[0].product.image} cartQuantity={cartItems && cartItems.length} />
                                 </>
                                 )
                                 }

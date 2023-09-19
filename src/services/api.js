@@ -145,3 +145,8 @@ export const modifyCartItemQuantity = async (productId, modifyType) => {
     console.log("API", responseData)
     return responseData;
 }
+
+export const completePurchase = async (cartItems) => {
+    const responseData = await fetchData(`${apiBaseUrl}/checkout`, "POST", {cartItems});
+    return responseData;
+}

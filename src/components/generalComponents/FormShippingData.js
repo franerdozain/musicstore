@@ -121,7 +121,10 @@ const FormShippingData = () => {
         ))}
         <div className="d-flex flex-column w-100 align-items-center">
           <Button type="submit" variant="primary" className="my-2">Submit Changes</Button>
-          <Button variant="danger" className="mt-1 mb-3" onClick={() => handleDeleteUser(userStatus.user.idUser)}>Delete Account</Button>
+          { location.pathname === "/profile" && (
+            <Button variant="danger" className="mt-1 mb-3" onClick={() => handleDeleteUser(userStatus.user.idUser)}>Delete Account</Button>            
+          )            
+          }
         </div>
       </Form>
     </div>
