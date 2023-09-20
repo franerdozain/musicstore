@@ -7,6 +7,7 @@ import '../src/components/footer/footerStyle.css';
 import '../src/pages/home/homeStyle.css';
 import '../src/pages/productList/productList.css';
 import '../src/components/generalComponents/generalComponents.css';
+import '../src/pages/productDetails/productDetails.css'
 import Home from './pages/home/Home.js';
 import Cart from './pages/cart/Cart';
 import Wishlist from './pages/wishlist/Wishlist';
@@ -25,7 +26,7 @@ function App() {
   useEffect(() => {
     async function fetchStatus() {
       try {
-        const response = await checkUserStatus();
+        const response = await checkUserStatus();        
         setUserStatus({
           isAuthenticated: response.isAuthenticated,
           user: response.user

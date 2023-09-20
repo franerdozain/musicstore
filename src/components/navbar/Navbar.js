@@ -66,13 +66,14 @@ const MmNavbar = () => {
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary sticky-top" data-bs-theme="dark">
                 <Container>
                     <Navbar.Brand className='me-0'>
-                        Melody Makers                        
-                        <Link to={"/"}>
+                        <Link to={"/"} className='text-decoration-none text-white me-4' >
                             <img
                                 src='/mmLogoWhSm.png'
                                 className="mmLogo d-inline-block align-top"
                                 alt="Melody Makers Logo"
-                            />                            
+                                />  
+                                <div className='mmNavbarLight w-50 position-absolute'></div>                                                                      
+                           Melody Makers                        
                         </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -99,7 +100,13 @@ const MmNavbar = () => {
                                         <>
                                             <LoginButton Icon={FaDoorOpen} text={"Login"} onClick={handleLoginClick} />
                                             <LoginButton Icon={MdOutlineAppRegistration} text={"Registration"} onClick={handleRegistrationClick} />
-                                            <AuthModal show={showModal} onHide={() => setShowModal(false)} modalType={modalType} handleLoggedIn={() => handleLoggedIn()} handleCreateAccount={handleCreateAccount} handleAlreadyHaveAnAccount={handleAlreadyHaveAnAccount} />
+                                            <AuthModal
+                                                show={showModal}
+                                                onHide={() => setShowModal(false)}
+                                                modalType={modalType} handleLoggedIn={() => handleLoggedIn()}
+                                                handleCreateAccount={handleCreateAccount}
+                                                handleAlreadyHaveAnAccount={handleAlreadyHaveAnAccount}
+                                            />
                                         </>
                                     )
                                     }

@@ -7,6 +7,7 @@ import FormShippingData from "../../components/generalComponents/FormShippingDat
 import CheckoutModal from "./CheckoutModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { completePurchase, deleteFromCart, getCart, modifyCartItemQuantity } from "../../services/api";
+
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const Cart = () => {
@@ -105,7 +106,6 @@ const Cart = () => {
 
         const makePurchase = async () => {
             try {
-                console.log(products)
                 await completePurchase(products);
             } catch (error) {
                 console.log(`Error: ${error}`)
@@ -114,6 +114,9 @@ const Cart = () => {
         setModalShow(true)
         makePurchase();
     }
+
+   
+
 
     return (
         <Container className="min-vh-100 d-flex flex-column justify-content-start align-items-center pt-3">
@@ -128,7 +131,7 @@ const Cart = () => {
                 ) : (
                     <>
                         {!userStatus.isAuthenticated ? (
-                            <p>"Please create an account or login"</p>
+                             <p>Please create an account or login</p>
                         ) : (
                             <div className="d-flex flex-column flex-lg-row">
                                 <div className="flex-grow-1">

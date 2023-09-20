@@ -1,3 +1,27 @@
 .logo-modal {
     height: 2.2em;
 }
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #9b9d9f;
+    color: #fff;
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.scroll-to-top:hover {
+    background-color: #3c3c3c;
+}
+
+#mmFooter {
+    
+}

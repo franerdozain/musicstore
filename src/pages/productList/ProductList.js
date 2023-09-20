@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Col } from "react-bootstrap";
+import { Col, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
@@ -8,6 +8,7 @@ import ProductCard from "./ProductCard";
 import DropdownSortBy from "./DropdownSortBy";
 import useApi from "../../hooks/useApi";
 import { getCategoriesData, getProductsList } from "../../services/api";
+import { FaBagShopping } from "react-icons/fa6";
 
 const PageSize = 6;
 
@@ -20,6 +21,7 @@ const ProductList = () => {
   const [selectedSortBy, setSelectedSortBy] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1)
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
   useEffect(() => {
     if (categoriesData) {
@@ -30,10 +32,11 @@ const ProductList = () => {
   useEffect(() => {
     if (category && subcategory && id) {
       const fetchData = async () => {
-        const response = await getProductsList(id, currentPage, PageSize, selectedSortBy, subcategory === "all");       
+        const response = await getProductsList(id, currentPage, PageSize, selectedSortBy, subcategory === "all");
         if (response && response.products) {
           setProducts(response.products);
           setTotalPages(response.totalPages);
+          setIsLoadingProducts(false);
         }
       };
       fetchData();
@@ -70,32 +73,60 @@ const ProductList = () => {
         }
       </Col>
       <Col xs={6} sm={8} md={7} lg={8} xl={9} xxl={9} className="text-center d-flex flex-column justify-content-between align-items-center">
-        <ProductCard products={products} />
-        <div className="pagination">
-          <button
-            className="page-link  p-1"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <FcPrevious size={20} />
-          </button>
-          {Array.from({ length: totalPagesDisplay }, (_, index) => (
-            <button
-              key={index}
-              className={`page-link ${index + 1 === currentPage ? "active" : ""}`}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-          <button
-            className="page-link p-1"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPagesDisplay}
-          >
-            <FcNext size={20}/>
-          </button>
-        </div>
+        {isLoadingProducts ? (
+          <div className="d-flex justify-content-center">
+            <div className="mt-5">
+              {loadingCategoriesAnimation}
+            </div>
+          </div>
+        ) : (products.length === 0 ? (
+          <div className="falling-words-container d-flex w-75">
+            <div className="mx-1">
+              <p className="falling-word1">More</p>
+            </div>
+            <div className="mx-5">
+              <p className="falling-word2">coming</p>
+            </div>
+            <div className="ms-4 me-2">
+              <p className="falling-word3">soon!</p>
+            </div>
+            <div className="lightComingSoon">
+              <FaBagShopping className="comingSoonBag mx-5 mt-0" size={20} />
+            </div>
+          </div>
+
+        ) : (
+          <>
+            <ProductCard products={products} />
+            <div className="pagination">
+              <button
+                className="page-link  p-1"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <FcPrevious size={20} />
+              </button>
+              {Array.from({ length: totalPagesDisplay }, (_, index) => (
+                <button
+                  key={index}
+                  className={`page-link ${index + 1 === currentPage ? "active" : ""}`}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              <button
+                className="page-link p-1"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPagesDisplay}
+              >
+                <FcNext size={20} />
+              </button>
+            </div>
+          </>
+        )
+        )}
+
       </Col>
       <Col md={2} lg={1} xl={1} xxl={1} className="position-absolute end-0">
         <DropdownSortBy handleSortByClick={handleSortByClick} selectedSortBy={selectedSortBy} />

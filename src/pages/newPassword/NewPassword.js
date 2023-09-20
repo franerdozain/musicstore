@@ -7,7 +7,7 @@ import NewPasswordForm from "./NewPasswordForm";
 
 const NewPassword = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get('token');
+    
     const [tokenEpired, setTokenExpired] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [updatedMsg, setUpdatedMsg] = useState("");
@@ -17,6 +17,7 @@ const NewPassword = () => {
 
     const onSubmit = async (data) => {
         try {
+            const token = searchParams.get('token');
             setErrorMsg("");
             setLoading(true);
             const response = await updatePassword(token, data.password);

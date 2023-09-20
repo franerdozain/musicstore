@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Carousel, Container, Image, Spinner, Table, Toast } from "react-bootstrap";
+import { Button, Carousel, Col, Container, Image, Spinner, Table, Toast } from "react-bootstrap";
 import { useParams } from 'react-router-dom';
 
 import DropdownQuantity from "./DropdownQuantity";
@@ -7,6 +7,8 @@ import CheckoutModal from "./CheckoutModal";
 import { addToCart, getProduct } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
 import AuthModal from "../../components/navbar/AuthModal";
+import DescriptionComponent from "./DescriptionComponent";
+import ScrollToTopButton from "../../components/generalComponents/ScrollToTopButton";
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const ProductDetails = () => {
@@ -76,7 +78,7 @@ const ProductDetails = () => {
                 </div>
             ) : (
                 <>
-                    <Carousel interval={null} className="w-75" data-bs-theme="dark">
+                    <Carousel interval={null} className="w-100" data-bs-theme="dark">
                         {productDetails && productDetails.product.imageUrls.map((image, index) => (
                             <Carousel.Item key={index} >
                                 <Image
@@ -84,19 +86,19 @@ const ProductDetails = () => {
                                     src={`${imagePath}/${encodeURIComponent(image)}`}
                                     onError={(e) => { e.target.src = '/coming soon.png' }}
                                     alt={image.productName}
-                                    style={{ objectFit: "contain", maxHeight: "80vh" }}
+                                    style={{ objectFit: "contain", maxHeight: "50vh" }}
                                 />
                             </Carousel.Item>
                         ))
                         }
-                    </Carousel>
-                    <h2 className="text-center">{productDetails && productDetails.product.productName}</h2>
-                    <h2>$ {productDetails && productDetails.product.price}</h2>
+                    </Carousel>                   
+                    <h2 className="product-name-product-details text-center w-75 my-5 p-2 rounded shadow">{productDetails && productDetails.product.productName}</h2>                   
+                    <h2 className="fw-bold p-2 rounded mt-2 shadow mb-4">$ {productDetails && productDetails.product.price}</h2>
 
-                    {productDetails && productDetails.product.features && (
-                        <div>
-                            <h4 className="text-center">Features</h4>
-                            <ul>
+                    {productDetails && productDetails.product.features && productDetails.product.features.length > 0 && (
+                        <div className="shadow bg-body-tertiary rounded mt-2 mb-4">
+                            <h4 className="text-center fw-bold pt-2">Features</h4>
+                            <ul className="pe-3">
                                 {productDetails.product.features.map((feature, index) => (
                                     <li key={index}>{feature}</li>
                                 ))}
@@ -113,15 +115,16 @@ const ProductDetails = () => {
                                 stock={productDetails && productDetails.product.stock}
                             />
                             <div style={{ position: 'relative' }}>
-                                <Button onClick={(p, q) => handleAddClick(productDetails && productDetails.product.idProduct, quantity)}>Add To Cart</Button>
+                                <Button className="add-item-button-with-shine" onClick={(p, q) => handleAddClick(productDetails && productDetails.product.idProduct, quantity)}>Add To Cart</Button>
                                 <Toast
                                     show={notLoggedToast}
                                     onClose={() => setNotLoggedToast(false)}
                                     delay={3000}
                                     autohide style={{
                                         position: 'absolute',
-                                        top: '0%',
-                                        left: '100%',
+                                        top: '100%',
+                                        bottom: '100%',
+                                        left: '0%',
                                         zIndex: 9999
                                     }}>
                                     <Toast.Header>
@@ -132,19 +135,18 @@ const ProductDetails = () => {
                         </div>
 
                         {productDetails && productDetails.product.slogan && (
-                            <h5>{productDetails.product.slogan}</h5>
+                            <h5 className="my-4 shadow p-3 bg-body-tertiary rounded fst-italic">{productDetails.product.slogan}</h5>
                         )}
 
-                    {productDetails && productDetails.product.description && (
-                        <span>{productDetails.product.description}</span>
-
+                    {productDetails && productDetails.product.description && (                        
+                        <DescriptionComponent description={productDetails.product.description} />
                     )}
 
                     <div className="w-100">
                         {productDetails && productDetails.product.specifications && (
                             <div className="table-responsive">
-                                <span className="fw-bold">Specifications</span>
-                                <Table striped borderless variant="light">
+                                <h4 className="text-center fw-bold">Specifications</h4>
+                                <Table className="table-striped-custom text-center" borderless variant="light">
                                     <tbody>
                                         {productDetails.product.specifications.map((spec, specIndex) => (
                                             <tr key={specIndex}>
@@ -163,6 +165,7 @@ const ProductDetails = () => {
                         product={productDetails && productDetails.product.productName}
                         price={productDetails && productDetails.product.price}
                     />
+                    <ScrollToTopButton />
                 </>
             )}
         </Container>

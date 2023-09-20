@@ -1,11 +1,70 @@
 .dropdown-menu {
-    --bs-dropdown-link-active-bg:#4e4e4e;
+    --bs-dropdown-link-active-bg: #4e4e4e;
 }
 
 .dropdown-toggle {
     white-space: normal;
 }
 
- [data-bs-theme=dark].carousel .carousel-indicators [data-bs-target] {
+[data-bs-theme=dark].carousel .carousel-indicators [data-bs-target] {
     background-color: transparent;
+}
+
+
+.falling-words-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100px;
+}
+
+.falling-word1,
+.falling-word2,
+.falling-word3 {
+    font-size: larger;
+    position: absolute;
+    animation: fall 1s linear forwards;
+    opacity: 0;
+}
+
+.falling-word1 {
+    animation-delay: 0s;
+}
+
+.falling-word2 {
+    animation-delay: 0.3s;
+}
+
+.falling-word3 {
+    animation-delay: 0.7s;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(50px);
+        opacity: 1;
+    }
+}
+
+.comingSoonBag {
+    transform: translateY(50px);
+    font-size: larger;
+    position: absolute;
+    opacity: 0;
+    animation: fadeIn 1s linear forwards 1.7s;
+    color: red;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

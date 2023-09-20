@@ -80,7 +80,7 @@
 
 /* brand logo */
 .mmLogo {
-    width: 2.9em;
+    width: 4em;
 }
 .mmLogo:hover {
     transition: 1s;
@@ -95,3 +95,28 @@
 .home-link:hover{
     animation: userBeat 1.5s;
 }
+
+.mmNavbarLight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0;
+    z-index: -1;
+    animation: moveLight 4s alternate;
+    pointer-events: none;
+     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  
+  @keyframes moveLight {
+    0% {
+      transform: translateX(-100%);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }

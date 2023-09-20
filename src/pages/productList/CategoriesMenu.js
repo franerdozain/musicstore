@@ -31,9 +31,15 @@ function CategoriesMenu({ categories, setCurrentPage }) {
     setShowCatMenuBigScreen(false);
   };
 
+  const handleToggle = (isOpen) => {
+    if (!isOpen) {
+      setShowCatMenuBigScreen(false);
+    }
+  }
+
   return (
     <div className='container'>
-      <Button variant="light" className="d-md-none mt-2 position-relative" onClick={handleToggleMenu}>
+      <Button variant="dark" className="d-md-none mt-2 position-relative" onClick={handleToggleMenu}>
         Categories
       </Button>
 
@@ -52,6 +58,7 @@ function CategoriesMenu({ categories, setCurrentPage }) {
                 handleCategoryClick(category);
               }}
               show={showCatMenuBigScreen && category === selectedCategory}
+              onToggle={handleToggle}
             >
               {categories.some(subcategory => subcategory.idCategoryParent === category.idCategory) && (
                 <>
@@ -103,7 +110,7 @@ function CategoriesMenu({ categories, setCurrentPage }) {
                             style={{ transition: 'background-color 0.4s', border: 'none', borderRadius: '10px' }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#cfe2ff'}
                             onMouseLeave={(e) => e.target.style.backgroundColor = 'initial'}
-                            onClick={(e) => handleSubcategoryClick(subcategory, e)}
+                            onClick={(e) => {handleSubcategoryClick(subcategory, e); setShowMenu(false) }}
                           >
                             {subcategory.categoryName}
                           </div>
@@ -115,7 +122,7 @@ function CategoriesMenu({ categories, setCurrentPage }) {
                         style={{ transition: 'background-color 0.4s', border: 'none', borderRadius: '10px' }}
                         onMouseEnter={(e) => e.target.style.backgroundColor = '#cfe2ff'}
                         onMouseLeave={(e) => e.target.style.backgroundColor = 'initial'}
-                        onClick={(e) => handleSubcategoryClick('All', e)}
+                        onClick={(e) => { handleSubcategoryClick('All', e); setShowMenu(false) }}
                       >
                         Show All
                       </div>}
