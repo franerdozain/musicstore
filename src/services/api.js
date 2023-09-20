@@ -142,11 +142,16 @@ export const deleteFromCart = async (id) => {
 
 export const modifyCartItemQuantity = async (productId, modifyType) => {  
     const responseData = await fetchData(`${apiBaseUrl}/cart/modify`, 'PATCH', {productId, modifyType});
-    console.log("API", responseData)
     return responseData;
 }
 
 export const completePurchase = async (cartItems) => {
     const responseData = await fetchData(`${apiBaseUrl}/checkout`, "POST", {cartItems});
     return responseData;
+}
+
+export const search = async (q) => {
+        const queryParams = new URLSearchParams({q});
+        const responseData = await fetchData(`${apiBaseUrl}/search?${queryParams}`, "GET");   
+        return responseData;
 }

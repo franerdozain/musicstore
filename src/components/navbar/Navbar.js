@@ -81,8 +81,8 @@ const MmNavbar = () => {
                         <Nav className="d-flex flex-row justify-content-end align-items-center" >
                             <IconButton icon={FaHeart} destination="/wishlist" className="FaHeart ms-2" />
                             <IconButton icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-3" />
-                            <Dropdown className='ms-3 mb-1'>
-                                <Dropdown.Toggle variant="dark" id="dropdownMenuButton" className="userDropdownToggle">
+                            <Dropdown className='ms-3 mb-1 d-flex flex-column'>
+                                <Dropdown.Toggle variant="dark" id="dropdownMenuButton" className="userDropdownToggle align-self-end">
                                     <FaUser className='FaUser' size={25} />
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="custom-dropdown-menu bg-dark">

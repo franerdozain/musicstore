@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import './App.css';
 import '../src/components/navbar/navbarStyle.css';
@@ -15,7 +16,6 @@ import ProductList from './pages/productList/ProductList';
 import Footer from './components/footer/Footer';
 import NewPassword from './pages/newPassword/NewPassword';
 import ProfileContainer from './pages/profile/ProfileContainer';
-import { useEffect } from 'react';
 import { checkUserStatus } from './services/api';
 import { useAuth } from './contexts/AuthContext';
 
