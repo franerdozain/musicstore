@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
-import { Button, Carousel, Container, Image, Spinner, Table } from "react-bootstrap";
+import { Button, Carousel, Container, Image, Spinner, Table, Toast } from "react-bootstrap";
 import { useParams } from 'react-router-dom';
 
 import DropdownQuantity from "./DropdownQuantity";
 import CheckoutModal from "./CheckoutModal";
 import { addToCart, getProduct } from "../../services/api";
 import { useAuth } from "../../contexts/AuthContext";
+import AuthModal from "../../components/navbar/AuthModal";
 const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
     const [inputValue, setInputValue] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const [notLoggedToast, setNotLoggedToast] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [productDetails, setProductDetails] = useState(null);
+    
     const { id } = useParams();
     const { userStatus } = useAuth();
 
@@ -46,14 +49,17 @@ const ProductDetails = () => {
     };
 
     const handleAddClick = async (pId, q) => {
-        setShowModal(true)
-        const idUser = userStatus.user?.idUser
-        //if not iduser, ask to login
-        try {
-            const data = { personId: idUser, idProduct: pId, quantity: q }
-            const response = await addToCart(data);
-        } catch (error) {
-            console.log(error)
+        const idUser = userStatus.user?.idUser        
+        if(!idUser) {
+            setNotLoggedToast(true);
+        } else if(idUser){
+            try {              
+                const data = { personId: idUser, idProduct: pId, quantity: q }
+                const response = await addToCart(data);
+                response && setShowModal(true)        
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 
@@ -97,21 +103,37 @@ const ProductDetails = () => {
                             </ul>
                         </div>
                     )}
-                    <div className="d-flex flex-wrap w-50 justify-content-evenly">
-                        <DropdownQuantity
-                            quantity={quantity}
-                            handleQuantitySelect={handleQuantitySelect}
-                            handleInputValueChange={handleInputValueChange}
-                            handleCheckClick={handleCheckClick}
-                            inputValue={inputValue}
-                            stock={productDetails && productDetails.product.stock}
-                        />
-                        <Button onClick={(p, q) => handleAddClick(productDetails && productDetails.product.idProduct, quantity)}>Add To Cart</Button>
-                    </div>
+                        <div className="d-flex flex-wrap w-50 justify-content-evenly">
+                            <DropdownQuantity
+                                quantity={quantity}
+                                handleQuantitySelect={handleQuantitySelect}
+                                handleInputValueChange={handleInputValueChange}
+                                handleCheckClick={handleCheckClick}
+                                inputValue={inputValue}
+                                stock={productDetails && productDetails.product.stock}
+                            />
+                            <div style={{ position: 'relative' }}>
+                                <Button onClick={(p, q) => handleAddClick(productDetails && productDetails.product.idProduct, quantity)}>Add To Cart</Button>
+                                <Toast
+                                    show={notLoggedToast}
+                                    onClose={() => setNotLoggedToast(false)}
+                                    delay={3000}
+                                    autohide style={{
+                                        position: 'absolute',
+                                        top: '0%',
+                                        left: '100%',
+                                        zIndex: 9999
+                                    }}>
+                                    <Toast.Header>
+                                        <strong className="mr-auto">Please Login</strong>
+                                    </Toast.Header>
+                                </Toast>
+                            </div>
+                        </div>
 
-                    {productDetails && productDetails.product.slogan && (
-                        <h5>{productDetails.product.slogan}</h5>
-                    )}
+                        {productDetails && productDetails.product.slogan && (
+                            <h5>{productDetails.product.slogan}</h5>
+                        )}
 
                     {productDetails && productDetails.product.description && (
                         <span>{productDetails.product.description}</span>
@@ -133,8 +155,7 @@ const ProductDetails = () => {
                                 </Table>
                             </div>
                         )}
-                    </div>
-
+                    </div>                    
                     <CheckoutModal
                         show={showModal}
                         onHide={() => setShowModal(false)}

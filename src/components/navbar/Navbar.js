@@ -80,13 +80,16 @@ const MmNavbar = () => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="d-flex flex-row justify-content-end align-items-center" >
                             <Button as={Link} to={'/'} variant='dark' className=' ms-2 home-link'>Home</Button>
+                            <div className='d-flex flex-wrap align-items-center'>
                             <IconButton icon={FaHeart} destination="/wishlist" className="FaHeart ms-2" />
-                            <IconButton icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-3" />
+                            <IconButton icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-2" />
+
+                            </div>
                             <Dropdown className='ms-3 mb-1 d-flex flex-column'>
                                 <Dropdown.Toggle variant="dark" id="dropdownMenuButton" className="userDropdownToggle align-self-end">
                                     <FaUser className='FaUser' size={25} />
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu className="custom-dropdown-menu bg-dark">
+                                <Dropdown.Menu className="custom-dropdown-menu bg-dark dropdown-menu-end">
                                     { userStatus.isAuthenticated ? (
                                         <>
                                             <LoginButton Icon={FaIdCardAlt} text={"Profile"} onClick={handleProfileClick} />
