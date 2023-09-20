@@ -82,3 +82,16 @@
 .mmLogo {
     width: 2.9em;
 }
+.mmLogo:hover {
+    transition: 1s;
+   transform: scale(1.05);
+}
+
+.home-link {
+    background: transparent;  
+    border:none;  
+}
+
+.home-link:hover{
+    animation: userBeat 1.5s;
+}

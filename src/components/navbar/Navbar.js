@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaHeart, FaUser } from 'react-icons/fa6';
 import { GiShoppingCart } from "react-icons/gi";
 import { FaDoorOpen, FaDoorClosed, FaIdCardAlt } from 'react-icons/fa';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Button } from 'react-bootstrap';
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -66,19 +66,20 @@ const MmNavbar = () => {
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary sticky-top" data-bs-theme="dark">
                 <Container>
                     <Navbar.Brand className='me-0'>
-                        Melody Makers
+                        Melody Makers                        
                         <Link to={"/"}>
                             <img
                                 src='/mmLogoWhSm.png'
                                 className="mmLogo d-inline-block align-top"
                                 alt="Melody Makers Logo"
-                            />
+                            />                            
                         </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <SearchBar />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="d-flex flex-row justify-content-end align-items-center" >
+                            <Button as={Link} to={'/'} variant='dark' className=' ms-2 home-link'>Home</Button>
                             <IconButton icon={FaHeart} destination="/wishlist" className="FaHeart ms-2" />
                             <IconButton icon={GiShoppingCart} destination="/cart" className="GiShoppingCart ms-3" />
                             <Dropdown className='ms-3 mb-1 d-flex flex-column'>

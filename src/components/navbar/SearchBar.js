@@ -44,9 +44,9 @@ const SearchBar = () => {
         option: (provided, state) => ({
             ...provided,
             color: 'gray', 
-            backgroundColor: state.isSelected ? 'e7e2e2' : 'whitesmoke', 
+            backgroundColor: state.isSelected ? '#e7e2e2' : '#fcfcfc', 
             '&:hover': {
-                backgroundColor: '#e7e2e2', 
+                backgroundColor: '#f0ebeb', 
             },
         }),
     };
