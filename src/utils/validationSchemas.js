@@ -6,6 +6,10 @@ export const registerValidationSchema = yup.object().shape({
     username: yup.string().required("Username is required"),
     password: yup
         .string()
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/,
+            "Password must contain at least one lowercase letter, one uppercase letter, one number, and have at least 6 characters"
+        )
         .oneOf([yup.ref("reEnterPassword"), null], "Passwords must match")
         .required("Password is required"),
     reEnterPassword: yup
