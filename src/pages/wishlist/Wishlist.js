@@ -27,11 +27,11 @@ const Wishlist = () => {
       //   const newWishlist = updatedWishlist.filter(item => item.productID !== productID )        
       //   setUpdatedWishlist(newWishlist)  
       // }
-      console.log("W", wishlist)
+
   const handleDelete = async (idProduct, idx) => {
     try {
       const response = await deleteFromWishlist(idProduct);
-      console.log("response", response)
+
       if (response.deleteOk) {
         wishlist.splice(idx, 1)
         setWishlist(prev => [...wishlist])
@@ -52,7 +52,6 @@ const Wishlist = () => {
             <div key={product.idProduct} className="my-3">
               <div className="d-flex align-items-center justify-content-center">
                 <Col xs={2} sm={2} md={1} lg={1} xl={1} xxl={1}>
-                  {console.log("SSS", imagePath, product.imageURL)}
                   <Image                  
                     src={`${imagePath}/${product.imageURL}`}
                     alt={`${product.productName}`}

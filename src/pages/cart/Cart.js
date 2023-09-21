@@ -75,7 +75,6 @@ const Cart = () => {
                 try {
                     const response = await modifyCartItemQuantity(id, "increment")
                     if (response.quantityModified) {
-                        console.log("response in increase", response.quantityModified);
                         const updatedValue = cartItems[index].quantity < cartItems[index].product.stock ? cartItems[index].quantity + 1 : cartItems[index].quantity;
                         updateQuantity(index, updatedValue);
                     }
@@ -167,7 +166,6 @@ const Cart = () => {
                                                                             onClick={() => handleDecreaseClick(index, cartItem.idProduct)}
                                                                         />
                                                                         <InputGroup className="w-50">
-                                                                            {console.log("CartITems", cartItem)}
                                                                             <Form.Control
                                                                                 className="rounded-bottom rounded-top text-center"
                                                                                 onClick={(e) => e.preventDefault()}

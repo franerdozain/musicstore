@@ -30,7 +30,6 @@ const CheckoutModal = ({ onHide, show, image, product, price }) => {
             </Modal.Header>
             <Modal.Body>
                 <div className="container d-flex justify-content-between">
-                    {console.log("product", image)}
                     <img
                         src={`${imagePath}/${image}`}
                         className="card-img-top img-fluid object-fit-contain w-25"

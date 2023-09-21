@@ -39,7 +39,7 @@ const CheckoutModal = ({ onHide, show, image, cartQuantity }) => {
                                 <FaPlus />                              
                             </Badge>
                         ) : (
-                            <Image src={image} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-4' />
+                            <Image src={`${imagePath}/${image}`} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-4' />
                         )}
                         <GiCheckMark style={{ color: "green", transform: "scale(3)" }} />
                     </div>

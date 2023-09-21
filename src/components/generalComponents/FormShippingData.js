@@ -85,7 +85,7 @@ const FormShippingData = () => {
   };
   const a = true
   return (
-    <div className="border rounded mt-4">
+    <div className="border rounded mt-4 w-100">
       <h2 className="text-center bg-secondary rounded p-1 text-white">
         {location.pathname === "/cart" ? "Shipping Details" : "Account & Shipping Details"}
       </h2>
@@ -144,3 +144,85 @@ const FormShippingData = () => {
 };
 
 export default FormShippingData;
+
+// const { userStatus } = useAuth();
+//   const [shoppingHistory, setShoppingHistory] = useState([]);
+
+//   useEffect(() => {
+//     if (userStatus.isAuthenticated) {
+//       const fetchOrders = async () => {
+//         try {
+//           const response = await getOrders(userStatus);
+//           if (response.orders) {
+//             setShoppingHistory(response.orders);
+//           }
+//         } catch (error) {
+//           console.log(`Error: ${error}`)
+//         }
+//       }
+//       fetchOrders();
+//     }
+//   }, [])
+
+//return
+{/* <Container className="min-vh-100 d-flex flex-column justify-content-start align-items-center pt-3">
+{userStatus.user === null ? (
+  <Spinner
+    animation="border"
+    size="lg"
+    role="status"
+    aria-label="Submitting... Please wait."
+  />
+) : (
+  <>
+    {!userStatus.isAuthenticated ? (
+      <p>"Please create an account or login"</p>
+    ) : (
+      <div className="min-vh-100 d-flex flex-wrap">
+        <Container fluid>
+          <Row>
+            <Col xs={12} md={6}>
+              <div className="mx-1 mx-md-4">
+                <FormShippingData userDetails={userStatus.user} />
+              </div>
+            </Col>
+            <Col xs={12} md={6}>
+              <div className="mt-4 border rounded me-4">
+                <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">Shopping History</h2>
+                {shoppingHistory ? (
+                  <div className="table-responsive">
+                    <Table striped borderless variant="light mb-0">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Order ID</th>
+                          <th>Product</th>
+                          <th>Quantity</th>
+                          <th>Price</th>
+                          <th>Total Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {shoppingHistory.map((order) => (
+                          <tr key={order.idOrder}>
+                            <td>{order.dateAndTime}</td>
+                            <td>{order.idOrder}</td>
+                            <td>{order.productName}</td>
+                            <td>{order.quantity}</td>
+                            <td>${order.unitPrice.toFixed(2)}</td>
+                            <td>${(order.unitPrice * order.quantity).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </div>
+                ) : null}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    )}
+  </>
+)}
+</Container> */}

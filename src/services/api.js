@@ -164,11 +164,16 @@ export const addToWishlist = async (itemId) => {
 
 export const getWishlist = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/wishlist`, 'GET');
-    console.log("api", responseData);
     return responseData;
 }
 
 export const deleteFromWishlist = async (itemId) => {
     const responseData = await fetchData(`${apiBaseUrl}/wishlist/${itemId}`, "DELETE")
+    return responseData;
+}
+
+// orders
+export const getOrders = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/orders`, 'GET');
     return responseData;
 }
