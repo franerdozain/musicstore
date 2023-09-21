@@ -155,3 +155,20 @@ export const search = async (q) => {
         const responseData = await fetchData(`${apiBaseUrl}/search?${queryParams}`, "GET");   
         return responseData;
 }
+
+// wishlist
+export const addToWishlist = async (itemId) => {
+    const responseData = await fetchData(`${apiBaseUrl}/wishlist`, "POST", {itemId});
+    return responseData;
+}
+
+export const getWishlist = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/wishlist`, 'GET');
+    console.log("api", responseData);
+    return responseData;
+}
+
+export const deleteFromWishlist = async (itemId) => {
+    const responseData = await fetchData(`${apiBaseUrl}/wishlist/${itemId}`, "DELETE")
+    return responseData;
+}

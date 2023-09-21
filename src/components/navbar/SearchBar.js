@@ -40,6 +40,10 @@ const SearchBar = () => {
         control: (provided, state) => ({
             ...provided,
             backgroundColor: 'whitesmoke',
+            '&:hover': {
+              backgroundColor: 'white',
+              cursor: 'pointer',
+          },
           }),   
         option: (provided, state) => ({
             ...provided,

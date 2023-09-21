@@ -36,8 +36,7 @@ const CheckoutModal = ({ onHide, show, image, cartQuantity }) => {
                         {cartQuantity > 1 ? (
                             <Badge className='me-4' bg="secondary">
                                 <Image src={`${imagePath}/${image}`} alt='' fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-1' />
-                                <FaPlus />
-                                {console.log("4444", `${imagePath}/${image}`)}
+                                <FaPlus />                              
                             </Badge>
                         ) : (
                             <Image src={image} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} className='me-4' />

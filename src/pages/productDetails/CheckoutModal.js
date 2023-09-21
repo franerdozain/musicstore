@@ -2,6 +2,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useNavigate } from 'react-router-dom';
 
+const imagePath = process.env.REACT_APP_PRODUCT_IMAGES_PATH;
+
+
 const CheckoutModal = ({ onHide, show, image, product, price }) => {
     const navigate = useNavigate();
 
@@ -27,8 +30,9 @@ const CheckoutModal = ({ onHide, show, image, product, price }) => {
             </Modal.Header>
             <Modal.Body>
                 <div className="container d-flex justify-content-between">
+                    {console.log("product", image)}
                     <img
-                        src={image}
+                        src={`${imagePath}/${image}`}
                         className="card-img-top img-fluid object-fit-contain w-25"
                         alt={product}
                     />

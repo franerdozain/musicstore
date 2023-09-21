@@ -10,7 +10,7 @@ import useApi from "../../hooks/useApi";
 import { getCategoriesData, getProductsList } from "../../services/api";
 import { FaBagShopping } from "react-icons/fa6";
 
-const PageSize = 6;
+const PageSize = 12;
 
 const ProductList = () => {
   const { category, subcategory, id } = useParams();
@@ -97,7 +97,7 @@ const ProductList = () => {
 
         ) : (
           <>
-            <ProductCard products={products} />
+            <ProductCard products={products} setProducts={setProducts} />
             <div className="pagination">
               <button
                 className="page-link  p-1"

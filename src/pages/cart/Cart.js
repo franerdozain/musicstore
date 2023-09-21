@@ -20,9 +20,22 @@ const Cart = () => {
         if (userStatus.isAuthenticated) {
             const fetchCart = async () => {
                 try {
-                    const response = await getCart()
+                    const response = await getCart()                    
                     if (response.cart) {
-                        setCartItems(response.cart)
+                        const uniqueProducts = {};
+                        response.cart.forEach((product) => {
+                            if (!uniqueProducts[product.idProduct]) {
+                              uniqueProducts[product.idProduct] = {
+                                ...product,
+                                quantity: product.quantity,
+                              };
+                            } else {
+                              uniqueProducts[product.idProduct].quantity += product.quantity;
+                            }
+                          });
+                          
+                          const uniqueProductsArray = Object.values(uniqueProducts);
+                        setCartItems(uniqueProductsArray)
                     }
                 } catch (error) {
                     console.log(`Error: ${error}`);
@@ -44,7 +57,7 @@ const Cart = () => {
                     setModifiableMsg(prevMessages => ({ ...prevMessages, [id]: "" }))
                     const response = await modifyCartItemQuantity(id, "decrement")
                     if (response.quantityModified) {
-                        console.log("response in DEcrease", response.quantityModified);
+                       
                         const updatedValue = cartItems[index].quantity > 1 ? cartItems[index].quantity - 1 : 1;
                         updateQuantity(index, updatedValue);
                     }
@@ -142,7 +155,7 @@ const Cart = () => {
                                                 {cartItems && cartItems.length > 0 ? (
                                                     cartItems.map((cartItem, index) => (
                                                         <tr key={index}>
-                                                            <td>
+                                                            <td>                                                                
                                                                 <Image src={`${imagePath}/${cartItem.product.image}`} fluid rounded style={{ maxHeight: "10vh", maxWidth: "fit-content" }} />
                                                             </td>
                                                             <td>{cartItem.product.productName}</td>
@@ -154,6 +167,7 @@ const Cart = () => {
                                                                             onClick={() => handleDecreaseClick(index, cartItem.idProduct)}
                                                                         />
                                                                         <InputGroup className="w-50">
+                                                                            {console.log("CartITems", cartItem)}
                                                                             <Form.Control
                                                                                 className="rounded-bottom rounded-top text-center"
                                                                                 onClick={(e) => e.preventDefault()}
