@@ -73,7 +73,12 @@ export const createOrModifySchema = yup.object().shape({
 
 // new password
 export const newPasswordSchema = yup.object().shape({
-    password: yup.string().required("Password is required"),
+    password: yup.string()
+    .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/,
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and have at least 6 characters"
+    )
+    .required("Password is required"),
     reEnterPassword: yup.string()
         .required("Please re-enter your password")
         .oneOf([yup.ref('password'), null], 'Passwords do not match')
