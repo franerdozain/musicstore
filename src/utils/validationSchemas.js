@@ -114,3 +114,14 @@ export const modifyUserDetails = yup.object().shape({
     zip: yup.string().required(),
     shippingAddress: yup.string().required(),
 })
+
+export const contactUsNotLoggedInSchema = yup.object().shape({
+    email: yup.string().email("Invalid email format").required("Email is required"),
+    subject: yup.string(),
+    message: yup.string().min(10, "Message must have at least 10 characters").required()
+});
+
+export const contactUsLoggedInSchema = yup.object().shape({  
+    subject: yup.string(),
+    message: yup.string().min(10, "Message must have at least 10 characters").required()
+});

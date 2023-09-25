@@ -39,7 +39,7 @@ const AuthForm = ({ submitAuthForm, isSubmitting, errorMsg, clearErrorMsg, succe
                         <InputGroup className="mb-3 w-100">
                             <InputGroup.Text className="justify-content-center">
                                 {field.label}
-                            </InputGroup.Text>
+                            </InputGroup.Text>                           
                             <Controller
                                 name={field.name}
                                 control={control}

@@ -75,7 +75,6 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
                                 <InputGroup.Text className="justify-content-center">
                                     {field.label}
                                 </InputGroup.Text>
-
                                 <Controller
                                     name={field.name}
                                     control={control}

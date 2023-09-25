@@ -150,6 +150,7 @@ export const completePurchase = async (cartItems) => {
     return responseData;
 }
 
+// search
 export const search = async (q) => {
         const queryParams = new URLSearchParams({q});
         const responseData = await fetchData(`${apiBaseUrl}/search?${queryParams}`, "GET");   
@@ -175,5 +176,11 @@ export const deleteFromWishlist = async (itemId) => {
 // orders
 export const getOrders = async () => {
     const responseData = await fetchData(`${apiBaseUrl}/orders`, 'GET');
+    return responseData;
+}
+
+// messages
+export const sendMsg = async (data) => {
+    const responseData = await fetchData(`${apiBaseUrl}/messages`, 'POST', data);
     return responseData;
 }

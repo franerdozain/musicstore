@@ -127,9 +127,6 @@ const Cart = () => {
         makePurchase();
     }
 
-   
-
-
     return (
         <Container className="min-vh-100 d-flex flex-column justify-content-start align-items-center pt-3">
             <>
@@ -145,9 +142,9 @@ const Cart = () => {
                         {!userStatus.isAuthenticated ? (
                              <p>Please create an account or login</p>
                         ) : (
-                            <div className="d-flex flex-column flex-lg-row">
+                            <div className="d-flex flex-column flex-lg-row w-100">
                                 <div className="flex-grow-1">
-                                    <Col xs={12} sm={12} md={12} lg={8} xl={8} xxl={8} className="min-vh-100 table-responsive mx-auto mt-2">
+                                    <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} className="table-responsive mx-auto mt-2">
                                         <h2 className="text-center bg-secondary rounded text-white p-1 mt-3">Your Cart:</h2>
                                         <Table striped borderless variant="light">
                                             <tbody>
@@ -164,6 +161,7 @@ const Cart = () => {
                                                                         <BsDashCircle
                                                                             style={{ cursor: "pointer", color: "blue", margin: "0.2em" }}
                                                                             onClick={() => handleDecreaseClick(index, cartItem.idProduct)}
+                                                                            size={25}
                                                                         />
                                                                         <InputGroup className="w-50">
                                                                             <Form.Control
@@ -173,29 +171,34 @@ const Cart = () => {
                                                                                 value={cartItem.quantity}
                                                                                 isInvalid={cartItem.quantity < 1 || cartItem.quantity > cartItem.product.stock}
                                                                                 min="1"
-                                                                                readOnly='true'
+                                                                                readOnly={true}
                                                                             />
                                                                             <small className="text-danger">{modifiableMsg[cartItem.idProduct]}</small>
                                                                         </InputGroup>
                                                                         <BsPlusCircle
                                                                             style={{ cursor: "pointer", color: "blue", margin: "0.2em" }}
                                                                             onClick={() => handleIncreaseClick(index, cartItem.idProduct)}
+                                                                            size={25}
                                                                         />
-                                                                        <MdDelete size={20} style={{ cursor: "pointer", marginLeft: "0.3em" }} onClick={() => handleDeleteItem(cartItem.productName, cartItem.idProduct)} />
+                                                                        <MdDelete size={30} style={{ cursor: "pointer" }} onClick={() => handleDeleteItem(cartItem.productName, cartItem.idProduct)} 
+                                                                        className="mx-2"
+                                                                        />
+                                                                    <div>
+                                                                    <span className="mt-2 mt-md-0 align-self-center">${(cartItem.product.price * cartItem.quantity).toFixed(2)}</span>                                   
                                                                     </div>
-                                                                    <h6 className="mt-2 mt-md-0 align-self-center">${(cartItem.product.price * cartItem.quantity).toFixed(2)}</h6>
+                                                                    </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                     ))) : (
-                                                    <h1>There's nothing in your cart, time to add something :D</h1>
+                                                    <tr><td>There's nothing in your cart, time to add something :D</td></tr>
                                                 )}
                                             </tbody>
                                         </Table>
                                     </Col>
                                 </div>
 
-                                <Col xs={12} sm={12} md={12} lg={4} xl={4} xxl={5}>
+                                <Col xs={12} sm={12} md={12} lg={7} xl={6} xxl={6}>
                                     <div className="mx-1 mx-md-4">
                                         <FormShippingData />
                                         <div className="mx-1 mx-md-4 mt-4 border rounded text-center">
