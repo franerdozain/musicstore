@@ -50,7 +50,7 @@ const AuthForm = ({ submitAuthForm, isSubmitting, errorMsg, clearErrorMsg, succe
                                             password: 'password',
                                             reEnterPassword: 'password'
                                         }[field.name] || 'text'}
-                                        value={field.value}
+                                        value={field.value || ""}
                                         onChange={(e) => {
                                             field.onChange(e.target.value);
                                             clearErrors("password");

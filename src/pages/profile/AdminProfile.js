@@ -1,23 +1,28 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Table } from "react-bootstrap";
+import { SiMinutemailer } from "react-icons/si";
 
 import useApi from "../../hooks/useApi";
-import { getCategories } from "../../services/api";
+import { getCategories, getMessages } from "../../services/api";
 import ProductForm from "./ProductForm";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
+import AnswerModal from "./AnswerModal";
 
 const AdminProfile = () => {
-    const [selectedCategory, setSelectedCategory] = useState("Category");
-    const [categories, setCategories] = useState({ images: [], categories: [] });
-    const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
+    const [messages, setMessages] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
-    const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
+    const [showAnswerModal, setShowAnswerModal] = useState(false);
+    const [messageToBeAnswered, setMessageToBeAnswered] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState("Category");
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
-    const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [subcategoriesForModify, setSubcategoriesForModify] = useState([]);
+    const [categories, setCategories] = useState({ images: [], categories: [] });
+    const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
+    const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [selectedSubcategoryForModify, setSelectedSubcategoryForModify] = useState("Subcategory");
-    
+    const { data: messagesData, loading: loadingMessages, LoadingAnimation: loadingMessagesAnimation } = useApi(getMessages);
+    const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
 
     // replace the fake data with useApi custom hook to fetch products from db
     const [products, setProducts] = useState(["product 1", "product 2", "product 3", "product 4", "product 5", "product 6", "product 7"])
@@ -30,6 +35,12 @@ const AdminProfile = () => {
             setCategories(categoriesData)
         }
     }, [categoriesData]);
+
+    useEffect(() => {
+        if (messagesData) {
+            setMessages(messagesData)
+        }
+    }, [messagesData]);
 
     const categoriesWithNullParent = categories.categories.filter(
         (category) => category.idCategoryParent === null
@@ -76,6 +87,13 @@ const AdminProfile = () => {
         setSelectedCategoryForCreate(selectedCategory);
     }
 
+    // Messages 
+    const handleAnswerClick = (idMessages) => {
+        const userMsgToAnswer = messages.filter(msg => msg.idMessages === idMessages);
+        setMessageToBeAnswered(userMsgToAnswer);
+        setShowAnswerModal(true);
+    }
+
     return (
         <div className="min-vh-100">
             <Container className="d-flex flex-wrap" fluid>
@@ -87,18 +105,46 @@ const AdminProfile = () => {
                             <Table striped borderless variant="light mb-0">
                                 <thead>
                                     <tr>
-                                        {["Date", "Message ID", "Title", "Message", "User"].map(th => (
+                                        {["Date & Time", "Message ID", "Subject", "Message", "User Id or Email", "Answer"].map(th => (
                                             <th key={th} rowSpan="3" className="bg-primary text-white">{th}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* msgs data */}
+                                    {loadingMessages ? (
+                                        <tr>
+                                            <td>{loadingMessagesAnimation}</td>
+                                        </tr>
+
+                                    ) : (
+                                        messages.map((msg) => (
+                                            <tr key={msg.idMessages}>
+                                                <td>{msg.dateAndTime}</td>
+                                                <td>{msg.idMessages}</td>
+                                                <td>{msg.subject}</td>
+                                                <td>{msg.message}</td>
+                                                <td>{msg.idSenderUser || msg.emailSender}</td>
+                                                <td className="text-center">
+                                                    <SiMinutemailer
+                                                        size={30}
+                                                        onClick={() => handleAnswerClick(msg.idMessages)}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </div>
                     </div>
                 </Col>
+                {showAnswerModal && (
+                    <AnswerModal
+                        showAnswerModal={showAnswerModal}
+                        setShowAnswerModal={setShowAnswerModal}
+                        messageToBeAnswered={messageToBeAnswered}
+                    />
+                )}
 
                 {/* Create Product */}
                 <Col xs={12} md={6} className="flex-grow-1">
@@ -112,7 +158,6 @@ const AdminProfile = () => {
                         selectedSubcategory={selectedSubcategory}
                         subcategories={subcategories}
                         handleSubcategoryClick={handleSubcategoryClick}
-
                     />
                     <div className="d-flex flex-wrap w-100">
                         {selectedSubcategory !== "Subcategory" && (
@@ -139,7 +184,14 @@ const AdminProfile = () => {
                     {!productForModify && (<select className="form-select" multiple aria-label="multiple select product" size={5}>
                         {products.length > 0 && (
                             products.map((product, idx) => (
-                                <option key={idx} value={product} role='button' onClick={event => handleProductClick(event.target.innerText)}>{product}</option>
+                                <option
+                                    key={idx}
+                                    value={product}
+                                    role='button'
+                                    onClick={event => handleProductClick(event.target.innerText)}
+                                >
+                                    {product}
+                                </option>
                             ))
                         )}
                     </select>
@@ -156,7 +208,7 @@ const AdminProfile = () => {
                         selectedCategoryForCreate={selectedCategoryForCreate}
                         categoriesWithNullParent={categoriesWithNullParent}
                         selectedSubcategory={selectedSubcategory}
-                        handleCategorySelectionClick={handleCategorySelectionClick}                       
+                        handleCategorySelectionClick={handleCategorySelectionClick}
                     />
                 </Col>
             </Container>

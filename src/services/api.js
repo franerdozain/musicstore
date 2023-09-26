@@ -184,3 +184,13 @@ export const sendMsg = async (data) => {
     const responseData = await fetchData(`${apiBaseUrl}/messages`, 'POST', data);
     return responseData;
 }
+
+export const sendAnswer = async (data) => {
+    const responseData = await fetchData(`${apiBaseUrl}/messages/answer`, 'POST', data);
+    return responseData;
+}
+
+export const getMessages = async () => {
+    const responseData = await fetchData(`${apiBaseUrl}/messages`, 'GET');
+    return responseData;
+}
