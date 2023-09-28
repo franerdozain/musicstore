@@ -8,11 +8,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { modifyUserDetails } from "../../utils/validationSchemas";
 import { deleteUser, logoutUser, updateUserData, checkUserStatus } from "../../services/api";
+import ConfirmDeleteAccountModal from "../../pages/profile/ConfirmDeleteAccountModal";
 
 const FormShippingData = () => {
   const navigate = useNavigate();
   const { userStatus, setUserStatus } = useAuth();
   const location = useLocation();
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const { control, handleSubmit, getValues, setValue, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(modifyUserDetails),
@@ -35,6 +37,15 @@ const FormShippingData = () => {
     zip: false,
     shippingAddress: false
   });
+
+  const fieldsLabels = {
+    username: 'Username',
+    country: 'Country',
+    state: 'State',
+    city: 'City',
+    zip: 'Zip',
+    shippingAddress: 'Shipping Address'
+  }
 
   const handleEditClick = (field) => {
     setIsEditing(prevState => ({
@@ -70,9 +81,9 @@ const FormShippingData = () => {
     }
   };
 
-  const handleDeleteUser = async (id) => {
+  const handleDeleteUser = async () => {
     try {
-      const response = await deleteUser(id);
+      const response = await deleteUser(userStatus.user.idUser);
       if (response.userDeleted) {
         await logoutUser();
         const response = await checkUserStatus();
@@ -98,13 +109,14 @@ const FormShippingData = () => {
             <Form.Group key={field} controlId={idx} className="w-100">
               <InputGroup className="mb-3">
                 <InputGroup.Text className="justify-content-center">
-                  {field}
+                  {fieldsLabels[field]}
                 </InputGroup.Text>
                 <Controller
                   name={field}
                   control={control}
                   render={({ field }) => (
                     <Form.Control
+                      className="text-center"
                       type='text'
                       {...field}
                       onChange={(e) => {
@@ -117,26 +129,30 @@ const FormShippingData = () => {
                   )}
                 />
                 <Form.Control.Feedback type="invalid">{errors[field]?.message}</Form.Control.Feedback>
+                <InputGroup.Text className="px-1">
                 {!isEditing[field] && (
-                  <Button variant="secondary" onClick={() => handleEditClick(field)} className="ms-2">
-                    <BiEdit />
-                  </Button>
+                    <div role="button" onClick={() => handleEditClick(field)} className="text-success">
+                      <BiEdit size={22}/>
+                    </div>                  
                 )}
-                {isEditing[field] && (
-                  <Button variant="danger" onClick={() => handleSaveClick(field)} className="ms-2">
-                    <FaCircleCheck />
-                  </Button>
-                )}
+                {isEditing[field] && ( 
+                    <div role="button" onClick={() => handleSaveClick(field)} className="text-danger">
+                      <FaCircleCheck size={22} />
+                    </div>
+                )}                
+                </InputGroup.Text>
               </InputGroup>
             </Form.Group>
           ) : null
         )
         )}
         {location.pathname === "/profile" && (
-          <Button variant="danger" className="mt-1 mb-3" onClick={() => handleDeleteUser(userStatus.user.idUser)}>Delete Account</Button>
+          <Button variant="danger" className="mt-1 mb-3" onClick={() => setShowConfirmationModal(true)}>Delete Account</Button>
+        )}
+        {showConfirmationModal && (
+          <ConfirmDeleteAccountModal handleDeleteUser={handleDeleteUser} show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)} />
         )}
       </Form>
-
     </div>
   );
 };
