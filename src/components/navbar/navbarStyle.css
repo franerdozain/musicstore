@@ -8,9 +8,11 @@
     0% {
         color: red;
     }
+
     20% {
         color: pink;
     }
+
     100% {
         color: red;
     }
@@ -30,9 +32,11 @@
     0% {
         color: whitesmoke;
     }
+
     20% {
         color: rgb(42, 148, 172);
     }
+
     100% {
         color: whitesmoke;
     }
@@ -51,9 +55,11 @@
     0% {
         color: whitesmoke;
     }
+
     40% {
         color: rgb(42, 148, 172);
     }
+
     100% {
         color: whitesmoke;
     }
@@ -82,17 +88,18 @@
 .mmLogo {
     width: 4em;
 }
+
 .mmLogo:hover {
     transition: 1s;
-   transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 .home-link {
-    background: transparent;  
-    border:none;  
+    background: transparent;
+    border: none;
 }
 
-.home-link:hover{
+.home-link:hover {
     animation: userBeat 1.5s;
 }
 
@@ -107,16 +114,26 @@
     z-index: -1;
     animation: moveLight 4s alternate;
     pointer-events: none;
-     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-  
-  @keyframes moveLight {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+@keyframes moveLight {
     0% {
-      transform: translateX(-100%);
-      opacity: 1;
+        transform: translateX(-100%);
+        opacity: 1;
     }
+
     100% {
-      transform: translateX(100%);
-      opacity: 0;
+        transform: translateX(100%);
+        opacity: 0;
     }
-  }
+}
+
+/* searchbar indicator separator & dropdown icon */
+.css-tj5bde-Svg {
+    display: none !important;
+}
+
+.css-1u9des2-indicatorSeparator {
+    display: none;
+}

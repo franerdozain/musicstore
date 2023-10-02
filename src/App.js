@@ -19,6 +19,7 @@ import NewPassword from './pages/newPassword/NewPassword';
 import ProfileContainer from './pages/profile/ProfileContainer';
 import { checkUserStatus } from './services/api';
 import { useAuth } from './contexts/AuthContext';
+import Search from './pages/search/Search';
 
 function App() {
   const { userStatus, setUserStatus } = useAuth();
@@ -45,6 +46,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route path='/home' element={<Home />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path='/search/:term' element={<Search />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/profile" element={<ProfileContainer />} />
         <Route path="/product/:name/:id" element={<ProductDetails />} />
