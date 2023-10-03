@@ -37,6 +37,8 @@ const SearchBar = () => {
 
   const handleSelectChange = (selectedOption) => {
     if (selectedOption.label === searchTerm) {
+      setSelectedOption(null);
+      setSearchTerm("");
       navigate(`/search/${searchTerm}`);
     } else {
       setSelectedOption(null);
@@ -49,8 +51,12 @@ const SearchBar = () => {
     if (e.key === 'Enter' && searchTerm !== "") {
       e.preventDefault();
       if (searchTerm === searchResults[0].label) {
+        setSelectedOption(null);
+        setSearchTerm("");
         navigate(`/search/${searchTerm}`);
       } else {
+        setSelectedOption(null);
+        setSearchTerm("");
         navigate(`/product/${searchResults[0].label}/${searchResults[0].value}`);
       }
     }

@@ -107,12 +107,13 @@ export const createProduct = async (formData) => {
     return responseData;
 }
 
-export const getProductsList = async (id, page, pageSize, sortBy, isCategory) => {
+export const getProductsList = async (id, page, pageSize, sortBy, isCategory, term) => {
     const queryParams = new URLSearchParams({
         page,
         pageSize,
         sortBy,
-        isCategory
+        isCategory,
+        term
     });
 
     const responseData = await fetchData(`${apiBaseUrl}/products/list/${id}?${queryParams}`, "GET");   

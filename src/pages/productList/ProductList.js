@@ -1,27 +1,27 @@
-import { useParams } from "react-router-dom";
-import { Col, Spinner } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { FaBagShopping } from "react-icons/fa6";
 import { FcNext, FcPrevious } from "react-icons/fc";
 
-import CategoriesMenu from "./CategoriesMenu";
 import ProductCard from "./ProductCard";
-import DropdownSortBy from "./DropdownSortBy";
 import useApi from "../../hooks/useApi";
+import CategoriesMenu from "./CategoriesMenu";
+import DropdownSortBy from "./DropdownSortBy";
 import { getCategoriesData, getProductsList } from "../../services/api";
-import { FaBagShopping } from "react-icons/fa6";
 
-const PageSize = 12;
+const pageSize = 12;
 
 const ProductList = () => {
-  const { category, subcategory, id } = useParams();
-  const [categories, setCategories] = useState({ categories: [] });
+  const { term } = useParams();
   const [products, setProducts] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategoriesData);
-  const [selectedSortBy, setSelectedSortBy] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
+  const { category, subcategory, id } = useParams();
+  const [selectedSortBy, setSelectedSortBy] = useState(null);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [categories, setCategories] = useState({ categories: [] });
+  const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategoriesData);
 
   useEffect(() => {
     if (categoriesData) {
@@ -32,7 +32,17 @@ const ProductList = () => {
   useEffect(() => {
     if (category && subcategory && id) {
       const fetchData = async () => {
-        const response = await getProductsList(id, currentPage, PageSize, selectedSortBy, subcategory === "all");
+        const response = await getProductsList(id, currentPage, pageSize, selectedSortBy, subcategory === "all");
+        if (response && response.products) {
+          setProducts(response.products);
+          setTotalPages(response.totalPages);
+          setIsLoadingProducts(false);
+        }
+      };
+      fetchData();
+    } else if (term) {
+      const fetchData = async () => {
+        const response = await getProductsList(null, currentPage, pageSize, selectedSortBy, null, term);
         if (response && response.products) {
           setProducts(response.products);
           setTotalPages(response.totalPages);
@@ -41,7 +51,7 @@ const ProductList = () => {
       };
       fetchData();
     }
-  }, [id, category, subcategory, currentPage, selectedSortBy]);
+  }, [id, category, subcategory, currentPage, selectedSortBy, term]);
 
   const handleSortByClick = (sortBy) => {
     setSelectedSortBy(sortBy === "Delete Sorting" ? null : sortBy);
