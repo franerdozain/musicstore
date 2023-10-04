@@ -69,10 +69,10 @@ export const logoutUser = async () => {
     return responseData;
 }
 
-export const getUserData = async (id) => {
-    const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "GET")
-    return responseData;
-}
+// export const getUserData = async (id) => {
+//     const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "GET")
+//     return responseData;
+// }
 
 export const updateUserData = async (id, newData) => {
     const responseData = await fetchData(`${apiBaseUrl}/users/${id}`, "PATCH", newData)

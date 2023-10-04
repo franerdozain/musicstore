@@ -131,12 +131,12 @@ const FormShippingData = () => {
                 <Form.Control.Feedback type="invalid">{errors[field]?.message}</Form.Control.Feedback>
                 <InputGroup.Text className="px-1">
                 {!isEditing[field] && (
-                    <div role="button" onClick={() => handleEditClick(field)} className="text-success">
+                    <div role="button" onClick={() => handleEditClick(field)} className="text-danger">
                       <BiEdit size={22}/>
                     </div>                  
                 )}
                 {isEditing[field] && ( 
-                    <div role="button" onClick={() => handleSaveClick(field)} className="text-danger">
+                    <div role="button" onClick={() => handleSaveClick(field)} className="text-success">
                       <FaCircleCheck size={22} />
                     </div>
                 )}                

@@ -5,6 +5,7 @@ import AnswerForm from "./AnswerForm";
 
 const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered }) => {
     const [errorMsg, setErrorMsg] = useState("");
+    const [msgSendOk, setMsgSendOk] = useState("")
     const clearErrorMsg = () => setErrorMsg("");
 
 
@@ -16,10 +17,12 @@ const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered 
             subject: data.subject
         }
         const response = await sendAnswer(dataForAnswerHandling);
+        console.log("respone", response)
         if (response.messageOk) {
             setShowAnswerModal(false);
-        } else if (response.error) {
-            setErrorMsg(response.error)
+        } else {
+            setErrorMsg(response.error || response.errorEmail)
+            setShowAnswerModal(false);
         }
     }
 

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Table } from "react-bootstrap";
-import { SiMinutemailer } from "react-icons/si";
+import { Col, Container } from "react-bootstrap";
 
 import useApi from "../../hooks/useApi";
-import { getCategories, getMessages } from "../../services/api";
+import { formatDate } from "../../utils/formatDate";
 import ProductForm from "./ProductForm";
+import AnswerModal from "./AnswerModal";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
-import AnswerModal from "./AnswerModal";
+import { getCategories, getMessages } from "../../services/api";
+import Messages from "./Messages";
 
 const AdminProfile = () => {
     const [messages, setMessages] = useState([]);
@@ -98,46 +99,13 @@ const AdminProfile = () => {
         <div className="min-vh-100">
             <Container className="d-flex flex-wrap" fluid>
                 {/* Messages */}
-                <Col xs={12} md={6}>
-                    <div className="mt-4 border rounded me-4 w-100">
-                        <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">User's Messages</h2>
-                        <div className="table-responsive">
-                            <Table striped borderless variant="light mb-0">
-                                <thead>
-                                    <tr>
-                                        {["Date & Time", "Message ID", "Subject", "Message", "User Id or Email", "Answer"].map(th => (
-                                            <th key={th} rowSpan="3" className="bg-primary text-white">{th}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loadingMessages ? (
-                                        <tr>
-                                            <td>{loadingMessagesAnimation}</td>
-                                        </tr>
-
-                                    ) : (
-                                        messages.map((msg) => (
-                                            <tr key={msg.idMessages}>
-                                                <td>{msg.dateAndTime}</td>
-                                                <td>{msg.idMessages}</td>
-                                                <td>{msg.subject}</td>
-                                                <td>{msg.message}</td>
-                                                <td>{msg.idSenderUser || msg.emailSender}</td>
-                                                <td className="text-center">
-                                                    <SiMinutemailer
-                                                        size={30}
-                                                        onClick={() => handleAnswerClick(msg.idMessages)}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </Table>
-                        </div>
-                    </div>
-                </Col>
+                <Messages
+                 loadingMessages={loadingMessages}
+                 loadingMessagesAnimation={loadingMessagesAnimation}
+                 messages={messages}
+                 handleAnswerClick={handleAnswerClick}
+                 formatDate={formatDate}
+                 />
                 {showAnswerModal && (
                     <AnswerModal
                         showAnswerModal={showAnswerModal}

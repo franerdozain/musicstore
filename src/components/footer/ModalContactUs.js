@@ -10,9 +10,7 @@ const ModalContactUs = ({ showContactUsModal, setShowContactUsModal }) => {
 
 
     const submitContactUsForm = async (data) => {
-        console.log("data",data)
         const response = await sendMsg(data);        
-        console.log("response frontend", response);
     }
     
     return (

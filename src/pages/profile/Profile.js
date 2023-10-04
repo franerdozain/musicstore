@@ -1,16 +1,30 @@
-import { Col, Table, Row, Container, Spinner } from "react-bootstrap";
-
-import FormShippingData from "../../components/generalComponents/FormShippingData";
 import { useEffect, useState } from "react";
-import { getOrders, getUserData } from "../../services/api";
-import { useAuth } from "../../contexts/AuthContext";
+import { Col, Table, Container, Spinner } from "react-bootstrap";
+
+import Messages from "./Messages";
+import AnswerModal from "./AnswerModal";
 import useApi from "../../hooks/useApi";
-import { getCategories, getMessages } from "../../services/api";
+import { getOrders } from "../../services/api";
+import { getMessages } from "../../services/api";
+import { formatDate } from "../../utils/formatDate";
+import { useAuth } from "../../contexts/AuthContext";
+import FormShippingData from "../../components/generalComponents/FormShippingData";
 
 const Profile = () => {
   const { userStatus } = useAuth();
+  const [messages, setMessages] = useState([]);
   const [shoppingHistory, setShoppingHistory] = useState([]);
   const { data: messagesData, loading: loadingMessages, LoadingAnimation: loadingMessagesAnimation } = useApi(getMessages);
+  const [messageToBeAnswered, setMessageToBeAnswered] = useState(null);
+  const [showAnswerModal, setShowAnswerModal] = useState(false);
+
+
+
+  useEffect(() => {
+    if (messagesData) {
+        setMessages(messagesData)
+    }
+}, [messagesData]);
 
   useEffect(() => {
     if (userStatus.isAuthenticated) {
@@ -28,10 +42,12 @@ const Profile = () => {
     }
   }, [userStatus.isAuthenticated])
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  const handleAnswerClick = (idMessages) => {
+    const userMsgToAnswer = messages.filter(msg => msg.idMessages === idMessages);
+    setMessageToBeAnswered(userMsgToAnswer);
+    setShowAnswerModal(true);
+}
+
 
   return (
     <div className="min-vh-100">
@@ -78,6 +94,23 @@ const Profile = () => {
               ) : null}
             </div>
           </Col>
+
+                 {/* Messages */}
+                   <Messages 
+                   loadingMessages={loadingMessages}
+                   loadingMessagesAnimation={loadingMessagesAnimation}
+                   messages={messages}
+                   handleAnswerClick={handleAnswerClick}
+                   formatDate={formatDate}
+                   />
+                {showAnswerModal && (
+                    <AnswerModal
+                        showAnswerModal={showAnswerModal}
+                        setShowAnswerModal={setShowAnswerModal}
+                        messageToBeAnswered={messageToBeAnswered}
+                    />
+                )}
+
         </Container>
       )}
     </>
