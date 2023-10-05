@@ -20,7 +20,7 @@ const FormShippingData = () => {
     resolver: yupResolver(modifyUserDetails),
   });
 
-  useEffect(() => {
+  useEffect(() => {    
     setValue('username', userStatus.user.username);
     setValue('country', userStatus.user.country);
     setValue('state', userStatus.user.state);
@@ -112,12 +112,12 @@ const FormShippingData = () => {
                   {fieldsLabels[field]}
                 </InputGroup.Text>
                 <Controller
-                  name={field}
+                  name={field}             
                   control={control}
                   render={({ field }) => (
                     <Form.Control
                       className="text-center"
-                      type='text'
+                      type='text'  
                       {...field}
                       onChange={(e) => {
                         field.onChange(e.target.value);

@@ -9,9 +9,13 @@ import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
 import { getCategories, getMessages } from "../../services/api";
 import Messages from "./Messages";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminProfile = () => {
     const [messages, setMessages] = useState([]);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [msgSendOk, setMsgSendOk] = useState("")
     const [subcategories, setSubcategories] = useState([]);
     const [showAnswerModal, setShowAnswerModal] = useState(false);
     const [messageToBeAnswered, setMessageToBeAnswered] = useState(null);
@@ -92,8 +96,23 @@ const AdminProfile = () => {
     const handleAnswerClick = (idMessages) => {
         const userMsgToAnswer = messages.filter(msg => msg.idMessages === idMessages);
         setMessageToBeAnswered(userMsgToAnswer);
+        setErrorMsg("");
+        setMsgSendOk("");
         setShowAnswerModal(true);
     }
+
+useEffect(() => {
+    notify();
+}, [errorMsg, msgSendOk]);
+
+const notify = () => {
+    if (errorMsg !== "") {
+      toast.warning(`${errorMsg}`)
+    } else if (msgSendOk !== "") {
+      toast.success(`${msgSendOk}`)
+    };
+  };
+
 
     return (
         <div className="min-vh-100">
@@ -111,6 +130,9 @@ const AdminProfile = () => {
                         showAnswerModal={showAnswerModal}
                         setShowAnswerModal={setShowAnswerModal}
                         messageToBeAnswered={messageToBeAnswered}
+                        setErrorMsg={setErrorMsg}
+                        setMsgSendOk={setMsgSendOk}
+                        notify={notify}
                     />
                 )}
 
@@ -180,6 +202,17 @@ const AdminProfile = () => {
                     />
                 </Col>
             </Container>
+            <ToastContainer 
+        position="bottom-right"
+        autoClose={10000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />   
         </div>
     );
 }

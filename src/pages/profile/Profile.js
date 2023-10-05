@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Table, Container, Spinner } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 import Messages from "./Messages";
 import AnswerModal from "./AnswerModal";
@@ -17,8 +19,8 @@ const Profile = () => {
   const { data: messagesData, loading: loadingMessages, LoadingAnimation: loadingMessagesAnimation } = useApi(getMessages);
   const [messageToBeAnswered, setMessageToBeAnswered] = useState(null);
   const [showAnswerModal, setShowAnswerModal] = useState(false);
-
-
+  const [errorMsg, setErrorMsg] = useState("");
+  const [msgSendOk, setMsgSendOk] = useState("")
 
   useEffect(() => {
     if (messagesData) {
@@ -48,6 +50,17 @@ const Profile = () => {
     setShowAnswerModal(true);
 }
 
+  useEffect(() => {
+    notify();
+  }, [errorMsg, msgSendOk]);
+
+  const notify = () => {
+    if (errorMsg !== "") {
+      toast.error(`${errorMsg}`)
+    } else if (msgSendOk !== "") {
+      toast.success(`${msgSendOk}`)
+    };
+  };
 
   return (
     <div className="min-vh-100">
@@ -101,20 +114,35 @@ const Profile = () => {
                    loadingMessagesAnimation={loadingMessagesAnimation}
                    messages={messages}
                    handleAnswerClick={handleAnswerClick}
-                   formatDate={formatDate}
+                   formatDate={formatDate}                 
                    />
                 {showAnswerModal && (
                     <AnswerModal
                         showAnswerModal={showAnswerModal}
                         setShowAnswerModal={setShowAnswerModal}
                         messageToBeAnswered={messageToBeAnswered}
+                        setErrorMsg={setErrorMsg}
+                        setMsgSendOk={setMsgSendOk}
+                        notify={notify}
                     />
                 )}
 
         </Container>
       )}
+     <ToastContainer 
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />   
     </>
   )}
+ 
 </div>
   );
 }

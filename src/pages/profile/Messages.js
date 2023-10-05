@@ -11,7 +11,7 @@ const Messages = ({ loadingMessagesAnimation, loadingMessages, messages, handleA
         : ["Date & Time", "Message ID", "Subject", "Message", "Answer"]
 
     return (
-        <Col xs={12} md={6}>
+        <Col xs={12} md={6} className="mb-5">
             <div className="mt-4 border rounded me-4 w-100">
                 <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">User's Messages</h2>
                 <div className="table-responsive">
@@ -28,7 +28,6 @@ const Messages = ({ loadingMessagesAnimation, loadingMessages, messages, handleA
                                 <tr>
                                     <td>{loadingMessagesAnimation}</td>
                                 </tr>
-
                             ) : (
                                 messages && messages.length > 0 ? (
                                     messages.map((msg) => (

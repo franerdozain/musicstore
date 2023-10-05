@@ -1,13 +1,9 @@
 import { Modal } from "react-bootstrap";
-import { useState } from "react";
 import { sendAnswer } from "../../services/api";
 import AnswerForm from "./AnswerForm";
 
-const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered }) => {
-    const [errorMsg, setErrorMsg] = useState("");
-    const [msgSendOk, setMsgSendOk] = useState("")
+const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered, setErrorMsg, setMsgSendOk, errorMsg, notify }) => {
     const clearErrorMsg = () => setErrorMsg("");
-
 
     const submitAnswerForm = async (data) => {
         const dataForAnswerHandling = {
@@ -17,12 +13,17 @@ const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered 
             subject: data.subject
         }
         const response = await sendAnswer(dataForAnswerHandling);
-        console.log("respone", response)
+
         if (response.messageOk) {
+            setMsgSendOk(response.messageOk);
+            // setErrorMsg("");
             setShowAnswerModal(false);
+            // notify();          
         } else {
             setErrorMsg(response.error || response.errorEmail)
+            // setMsgSendOk("");
             setShowAnswerModal(false);
+            // notify();
         }
     }
 
@@ -51,7 +52,7 @@ const AnswerModal = ({ showAnswerModal, setShowAnswerModal, messageToBeAnswered 
                     clearErrorMsg={clearErrorMsg}
                     submitAnswerForm={submitAnswerForm}
                 />
-                {errorMsg && <small className="text-danger">{errorMsg}</small>}
+                {/* {errorMsg && <small className="text-danger">{errorMsg}</small>} */}
             </Modal.Body>
         </Modal>
     )
