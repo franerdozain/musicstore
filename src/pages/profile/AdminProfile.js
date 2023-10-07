@@ -8,7 +8,7 @@ import ProductForm from "./ProductForm";
 import AnswerModal from "./AnswerModal";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
-import { getCategories, getMessages } from "../../services/api";
+import { deleteCategoryOrSubcategory, getCategories, getMessages } from "../../services/api";
 import Messages from "./Messages";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,10 +29,11 @@ const AdminProfile = () => {
     const [selectedCategoryForDelete, setSelectedCategoryForDelete] = useState("Category");
     const [selectedSubcategoryForDelete, setSelectedSubcategoryForDelete] = useState("Subcategory");
     const [selectedSubcategoryIdForDelete, setSelectedSubcategoryIdForDelete] = useState(null);
+    const [selectedCategoryIdForDelete, setSelectedCategoryIdForDelete] = useState(null);
     const [subcategoriesForDelete, setSubcategoriesForDelete] = useState([]);
     const { data: messagesData, loading: loadingMessages, LoadingAnimation: loadingMessagesAnimation } = useApi(getMessages);
     const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
-
+    const [deletedOkMsg, setDeletedOkMsg] = useState("");
     const categoryToDelete = selectedCategoryForDelete !== "Category" ? selectedCategoryForDelete : "";
     const subcategoryToDelete = selectedSubcategoryForDelete !== "Subcategory" && selectedSubcategoryForDelete !== "All" ? selectedSubcategoryForDelete : "";
     const deleteText = `Delete ${subcategoryToDelete ? "Subcategory" : categoryToDelete ? "Category" : ""} ${subcategoryToDelete || categoryToDelete}`;
@@ -104,18 +105,43 @@ const AdminProfile = () => {
     const handleCategoryClickForDelete = (category) => {
         setSelectedCategoryForDelete(category.categoryName);
         setSelectedSubcategoryForDelete("Subcategory");
-
         const filteredCategories = categories.categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
-        const subcategoriesWithAll = [...filteredCategories, {
-            categoryName: "All",
-            idCategoryParent: filteredCategories[0].idCategoryParent}]
-
-        setSubcategoriesForDelete(subcategoriesWithAll);
+        if(filteredCategories.length > 0) {           
+            const subcategoriesWithAll = [...filteredCategories, {
+                categoryName: "All",
+                idCategoryParent: filteredCategories[0].idCategoryParent}]
+            setSubcategoriesForDelete(subcategoriesWithAll);            
+        } else {
+            setSubcategoriesForDelete({ 
+                categoryName: "All",
+                idCategoryParent: category.idCategory})
+        }
+        setSelectedCategoryIdForDelete(category.idCategory)
     };
 
     const handleSubcategoryClickForDelete = subcategory => {
         setSelectedSubcategoryForDelete(subcategory.categoryName)
         setSelectedSubcategoryIdForDelete(subcategory.idCategory)
+        setSelectedCategoryIdForDelete(null)
+    }
+
+    const handleDeleteCategoryOrSubcategory = async () => {
+        try {
+            setErrorMsg("");
+            setMsgSendOk("");
+            const response = await deleteCategoryOrSubcategory(selectedCategoryIdForDelete || selectedSubcategoryIdForDelete)
+            if(response.deletedOk) {
+                setMsgSendOk(response.deletedOk)
+                const responseGetCategories = await getCategories();
+                setCategories(responseGetCategories);
+                setSelectedCategoryForDelete("Category");
+                setSelectedSubcategoryForDelete("Subcategory");
+            } else if (response.errorDeleting) {
+                setErrorMsg(response.errorDeleting);
+            }
+        } catch (error) {
+            console.log(`Error: ${error}`)
+        }
     }
 
     // Messages 
@@ -129,7 +155,7 @@ const AdminProfile = () => {
 
 useEffect(() => {
     notify();
-}, [errorMsg, msgSendOk]);
+}, [errorMsg, msgSendOk, deletedOkMsg]);
 
 const notify = () => {
     if (errorMsg !== "") {
@@ -138,18 +164,18 @@ const notify = () => {
       toast.success(`${msgSendOk}`)
     };
   };
-
+  
     return (
         <div className="min-vh-100">
             <Container className="d-flex flex-wrap" fluid>
                 {/* Messages */}
                 <Messages
-                 loadingMessages={loadingMessages}
-                 loadingMessagesAnimation={loadingMessagesAnimation}
-                 messages={messages}
-                 handleAnswerClick={handleAnswerClick}
-                 formatDate={formatDate}
-                 />
+                    loadingMessages={loadingMessages}
+                    loadingMessagesAnimation={loadingMessagesAnimation}
+                    messages={messages}
+                    handleAnswerClick={handleAnswerClick}
+                    formatDate={formatDate}
+                />
                 {showAnswerModal && (
                     <AnswerModal
                         showAnswerModal={showAnswerModal}
@@ -242,21 +268,22 @@ const notify = () => {
                         selectedCategoryForDelete={selectedCategoryForDelete}
                         selectedSubcategoryForDelete={selectedSubcategoryForDelete}
                         deleteText={deleteText}
-                        withDeleteButton                    
+                        withDeleteButton
+                        handleDeleteCategoryOrSubcategory={handleDeleteCategoryOrSubcategory}
                     />
                 </Col>
             </Container>
-            <ToastContainer 
-        position="bottom-right"
-        autoClose={10000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />   
+            <ToastContainer
+                position="bottom-right"
+                autoClose={10000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 }

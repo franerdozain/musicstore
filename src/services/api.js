@@ -101,6 +101,11 @@ export const createCategoryOrSubcategory = async (formData) => {
     return responseData;
 }
 
+export const deleteCategoryOrSubcategory = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/categories/${id}`, 'DELETE');
+    return responseData;
+}
+
 // product
 export const createProduct = async (formData) => {  
     const responseData = await fetchData(`${apiBaseUrl}/products/new`, "POST", formData, true)

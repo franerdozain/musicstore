@@ -16,7 +16,8 @@ const CategorySelector = ({
     withDeleteButton = null,
     selectedCategoryForDelete,
     selectedSubcategoryForDelete,
-    deleteText }) => {
+    deleteText, 
+    handleDeleteCategoryOrSubcategory }) => {
 
     return (
         <div className="mt-4 border rounded me-4 d-flex flex-column w-100 ">
@@ -56,6 +57,7 @@ const CategorySelector = ({
                         disabled={selectedCategoryForDelete === "Category" && selectedSubcategoryForDelete === "Subcategory"}
                         variant="danger"
                         className="mb-5"
+                        onClick={handleDeleteCategoryOrSubcategory}
                     >
                         {deleteText}
                     </Button>
