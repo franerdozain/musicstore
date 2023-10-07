@@ -24,7 +24,7 @@ const CreateCatOrSubcatForm = ({ title, categoriesWithNullParent, selectedCatego
         try {
             setErrorMessage("");
             setSuccessMessage("");
-            await new Promise(r => setTimeout(r, 2000));
+            // await new Promise(r => setTimeout(r, 2000));
             const { category, subcategory, images } = data;
             let requestData = {};
 

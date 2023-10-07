@@ -1,4 +1,5 @@
-import { Dropdown, DropdownButton } from "react-bootstrap";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+
 import SearchBar from "../../components/navbar/SearchBar";
 
 const CategorySelector = ({
@@ -11,9 +12,14 @@ const CategorySelector = ({
     categoriesWithNullParent,
     selectedSubcategory,
     subcategories,
-    handleSubcategoryClick }) => {
+    handleSubcategoryClick,
+    withDeleteButton = null,
+    selectedCategoryForDelete,
+    selectedSubcategoryForDelete,
+    deleteText }) => {
+
     return (
-        <div className="mt-4 border rounded me-4 d-flex flex-column w-100">
+        <div className="mt-4 border rounded me-4 d-flex flex-column w-100 ">
             <h2 className="text-center bg-secondary text-white p-1 mb-0 rounded-top">{title}</h2>
             <div className="d-flex flex-wrap">
                 <div className="bg-primary text-white h-50">
@@ -45,6 +51,15 @@ const CategorySelector = ({
                     </div>
                 )
                 }
+                {withDeleteButton && (
+                    <Button
+                        disabled={selectedCategoryForDelete === "Category" && selectedSubcategoryForDelete === "Subcategory"}
+                        variant="danger"
+                        className="mb-5"
+                    >
+                        {deleteText}
+                    </Button>
+                )}
             </div>
         </div>
     )

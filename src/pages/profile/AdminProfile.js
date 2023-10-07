@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Col, Container } from "react-bootstrap";
+import { Button, Col, Container } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
 
 import useApi from "../../hooks/useApi";
 import { formatDate } from "../../utils/formatDate";
@@ -9,7 +10,6 @@ import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
 import { getCategories, getMessages } from "../../services/api";
 import Messages from "./Messages";
-import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const AdminProfile = () => {
@@ -26,8 +26,16 @@ const AdminProfile = () => {
     const [selectedSubcategory, setSelectedSubcategory] = useState("Subcategory");
     const [selectedCategoryForModify, setSelectedCategoryForModify] = useState("Category");
     const [selectedSubcategoryForModify, setSelectedSubcategoryForModify] = useState("Subcategory");
+    const [selectedCategoryForDelete, setSelectedCategoryForDelete] = useState("Category");
+    const [selectedSubcategoryForDelete, setSelectedSubcategoryForDelete] = useState("Subcategory");
+    const [selectedSubcategoryIdForDelete, setSelectedSubcategoryIdForDelete] = useState(null);
+    const [subcategoriesForDelete, setSubcategoriesForDelete] = useState([]);
     const { data: messagesData, loading: loadingMessages, LoadingAnimation: loadingMessagesAnimation } = useApi(getMessages);
     const { data: categoriesData, loading: loadingCategories, LoadingAnimation: loadingCategoriesAnimation } = useApi(getCategories);
+
+    const categoryToDelete = selectedCategoryForDelete !== "Category" ? selectedCategoryForDelete : "";
+    const subcategoryToDelete = selectedSubcategoryForDelete !== "Subcategory" && selectedSubcategoryForDelete !== "All" ? selectedSubcategoryForDelete : "";
+    const deleteText = `Delete ${subcategoryToDelete ? "Subcategory" : categoryToDelete ? "Category" : ""} ${subcategoryToDelete || categoryToDelete}`;
 
     // replace the fake data with useApi custom hook to fetch products from db
     const [products, setProducts] = useState(["product 1", "product 2", "product 3", "product 4", "product 5", "product 6", "product 7"])
@@ -92,6 +100,24 @@ const AdminProfile = () => {
         setSelectedCategoryForCreate(selectedCategory);
     }
 
+    // Delete Category/Subcategory
+    const handleCategoryClickForDelete = (category) => {
+        setSelectedCategoryForDelete(category.categoryName);
+        setSelectedSubcategoryForDelete("Subcategory");
+
+        const filteredCategories = categories.categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
+        const subcategoriesWithAll = [...filteredCategories, {
+            categoryName: "All",
+            idCategoryParent: filteredCategories[0].idCategoryParent}]
+
+        setSubcategoriesForDelete(subcategoriesWithAll);
+    };
+
+    const handleSubcategoryClickForDelete = subcategory => {
+        setSelectedSubcategoryForDelete(subcategory.categoryName)
+        setSelectedSubcategoryIdForDelete(subcategory.idCategory)
+    }
+
     // Messages 
     const handleAnswerClick = (idMessages) => {
         const userMsgToAnswer = messages.filter(msg => msg.idMessages === idMessages);
@@ -112,7 +138,6 @@ const notify = () => {
       toast.success(`${msgSendOk}`)
     };
   };
-
 
     return (
         <div className="min-vh-100">
@@ -199,6 +224,25 @@ const notify = () => {
                         categoriesWithNullParent={categoriesWithNullParent}
                         selectedSubcategory={selectedSubcategory}
                         handleCategorySelectionClick={handleCategorySelectionClick}
+                    />
+                </Col>
+
+                {/* Delete Category/Subcategory */}
+                <Col xs={12} md={6}>
+                    <CategorySelector
+                        title={"Delete Category/Subcategory"}
+                        selectedCategory={selectedCategoryForDelete}
+                        loadingCategories={loadingCategories}
+                        loadingCategoriesAnimation={loadingCategoriesAnimation}
+                        handleCategoryClick={handleCategoryClickForDelete}
+                        categoriesWithNullParent={categoriesWithNullParent}
+                        selectedSubcategory={selectedSubcategoryForDelete}
+                        subcategories={subcategoriesForDelete}
+                        handleSubcategoryClick={handleSubcategoryClickForDelete}
+                        selectedCategoryForDelete={selectedCategoryForDelete}
+                        selectedSubcategoryForDelete={selectedSubcategoryForDelete}
+                        deleteText={deleteText}
+                        withDeleteButton                    
                     />
                 </Col>
             </Container>
