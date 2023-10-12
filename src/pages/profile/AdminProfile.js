@@ -8,7 +8,7 @@ import ProductForm from "./ProductForm";
 import AnswerModal from "./AnswerModal";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
-import { deleteCategoryOrSubcategory, getCategories, getMessages } from "../../services/api";
+import { deleteCategoryOrSubcategory, getCategories, getMessages, getProductsList } from "../../services/api";
 import Messages from "./Messages";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,8 +38,7 @@ const AdminProfile = () => {
     const subcategoryToDelete = selectedSubcategoryForDelete !== "Subcategory" && selectedSubcategoryForDelete !== "All" ? selectedSubcategoryForDelete : "";
     const deleteText = `Delete ${subcategoryToDelete ? "Subcategory" : categoryToDelete ? "Category" : ""} ${subcategoryToDelete || categoryToDelete}`;
 
-    // replace the fake data with useApi custom hook to fetch products from db
-    const [products, setProducts] = useState(["product 1", "product 2", "product 3", "product 4", "product 5", "product 6", "product 7"])
+    const [products, setProducts] = useState([]);
     const [productForModify, setProductForModify] = useState(null);
 
     const [selectedCategoryForCreate, setSelectedCategoryForCreate] = useState();
@@ -78,13 +77,22 @@ const AdminProfile = () => {
 
     // Modify Product
     const handleCategoryClickForModify = (category) => {
+        setSelectedSubcategoryForModify("Subcategory");
         setSelectedCategoryForModify(category.categoryName);
         const filteredCategories = categories.categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
         setSubcategoriesForModify(filteredCategories);
     };
 
-    const handleSubcategoryClickForModify = (subcategory) => {
+    const handleSubcategoryClickForModify = async (subcategory) => {        
         setSelectedSubcategoryForModify(subcategory.categoryName);
+        try {
+            const response = await getProductsList(subcategory.idCategory, 1, 999999999, null, false, undefined)
+            if (response.products) {
+                setProducts(response.products)
+            }
+        } catch (error) {
+            console.log('Error', error)
+        }
     };
 
     const handleProductClick = (product) => {
@@ -222,19 +230,23 @@ const notify = () => {
                         subcategories={subcategoriesForModify}
                         handleSubcategoryClick={handleSubcategoryClickForModify}
                     />
-                    {!productForModify && (<select className="form-select" multiple aria-label="multiple select product" size={5}>
-                        {products.length > 0 && (
-                            products.map((product, idx) => (
+                    {!productForModify && products.length > 0 && (
+                    <select className="form-select text-center" multiple aria-label="multiple select product" size={5}>                       
+                        { products.map((product, idx) => (
                                 <option
                                     key={idx}
-                                    value={product}
+                                    value={product.productName}
                                     role='button'
-                                    onClick={event => handleProductClick(event.target.innerText)}
+                                    style={{ backgroundColor: (idx % 2 === 0) ? '#e5e6e7' : '#FFF', borderRadius: '0.5em' }}
+                                    onMouseOver={e =>{ e.target.style.backgroundColor = '#0d6efd'; e.target.style.color = '#FFF'}} 
+                                    onMouseOut={e => {e.target.style.backgroundColor = (idx % 2 === 0) ? '#e5e6e7' : '#FFF'; e.target.style.color ='#000'}}                              
+                                    onClick={e => handleProductClick(e.target.innerText)}
+                                    className="text-wrap"
                                 >
-                                    {product}
+                                    {product.productName}
                                 </option>
                             ))
-                        )}
+                        }
                     </select>
                     )}
                     <div className="d-flex flex-wrap w-100">
