@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,7 +8,7 @@ import { createProduct } from "../../services/api";
 import { createOrModifySchema } from "../../utils/validationSchemas";
 import { BiConfused, BiHappyAlt } from "react-icons/bi";
 
-const ProductForm = ({ buttonName, selectedSubcategoryId }) => {
+const ProductForm = ({ buttonName, selectedSubcategoryId, productForModify }) => {
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [productFormFields, setProductFormFields] = useState([
@@ -24,7 +24,11 @@ const ProductForm = ({ buttonName, selectedSubcategoryId }) => {
         { name: "features-1", label: "Feature:" },
         { name: "images", label: "" }
     ]);
+    useEffect(()=>{
+        console.log(productForModify)
 
+    },[])
+    
     const addField = (fieldName) => {
         setProductFormFields(prevFields => {
             const isFieldAlreadyAdded = prevFields.some(field => field.name === fieldName);

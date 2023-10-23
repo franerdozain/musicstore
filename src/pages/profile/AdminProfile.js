@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container } from "react-bootstrap";
+import { Button, Col, Container, Spinner } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 
 import useApi from "../../hooks/useApi";
@@ -8,7 +8,7 @@ import ProductForm from "./ProductForm";
 import AnswerModal from "./AnswerModal";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
-import { deleteCategoryOrSubcategory, getCategories, getMessages, getProductsList } from "../../services/api";
+import { deleteCategoryOrSubcategory, getCategories, getMessages, getProduct, getProductsListForModify } from "../../services/api";
 import Messages from "./Messages";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -37,11 +37,10 @@ const AdminProfile = () => {
     const categoryToDelete = selectedCategoryForDelete !== "Category" ? selectedCategoryForDelete : "";
     const subcategoryToDelete = selectedSubcategoryForDelete !== "Subcategory" && selectedSubcategoryForDelete !== "All" ? selectedSubcategoryForDelete : "";
     const deleteText = `Delete ${subcategoryToDelete ? "Subcategory" : categoryToDelete ? "Category" : ""} ${subcategoryToDelete || categoryToDelete}`;
-
     const [products, setProducts] = useState([]);
     const [productForModify, setProductForModify] = useState(null);
-
     const [selectedCategoryForCreate, setSelectedCategoryForCreate] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (categoriesData) {
@@ -83,24 +82,35 @@ const AdminProfile = () => {
         setSubcategoriesForModify(filteredCategories);
     };
 
-    const handleSubcategoryClickForModify = async (subcategory) => {        
+    const handleSubcategoryClickForModify = async (subcategory) => {
         setSelectedSubcategoryForModify(subcategory.categoryName);
+        setLoading(true);
         try {
-            const response = await getProductsList(subcategory.idCategory, 1, 999999999, null, false, undefined)
+            setProductForModify(null);
+            const response = await getProductsListForModify(subcategory.idCategory);
             if (response.products) {
                 setProducts(response.products)
             }
         } catch (error) {
             console.log('Error', error)
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleProductClick = (product) => {
-        setProductForModify(product)
-    }
-
-    const handleModifyProduct = () => {
-
+    const handleProductClick = async (idProduct) => {
+        setLoading(true);
+        try {
+            const response = await getProduct(idProduct);
+            if (response.product) {
+                setProductForModify(response.product)
+                console.log("goku", productForModify);
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        } finally {
+            setLoading(false)            
+        }
     }
 
     // Create Category/Subcategory
@@ -114,15 +124,17 @@ const AdminProfile = () => {
         setSelectedCategoryForDelete(category.categoryName);
         setSelectedSubcategoryForDelete("Subcategory");
         const filteredCategories = categories.categories.filter((subcategory) => subcategory.idCategoryParent === category.idCategory);
-        if(filteredCategories.length > 0) {           
+        if (filteredCategories.length > 0) {
             const subcategoriesWithAll = [...filteredCategories, {
                 categoryName: "All",
-                idCategoryParent: filteredCategories[0].idCategoryParent}]
-            setSubcategoriesForDelete(subcategoriesWithAll);            
+                idCategoryParent: filteredCategories[0].idCategoryParent
+            }]
+            setSubcategoriesForDelete(subcategoriesWithAll);
         } else {
-            setSubcategoriesForDelete({ 
+            setSubcategoriesForDelete({
                 categoryName: "All",
-                idCategoryParent: category.idCategory})
+                idCategoryParent: category.idCategory
+            })
         }
         setSelectedCategoryIdForDelete(category.idCategory)
     };
@@ -138,7 +150,7 @@ const AdminProfile = () => {
             setErrorMsg("");
             setMsgSendOk("");
             const response = await deleteCategoryOrSubcategory(selectedCategoryIdForDelete || selectedSubcategoryIdForDelete)
-            if(response.deletedOk) {
+            if (response.deletedOk) {
                 setMsgSendOk(response.deletedOk)
                 const responseGetCategories = await getCategories();
                 setCategories(responseGetCategories);
@@ -161,18 +173,18 @@ const AdminProfile = () => {
         setShowAnswerModal(true);
     }
 
-useEffect(() => {
-    notify();
-}, [errorMsg, msgSendOk, deletedOkMsg]);
+    useEffect(() => {
+        notify();
+    }, [errorMsg, msgSendOk, deletedOkMsg]);
 
-const notify = () => {
-    if (errorMsg !== "") {
-      toast.warning(`${errorMsg}`)
-    } else if (msgSendOk !== "") {
-      toast.success(`${msgSendOk}`)
+    const notify = () => {
+        if (errorMsg !== "") {
+            toast.warning(`${errorMsg}`)
+        } else if (msgSendOk !== "") {
+            toast.success(`${msgSendOk}`)
+        };
     };
-  };
-  
+
     return (
         <div className="min-vh-100">
             <Container className="d-flex flex-wrap" fluid>
@@ -230,27 +242,37 @@ const notify = () => {
                         subcategories={subcategoriesForModify}
                         handleSubcategoryClick={handleSubcategoryClickForModify}
                     />
-                    {!productForModify && products.length > 0 && (
-                    <select className="form-select text-center" multiple aria-label="multiple select product" size={5}>                       
-                        { products.map((product, idx) => (
-                                <option
-                                    key={idx}
-                                    value={product.productName}
-                                    role='button'
-                                    style={{ backgroundColor: (idx % 2 === 0) ? '#e5e6e7' : '#FFF', borderRadius: '0.5em' }}
-                                    onMouseOver={e =>{ e.target.style.backgroundColor = '#0d6efd'; e.target.style.color = '#FFF'}} 
-                                    onMouseOut={e => {e.target.style.backgroundColor = (idx % 2 === 0) ? '#e5e6e7' : '#FFF'; e.target.style.color ='#000'}}                              
-                                    onClick={e => handleProductClick(e.target.innerText)}
-                                    className="text-wrap"
-                                >
-                                    {product.productName}
-                                </option>
-                            ))
-                        }
-                    </select>
-                    )}
+                    {loading ? (
+                        <Spinner
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-label="Submitting... Please wait."
+                        />
+                    ) : (
+                        !productForModify && products.length > 0 && (
+                            <select className="form-select text-center" multiple aria-label="multiple select product" size={5}>
+                                {products.map((product, idx) => (
+                                    <option
+                                        key={idx}
+                                        value={product.productName}
+                                        role='button'
+                                        style={{ backgroundColor: (idx % 2 === 0) ? '#e5e6e7' : '#FFF', borderRadius: '0.5em' }}
+                                        onMouseOver={e => { e.target.style.backgroundColor = '#0d6efd'; e.target.style.color = '#FFF' }}
+                                        onMouseOut={e => { e.target.style.backgroundColor = (idx % 2 === 0) ? '#e5e6e7' : '#FFF'; e.target.style.color = '#000' }}
+                                        onClick={e => handleProductClick(product.idProduct)}
+                                        className="text-wrap"
+                                    >
+                                        {product.productName}
+                                    </option>
+                                ))
+                                }
+                            </select>
+                        )
+                    )
+                    }
                     <div className="d-flex flex-wrap w-100">
-                        {productForModify && <ProductForm buttonName={"Modify Product"} />}
+                        {productForModify && <ProductForm productForModify={productForModify} buttonName={"Modify Product"} />}
                     </div>
                 </Col>
 

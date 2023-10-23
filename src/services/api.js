@@ -125,6 +125,11 @@ export const getProductsList = async (id, page, pageSize, sortBy, isCategory, te
     return responseData;
 }
 
+export const getProductsListForModify = async (id) => {
+    const responseData = await fetchData(`${apiBaseUrl}/products/listModify/${id}`, "GET");   
+    return responseData;
+}
+
 export const getProduct = async (id) => {   
     const responseData = await fetchData(`${apiBaseUrl}/products/details/${id}`, "GET");   
     return responseData;
