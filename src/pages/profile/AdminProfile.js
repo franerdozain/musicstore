@@ -8,9 +8,10 @@ import ProductForm from "./ProductForm";
 import AnswerModal from "./AnswerModal";
 import CategorySelector from "./CategorySelector";
 import CreateCatOrSubcatForm from "./CreateCatOrSubcatForm";
-import { deleteCategoryOrSubcategory, getCategories, getMessages, getProduct, getProductsListForModify } from "../../services/api";
+import { deleteCategoryOrSubcategory, getCategories, getMessages, getProduct, getProductsListForModify, getUsersInfo } from "../../services/api";
 import Messages from "./Messages";
 import 'react-toastify/dist/ReactToastify.css';
+import UsersInfo from "./UsersInfo";
 
 const AdminProfile = () => {
     const [messages, setMessages] = useState([]);
@@ -41,6 +42,8 @@ const AdminProfile = () => {
     const [productForModify, setProductForModify] = useState(null);
     const [selectedCategoryForCreate, setSelectedCategoryForCreate] = useState();
     const [loading, setLoading] = useState(false);
+    const { data: usersInfo, loading: loadingUsersInfo, LoadingAnimation: loadingUsersInfoAnimation } = useApi(getUsersInfo);
+
 
     useEffect(() => {
         if (categoriesData) {
@@ -306,6 +309,12 @@ const AdminProfile = () => {
                         handleDeleteCategoryOrSubcategory={handleDeleteCategoryOrSubcategory}
                     />
                 </Col>
+
+                {/* User's info */}
+                <Col xs={12} md={6}>
+                    <UsersInfo usersInfo={usersInfo} />
+                </Col>
+
             </Container>
             <ToastContainer
                 position="bottom-right"
