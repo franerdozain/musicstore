@@ -32,7 +32,7 @@ const Profile = () => {
     if (userStatus.isAuthenticated) {
       const fetchOrders = async () => {
         try {
-          const response = await getOrders(userStatus);
+          const response = await getOrders();
           if (response.orders) {
             setShoppingHistory(response.orders);
           }

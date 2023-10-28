@@ -185,8 +185,9 @@ export const deleteFromWishlist = async (itemId) => {
 }
 
 // orders
-export const getOrders = async () => {
-    const responseData = await fetchData(`${apiBaseUrl}/orders`, 'GET');
+export const getOrders = async (idUser) => {
+    const url = idUser ? `/orders/${idUser}` : `/orders`
+    const responseData = await fetchData(`${apiBaseUrl}${url}`, 'GET');
     return responseData;
 }
 

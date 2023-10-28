@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { Table } from "react-bootstrap";
 import { TbShoppingCartSearch } from "react-icons/tb";
+import ShoppingHistoryModal from "./ShoppingHistoryModal";
 
 const UsersInfo = ({ usersInfo, loadingUsersInfo, loadingUsersInfoAnimation }) => {
+    const [showShopHistoryModal, setShowShopHistoryModal] = useState(false);
+    const [idUserForShopHistory, setIdUserForShopHistory] = useState(null);
+    const [username, setUsername] = useState("");
 
     const thFields = [
         'User Id',
@@ -14,6 +19,12 @@ const UsersInfo = ({ usersInfo, loadingUsersInfo, loadingUsersInfoAnimation }) =
         'Zip',
         'Shopping History'
     ];
+
+    const handleSearchUserShopHistory = (idUser, username) => {
+        setIdUserForShopHistory(idUser);
+        setUsername(username);
+        setShowShopHistoryModal(true);
+    }
 
     return (
         <div className="mt-4 border rounded me-4 w-100 mb-4">
@@ -44,7 +55,7 @@ const UsersInfo = ({ usersInfo, loadingUsersInfo, loadingUsersInfoAnimation }) =
                                         <td>{user.city}</td>
                                         <td>{user.shippingAddress}</td>
                                         <td>{user.zip}</td>
-                                        <td><TbShoppingCartSearch size={25} /></td>
+                                        <td><TbShoppingCartSearch size={25} onClick={() => handleSearchUserShopHistory(user.idUser, user.username)} /></td>
                                     </tr>
                                 ))
                             ) : null
@@ -52,6 +63,15 @@ const UsersInfo = ({ usersInfo, loadingUsersInfo, loadingUsersInfoAnimation }) =
                     </tbody>
                 </Table>
             </div>
+            {showShopHistoryModal && (
+                <ShoppingHistoryModal
+                    setShowShopHistoryModal={setShowShopHistoryModal}
+                    showShopHistoryModal={showShopHistoryModal}
+                    idUserForShopHistory={idUserForShopHistory}
+                    username={username}
+                />
+            )
+            }
         </div>
     )
 }
