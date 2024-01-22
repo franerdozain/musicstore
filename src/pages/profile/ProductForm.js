@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,24 +11,40 @@ import { BiConfused, BiHappyAlt } from "react-icons/bi";
 const ProductForm = ({ buttonName, selectedSubcategoryId, productForModify }) => {
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
-    const [productFormFields, setProductFormFields] = useState([
-        { name: "productName", label: "Product Name:" },
-        { name: "price", label: { outer: "Price $:", inner: "XX.xx" } },
-        { name: "discount", label: { outer: "Discount", inner: "E.g.: for 5 % discount enter 0.05" } },
-        { name: "stock", label: "Initial Stock:" },
-        { name: "brand", label: "Brand:" },
-        { name: "supplier", label: "Supplier:" },
-        { name: "slogan", label: "Slogan:" },
-        { name: "description", label: "Description:" },
-        { name: "specifications-1", label: "Specification:" },
-        { name: "features-1", label: "Feature:" },
-        { name: "images", label: "" }
-    ]);
-    useEffect(()=>{
-        console.log(productForModify)
 
-    },[])
-    
+    const [productFormFields, setProductFormFields] = useState(null)
+
+    useEffect(() => {
+        if (!productFormFields) {
+            const formFields = createFormFields(productForModify)
+            setProductFormFields(formFields)
+        }
+
+    }, [productForModify])
+
+    const createFormFields = (product) => {
+        const fields = [
+            { name: "productName", label: "Product Name:" },
+            { name: "price", label: { outer: "Price $:", inner: "XX.xx" } },
+            { name: "discount", label: { outer: "Discount", inner: "E.g.: for 5 % discount enter 0.05" } },
+            { name: "stock", label: "Initial Stock:" },
+            { name: "brand", label: "Brand:" },
+            { name: "supplier", label: "Supplier:" },
+            { name: "slogan", label: "Slogan:" },
+            { name: "description", label: "Description:" },
+            { name: "images", label: "" }
+        ]
+
+        const newFields = (product && product.specifications)
+            ? product.specifications.map((specification, index) => ({
+                name: `specifications-${index + 1}`,
+                label: `Specification ${index + 1}:`,
+            }))
+            : [];
+
+        return [fields, newFields]
+    }
+
     const addField = (fieldName) => {
         setProductFormFields(prevFields => {
             const isFieldAlreadyAdded = prevFields.some(field => field.name === fieldName);
@@ -69,7 +85,7 @@ const ProductForm = ({ buttonName, selectedSubcategoryId, productForModify }) =>
 
     return (
         <Form className="d-flex flex-column align-items-center w-75 mx-auto" onSubmit={handleSubmit(submitForm)}>
-            {productFormFields.map((field) => (
+            {productFormFields && productFormFields[0].map((field, i) => (
                 field.name !== "images" && (
                     <Form.Group key={field.name} controlId={field.name} className="w-100">
                         <InputGroup className="mb-3">
@@ -81,6 +97,59 @@ const ProductForm = ({ buttonName, selectedSubcategoryId, productForModify }) =>
                                 control={control}
                                 render={({ field }) => (
                                     <Form.Control
+                                        defaultValue={productForModify ? productForModify[field.name] : ""}
+                                        type={{
+                                            price: 'number',
+                                            discount: 'number',
+                                            stock: 'number',
+                                        }[field.name] || 'text'}
+                                        step={{
+                                            price: '1',
+                                            discount: '0.01',
+                                            stock: '1'
+                                        }[field.name]}
+                                        value={field.value}
+                                        onChange={(e) => {
+                                            field.onChange(e.target.value);
+                                            clearErrors(field.name);
+                                            setErrorMsg("");
+                                            setSuccessMsg("");
+                                        }}
+                                        isInvalid={!!errors[field.name]}
+                                    />
+                                )}
+                            />
+                            {field.name.startsWith("specifications") && (
+                                <>
+                                    <FaPlus type="button" onClick={() => addField('specifications')} />
+                                    <FaMinus type="button" onClick={() => removeField(field.name)} />
+                                </>
+                            )}
+                            {field.name.startsWith("features") && (
+                                <>
+                                    <FaPlus type="button" onClick={() => addField('features')} />
+                                    <FaMinus type="button" onClick={() => removeField(field.name)} />
+                                </>
+                            )}
+                            <Form.Control.Feedback type="invalid">{errors[field.name]?.message}</Form.Control.Feedback>
+                        </InputGroup>
+                    </Form.Group>
+                )
+            ))}
+
+            {productFormFields && productFormFields[1].map((field, i) => (
+                field.name !== "images" && (
+                    <Form.Group key={field.name} controlId={field.name} className="w-100">
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text className="justify-content-center">
+                                {field.label.outer || field.label}
+                            </InputGroup.Text>
+                            <Controller
+                                name={field.name}
+                                control={control}
+                                render={({ field }) => (
+                                    <Form.Control
+                                        defaultValue={productForModify.specifications[i]}
                                         type={{
                                             price: 'number',
                                             discount: 'number',
