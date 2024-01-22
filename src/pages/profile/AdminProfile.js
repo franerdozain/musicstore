@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Spinner } from "react-bootstrap";
+import { Col, Container, Spinner } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 
 import useApi from "../../hooks/useApi";
@@ -107,12 +107,11 @@ const AdminProfile = () => {
             const response = await getProduct(idProduct);
             if (response.product) {
                 setProductForModify(response.product)
-                console.log("goku", productForModify);
             }
         } catch (error) {
             console.log("Error: ", error)
         } finally {
-            setLoading(false)            
+            setLoading(false)
         }
     }
 
